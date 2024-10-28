@@ -2,6 +2,7 @@ import { useState } from "react"
 import { styled } from "styled-components"
 
 const Container = styled.div`
+  height: 1000px;
   font-family: "Arial", sans-serif;
   max-width: 800px;
   margin: 20px auto;
@@ -59,6 +60,7 @@ const AdjustButton = styled(Button)`
 `
 
 const Result = styled.div`
+  height: 300px;
   color: black;
   margin-top: 20px;
   padding: 15px;
@@ -158,8 +160,7 @@ const attributes = [
 
 const Sheet = () => {
   const [result, setResult] = useState(null)
-
-  const rollD6 = () => Math.floor(Math.random() * 6) + 1
+  const [attributeValues, setAttributeValues] = useState(attributes)
 
   const rollForRow = (attribute, numDice, modifier) => {
     let rolls = []
@@ -242,20 +243,82 @@ const Sheet = () => {
               </Td>
               <Td>
                 <InputGroup>
-                  <AdjustButton onClick={() => {}}> - </AdjustButton>
-                  <NumberInput type="number" defaultValue={row.value} readOnly />
-                  <AdjustButton onClick={() => {}}> + </AdjustButton>
+                  <AdjustButton
+                    onClick={() => {
+                      setAttributeValues(
+                        attributeValues.map((item, i) => {
+                          if (i === index) {
+                            return { ...item, value: item.value - 1 }
+                          }
+                          return item
+                        }),
+                      )
+                    }}
+                  >
+                    -
+                  </AdjustButton>
+                  <NumberInput type="number" value={attributeValues[index].value} readOnly />
+                  <AdjustButton
+                    onClick={() => {
+                      setAttributeValues(
+                        attributeValues.map((item, i) => {
+                          if (i === index) {
+                            return { ...item, value: item.value + 1 }
+                          }
+                          return item
+                        }),
+                      )
+                    }}
+                  >
+                    +
+                  </AdjustButton>
                 </InputGroup>
               </Td>
               <Td>
                 <InputGroup>
-                  <AdjustButton onClick={() => {}}> - </AdjustButton>
-                  <NumberInput type="number" defaultValue={row.modifier} readOnly />
-                  <AdjustButton onClick={() => {}}> + </AdjustButton>
+                  <AdjustButton
+                    onClick={() => {
+                      setAttributeValues(
+                        attributeValues.map((item, i) => {
+                          if (i === index) {
+                            return { ...item, modifier: item.modifier - 1 }
+                          }
+                          return item
+                        }),
+                      )
+                    }}
+                  >
+                    {" "}
+                    -{" "}
+                  </AdjustButton>
+                  <NumberInput type="number" value={attributeValues[index].modifier} readOnly />
+                  <AdjustButton
+                    onClick={() => {
+                      setAttributeValues(
+                        attributeValues.map((item, i) => {
+                          if (i === index) {
+                            return { ...item, modifier: item.modifier + 1 }
+                          }
+                          return item
+                        }),
+                      )
+                    }}
+                  >
+                    {" "}
+                    +{" "}
+                  </AdjustButton>
                 </InputGroup>
               </Td>
               <Td>
-                <RollButton onClick={() => rollForRow(row.attribute, row.value, row.modifier)}>
+                <RollButton
+                  onClick={() =>
+                    rollForRow(
+                      row.attribute,
+                      attributeValues[index].value,
+                      attributeValues[index].modifier,
+                    )
+                  }
+                >
                   Roll
                 </RollButton>
               </Td>
@@ -267,10 +330,7 @@ const Sheet = () => {
         <Result>
           {console.log(result)}
           <h3>{result.attribute} Check</h3>
-          <p>
-            Total: {result.total} (including {result.modifier >= 0 ? "+" : ""}
-            {result.modifier} modifier)
-          </p>
+          <h2>Total: {result.total}</h2>
           <DiceDetail>
             <DiceContainer>
               {result.rolls.regular.map((item, index) => (
@@ -301,6 +361,10 @@ const Sheet = () => {
       )}
     </Container>
   )
+}
+
+function rollD6() {
+  return Math.floor(Math.random() * 6) + 1
 }
 
 export default Sheet
