@@ -244,13 +244,12 @@ const Sheet = () => {
 
   return (
     <Container>
-      <Title>Character Sheet</Title>
       <Table>
         <thead>
           <tr>
-            <Th>Attribute</Th>
-            <Th>Value (D6)</Th>
-            <Th>Modifier</Th>
+            <Th>Fertigkeit</Th>
+            <Th>Würfel (D6)</Th>
+            <Th>Bonus/Malus</Th>
             <Th>Probe</Th>
           </tr>
         </thead>
@@ -361,8 +360,8 @@ const Sheet = () => {
       {result && (
         <Result>
           {console.log(result)}
-          <h3>{result.attribute} Check</h3>
-          <h2>Total: {result.total}</h2>
+          <h3>{result.attribute} Probe</h3>
+          <h2>Ergebnis: {result.total}</h2>
           <DiceDetail>
             <DiceContainer>
               {result.rolls.regular.map((item, index) => (
@@ -379,16 +378,12 @@ const Sheet = () => {
             </DiceContainer>
           </DiceDetail>
           {result.wildDieStatus === "fail" && (
-            <StatusMessage color={"#e74c3c"}>
-              Critical failure! Wild die rolls were subtracted.
-            </StatusMessage>
+            <StatusMessage color={"#e74c3c"}>Patzer!</StatusMessage>
           )}
           {result.wildDieStatus === "explode" && (
-            <StatusMessage color={"#27ae60"}>Wild die exploded!</StatusMessage>
+            <StatusMessage color={"#27ae60"}>Kritische Treffer!</StatusMessage>
           )}
-          <QualityRating className={result.quality.class}>
-            Quality Rating: {result.quality.text}
-          </QualityRating>
+          <QualityRating className={result.quality.class}>{result.quality.text}</QualityRating>
         </Result>
       )}
     </Container>
