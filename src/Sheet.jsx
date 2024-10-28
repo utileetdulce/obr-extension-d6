@@ -182,7 +182,7 @@ const Sheet = () => {
   const [result, setResult] = useState(null)
   const [attributeValues, setAttributeValues] = useState(initialAttributes)
 
-  const rollForRow = (attribute, numDice, modifier) => {
+  const rollForRow = async (attribute, numDice, modifier) => {
     let rolls = []
     let wildDieRolls = []
     let wildDieTotal = 0
@@ -234,7 +234,9 @@ const Sheet = () => {
       wildDieStatus,
       quality,
     })
-    OBR.notification.show(`Player ${OBR.player.getName()} rolled ${total} for ${attribute}`)
+
+    const playerName = await OBR.player.getName()
+    OBR.notification.show(`Player ${playerName} rolled ${total} for ${attribute}`)
   }
 
   const getQualityRating = (total) => {
