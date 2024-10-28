@@ -1,6 +1,8 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { styled } from "styled-components"
 import OBR from "@owlbear-rodeo/sdk"
+
+const MESSAGE_CHANNEL = "rodeo.owlbear.cgn.d6"
 
 const Container = styled.div`
   width: 450px;
@@ -182,6 +184,14 @@ const Sheet = () => {
   const [result, setResult] = useState(null)
   const [attributeValues, setAttributeValues] = useState(initialAttributes)
 
+  useEffect(
+    () =>
+      OBR.broadcast.onMessage("rodeo.owlbear.example", (event) => {
+        OBR.notification.show(`Message: ${event.data}`)
+      }),
+    [],
+  )
+
   const rollForRow = async (attribute, numDice, modifier) => {
     let rolls = []
     let wildDieRolls = []
@@ -236,7 +246,10 @@ const Sheet = () => {
     })
 
     const playerName = await OBR.player.getName()
-    OBR.notification.show(`Player ${playerName} rolled ${total} for ${attribute}`)
+    OBR.broadcast.sendMessage(
+      MESSAGE_CHANNEL,
+      `Player ${playerName} rolled ${total} for ${attribute}`,
+    )
   }
 
   const getQualityRating = (total) => {
