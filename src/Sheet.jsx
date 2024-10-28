@@ -1,11 +1,11 @@
 import { useState } from "react"
 import { styled } from "styled-components"
+import OBR from "@owlbear-rodeo/sdk"
 
 const Container = styled.div`
-  height: 1000px;
+  width: 450px;
+  height: 670px;
   font-family: "Arial", sans-serif;
-  max-width: 800px;
-  margin: 20px auto;
   padding: 20px;
   background-color: #f5f5f5;
 `
@@ -16,7 +16,6 @@ const Title = styled.h1`
 `
 
 const Table = styled.table`
-  width: 100%;
   border-collapse: collapse;
   background-color: white;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
@@ -31,7 +30,7 @@ const Th = styled.th`
 `
 
 const Td = styled.td`
-  padding: 12px;
+  padding: 2px;
   text-align: left;
   border: 1px solid #ddd;
 `
@@ -51,6 +50,7 @@ const Button = styled.button`
 
 const RollButton = styled(Button)`
   width: 60px;
+  padding: 4px 8px;
 `
 
 const AdjustButton = styled(Button)`
@@ -77,7 +77,6 @@ const DiceDetail = styled.div`
 
 const DiceContainer = styled.div`
   display: flex;
-  width: 100%;
   justify-content: center;
 `
 
@@ -133,9 +132,15 @@ const AttributeInput = styled.input`
 `
 
 const NumberInput = styled.input`
-  width: 40px;
+  width: 30px;
+  padding: 0;
+  box-sizing: border-box;
   text-align: center;
   margin: 0 2px;
+  &::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
 `
 
 const InputGroup = styled.div`
@@ -214,6 +219,7 @@ const Sheet = () => {
       wildDieStatus,
       quality,
     })
+    OBR.notification.show(`Player XY rolled ${total} for ${attribute}`)
   }
 
   const getQualityRating = (total) => {
@@ -225,14 +231,14 @@ const Sheet = () => {
 
   return (
     <Container>
-      <Title>D6 Fantasy Character Sheet</Title>
+      <Title>Character Sheet</Title>
       <Table>
         <thead>
           <tr>
             <Th>Attribute</Th>
             <Th>Value (D6)</Th>
             <Th>Modifier</Th>
-            <Th>Make a Probe</Th>
+            <Th>Probe</Th>
           </tr>
         </thead>
         <tbody>
