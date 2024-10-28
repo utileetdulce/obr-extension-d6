@@ -1,9 +1,10 @@
 import { useState } from "react"
 import "./App.css"
 import OBR from "@owlbear-rodeo/sdk"
+import Sheet from "./Sheet"
 
 function App() {
-  const [count, setCount] = useState([0])
+  const [count, setCount] = useState([])
 
   const onClick = () => {
     const wuerfelWurf = rollD6(2)
@@ -12,9 +13,26 @@ function App() {
   }
 
   return (
-    <>
+    <div style={{}}>
       <button onClick={onClick}>Gewürfelt wurde [{count.join(", ")}]</button>
-    </>
+      {count.length > 0 && (
+        <div style={{ display: "flex" }}>
+          {count.map((item, index) => (
+            <div key={index}>
+              <img
+                width={"20px"}
+                src={`./dice-${item}.svg`}
+                style={{ background: index === 0 ? "red" : "transparent" }}
+                alt={`dice-${item}`}
+              />
+            </div>
+          ))}
+          Sum: {count.reduce((a, b) => a + b, 0)}
+        </div>
+      )}
+
+      <Sheet />
+    </div>
   )
 }
 
