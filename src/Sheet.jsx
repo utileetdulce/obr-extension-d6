@@ -234,7 +234,7 @@ const Sheet = () => {
       wildDieStatus,
       quality,
     })
-    OBR.notification.show(`Player XY rolled ${total} for ${attribute}`)
+    OBR.notification.show(`Player ${OBR.player.getName()} rolled ${total} for ${attribute}`)
   }
 
   const getQualityRating = (total) => {
