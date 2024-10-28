@@ -10,11 +10,6 @@ const Container = styled.div`
   background-color: #f5f5f5;
 `
 
-const Title = styled.h1`
-  color: #2c3e50;
-  text-align: center;
-`
-
 const Table = styled.table`
   border-collapse: collapse;
   background-color: white;
