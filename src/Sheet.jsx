@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import { styled } from "styled-components"
 import OBR from "@owlbear-rodeo/sdk"
 
-const MESSAGE_CHANNEL = "rodeo.owlbear.cgn.d6"
+const MESSAGE_CHANNEL = "com.onrender.obr-extension-d6"
 
 const Container = styled.div`
   width: 450px;
@@ -183,14 +183,30 @@ const initialAttributes = [
 const Sheet = () => {
   const [result, setResult] = useState(null)
   const [attributeValues, setAttributeValues] = useState(initialAttributes)
+  const isReady = OBR.isReady
 
-  useEffect(
-    () =>
-      OBR.broadcast.onMessage("rodeo.owlbear.example", (event) => {
-        OBR.notification.show(`Message: ${event.data}`)
-      }),
-    [],
-  )
+  console.log(OBR)
+
+  useEffect(() => {
+    if (isReady) {
+      OBR.broadcast.onMessage(MESSAGE_CHANNEL, (event) => {
+        console.log("event:", event)
+        try {
+          OBR.notification.show(`Message: ${event.data}`)
+        } catch (error) {
+          console.error(error)
+        }
+      })
+    }
+    // return OBR.broadcast.onMessage(MESSAGE_CHANNEL, (event) => {
+    //   console.log("event:", event)
+    //   try {
+    //     OBR.notification.show(`Message: ${event.data}`)
+    //   } catch (error) {
+    //     console.error(error)
+    //   }
+    // })
+  }, [isReady])
 
   const rollForRow = async (attribute, numDice, modifier) => {
     let rolls = []
@@ -246,10 +262,22 @@ const Sheet = () => {
     })
 
     const playerName = await OBR.player.getName()
-    OBR.broadcast.sendMessage(
-      MESSAGE_CHANNEL,
-      `Player ${playerName} rolled ${total} for ${attribute}`,
-    )
+    try {
+      if (isReady) {
+        await OBR.broadcast.sendMessage(
+          MESSAGE_CHANNEL,
+          `Player ${playerName} rolled ${total} for ${attribute}`,
+          { destination: "ALL" },
+        )
+      }
+    } catch (error) {
+      console.error(error)
+    }
+    // OBR.broadcast.sendMessage(
+    //   MESSAGE_CHANNEL,
+    //   `Player ${playerName} rolled ${total} for ${attribute}`,
+    //   { destination: "ALL" },
+    // )
   }
 
   const getQualityRating = (total) => {
