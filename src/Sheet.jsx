@@ -102,25 +102,34 @@ const QualityRating = styled.div`
   padding: 8px;
   border-radius: 4px;
   font-weight: bold;
+  color: rgba(0, 0, 0, 0.5);
 
   &.quality-bad {
-    background-color: #ffebee;
-    color: #c62828;
+    background-color: #ff0000;
+  }
+
+  &.quality-average {
+    background-color: #ff4000;
   }
 
   &.quality-ok {
-    background-color: #fff3e0;
-    color: #ef6c00;
+    background-color: #ff8000;
   }
 
   &.quality-good {
-    background-color: #e8f5e9;
-    color: #2e7d32;
+    background-color: #ffbf00;
   }
 
-  &.quality-great {
-    background-color: #e3f2fd;
-    color: #1565c0;
+  &.quality-master {
+    background-color: #bfff00;
+  }
+
+  &.quality-brilliant {
+    background-color: #80ff00;
+  }
+
+  &.quality-god {
+    background-color: #40ff00;
   }
 `
 
@@ -155,7 +164,7 @@ const StatusMessage = styled.div`
   font-style: italic;
 `
 
-const attributes = [
+const initialAttributes = [
   { attribute: "Strength", value: 2, modifier: 0 },
   { attribute: "Agility", value: 2, modifier: 0 },
   { attribute: "Vigor", value: 2, modifier: 0 },
@@ -165,7 +174,7 @@ const attributes = [
 
 const Sheet = () => {
   const [result, setResult] = useState(null)
-  const [attributeValues, setAttributeValues] = useState(attributes)
+  const [attributeValues, setAttributeValues] = useState(initialAttributes)
 
   const rollForRow = (attribute, numDice, modifier) => {
     let rolls = []
@@ -223,10 +232,13 @@ const Sheet = () => {
   }
 
   const getQualityRating = (total) => {
-    if (total <= 5) return { text: "Bad", class: "quality-bad" }
-    if (total <= 12) return { text: "OK", class: "quality-ok" }
-    if (total <= 18) return { text: "Good", class: "quality-good" }
-    return { text: "Great", class: "quality-great" }
+    if (total <= 5) return { text: "Ungeschickt", class: "quality-bad" }
+    if (total <= 10) return { text: "Durchschnittlich", class: "quality-average" }
+    if (total <= 15) return { text: "Geschickt", class: "quality-ok" }
+    if (total <= 20) return { text: "Gut", class: "quality-good" }
+    if (total <= 25) return { text: "Meisterlich", class: "quality-master" }
+    if (total <= 30) return { text: "Brilliant", class: "quality-brilliant" }
+    return { text: "Göttlich", class: "quality-god" }
   }
 
   return (
@@ -242,7 +254,7 @@ const Sheet = () => {
           </tr>
         </thead>
         <tbody>
-          {attributes.map((row, index) => (
+          {initialAttributes.map((row, index) => (
             <tr key={index}>
               <Td>
                 <AttributeInput
