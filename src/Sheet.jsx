@@ -1,250 +1,306 @@
-import styled from "styled-components"
+import { useState } from "react"
+import { styled } from "styled-components"
 
 const Container = styled.div`
-  font-family: Arial, sans-serif;
+  font-family: "Arial", sans-serif;
   max-width: 800px;
   margin: 20px auto;
   padding: 20px;
-  color: #000;
+  background-color: #f5f5f5;
 `
 
-const Grid = styled.div`
-  display: grid;
-  gap: 1rem;
-`
-
-const Card = styled.div`
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 1rem;
-  background: white;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+const Title = styled.h1`
+  color: #2c3e50;
+  text-align: center;
 `
 
 const Table = styled.table`
   width: 100%;
   border-collapse: collapse;
-  margin-bottom: 1rem;
+  background-color: white;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 `
 
 const Th = styled.th`
-  border: 1px solid #ddd;
-  padding: 8px;
+  padding: 12px;
   text-align: left;
-  background-color: #f5f5f5;
+  border: 1px solid #ddd;
+  background-color: #2c3e50;
+  color: white;
 `
 
 const Td = styled.td`
-  border: 1px solid #ddd;
-  padding: 8px;
+  padding: 12px;
   text-align: left;
+  border: 1px solid #ddd;
 `
 
-const AttributesTableTd = styled(Td)`
-  &:nth-child(2) {
-    width: 100px;
+const Button = styled.button`
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #2980b9;
   }
 `
 
-const SkillsTableTd = styled(Td)`
-  &:nth-child(2),
-  &:nth-child(3) {
-    width: 100px;
-  }
-`
-
-const CharacterImage = styled.div`
-  width: 100px;
-  height: 200px;
-  border: 1px solid #ccc;
-  margin: 10px 0;
-`
-
-const OrnamentalBorder = styled.div`
-  border: 2px solid #333;
-  border-radius: 8px;
-  padding: 20px;
-  margin-top: 20px;
-  background-image: linear-gradient(to right, #f5f5f5, white, #f5f5f5);
-`
-
-const DefenseGrid = styled.div`
-  display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 10px;
-  align-items: center;
-`
-
-const Input = styled.input`
+const RollButton = styled(Button)`
   width: 60px;
 `
 
-const Sheet = () => (
-  <Container>
-    <Grid>
-      <Card>
-        <h2>Grundfertigkeit (GF)</h2>
-        <Table className="attributes-table">
-          <thead>
-            <tr>
-              <Th>Attribute</Th>
-              <Th>Min/Max</Th>
-              <Th>Value</Th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <AttributesTableTd>(R) Reflexe</AttributesTableTd>
-              <AttributesTableTd>3W+1</AttributesTableTd>
-              <AttributesTableTd>
-                <Input type="number" />
-              </AttributesTableTd>
-            </tr>
-            <tr>
-              <AttributesTableTd>(K) Koordination</AttributesTableTd>
-              <AttributesTableTd>3W+2</AttributesTableTd>
-              <AttributesTableTd>
-                <Input type="number" />
-              </AttributesTableTd>
-            </tr>
-            <tr>
-              <AttributesTableTd>(P) Physis</AttributesTableTd>
-              <AttributesTableTd>4W</AttributesTableTd>
-              <AttributesTableTd>
-                <Input type="number" />
-              </AttributesTableTd>
-            </tr>
-            <tr>
-              <AttributesTableTd>(R) Ratio</AttributesTableTd>
-              <AttributesTableTd>4W+2</AttributesTableTd>
-              <AttributesTableTd>
-                <Input type="number" />
-              </AttributesTableTd>
-            </tr>
-            <tr>
-              <AttributesTableTd>(A) Auftreten</AttributesTableTd>
-              <AttributesTableTd>1W+2</AttributesTableTd>
-              <AttributesTableTd>
-                <Input type="number" />
-              </AttributesTableTd>
-            </tr>
-            <tr>
-              <AttributesTableTd>(W) Wahrnehmung</AttributesTableTd>
-              <AttributesTableTd>4W+1</AttributesTableTd>
-              <AttributesTableTd>
-                <Input type="number" />
-              </AttributesTableTd>
-            </tr>
-            <tr>
-              <AttributesTableTd>(P) Paranormal</AttributesTableTd>
-              <AttributesTableTd>--</AttributesTableTd>
-              <AttributesTableTd>
-                <Input type="number" />
-              </AttributesTableTd>
-            </tr>
-          </tbody>
-        </Table>
-      </Card>
+const AdjustButton = styled(Button)`
+  padding: 4px 8px;
+  margin: 0 2px;
+  width: 30px;
+`
 
-      <Card>
-        <h2>Defense</h2>
-        <DefenseGrid>
-          <label>Passive Verteidigung:</label>
-          <Input type="number" value="11" />
+const Result = styled.div`
+  color: black;
+  margin-top: 20px;
+  padding: 15px;
+  background-color: white;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+`
 
-          <label>Rüstung Physis:</label>
-          <Input type="number" value="7" />
+const DiceDetail = styled.div`
+  color: #666;
+  font-size: 0.9em;
+  margin-top: 5px;
+`
 
-          <label>Grundschaden:</label>
-          <Input type="number" value="7" />
+const DiceContainer = styled.div`
+  display: flex;
+  width: 100%;
+  justify-content: center;
+`
 
-          <label>Bewegung [m/Runde]:</label>
-          <Input type="number" />
-        </DefenseGrid>
-      </Card>
+const DiceImage = styled.img`
+  width: 40px;
 
-      <Card>
-        <h2>Skills</h2>
-        <Table className="skills-table">
-          <thead>
-            <tr>
-              <Th>Fertigkeit</Th>
-              <Th>GF(s)</Th>
-              <Th>Wert</Th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <SkillsTableTd>Schwimmen/Tauchen</SkillsTableTd>
-              <SkillsTableTd>KP</SkillsTableTd>
-              <SkillsTableTd>
-                <Input type="text" value="6W" />
-              </SkillsTableTd>
-            </tr>
-            <tr>
-              <SkillsTableTd>Seefahrt/Nautik</SkillsTableTd>
-              <SkillsTableTd>RW</SkillsTableTd>
-              <SkillsTableTd>
-                <Input type="text" value="5W" />
-              </SkillsTableTd>
-            </tr>
-            <tr>
-              <SkillsTableTd>Erfinden</SkillsTableTd>
-              <SkillsTableTd>R</SkillsTableTd>
-              <SkillsTableTd>
-                <Input type="text" value="6W" />
-              </SkillsTableTd>
-            </tr>
-          </tbody>
-        </Table>
-      </Card>
+  background-color: black;
 
-      <Card>
-        <h2>Weapons</h2>
-        <Table>
-          <thead>
-            <tr>
-              <Th>Waffe</Th>
-              <Th>Schaden</Th>
-              <Th>Reichweite</Th>
-              <Th>Munition</Th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <Td>Harpune</Td>
-              <Td>14</Td>
-              <Td>10m</Td>
-              <Td>1</Td>
-            </tr>
-            <tr>
-              <Td>Messer</Td>
-              <Td>11.5</Td>
-              <Td>1m</Td>
-              <Td>-</Td>
-            </tr>
-            <tr>
-              <Td>Rapier</Td>
-              <Td>16</Td>
-              <Td>2m</Td>
-              <Td>-</Td>
-            </tr>
-          </tbody>
-        </Table>
-      </Card>
+  &.normal {
+    background-color: blue;
+  }
+  &.fail {
+    background-color: red;
+  }
 
-      <OrnamentalBorder>
-        <h2>Equipment</h2>
-        <div style={{ display: "flex", gap: "20px" }}>
-          <CharacterImage />
-          <div>
-            <h3>Ausrüstung (wo getragen)</h3>
-            <p>Amulett des großen Geflechts: 2 Brilliante Heilzauber (8W)</p>
-          </div>
-        </div>
-      </OrnamentalBorder>
-    </Grid>
-  </Container>
-)
+  &.explode {
+    background-color: green;
+  }
+`
+
+const QualityRating = styled.div`
+  margin-top: 10px;
+  padding: 8px;
+  border-radius: 4px;
+  font-weight: bold;
+
+  &.quality-bad {
+    background-color: #ffebee;
+    color: #c62828;
+  }
+
+  &.quality-ok {
+    background-color: #fff3e0;
+    color: #ef6c00;
+  }
+
+  &.quality-good {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+  }
+
+  &.quality-great {
+    background-color: #e3f2fd;
+    color: #1565c0;
+  }
+`
+
+const AttributeInput = styled.input`
+  border: 1px solid #ddd;
+  padding: 4px 8px;
+  border-radius: 3px;
+  width: 100px;
+`
+
+const NumberInput = styled.input`
+  width: 40px;
+  text-align: center;
+  margin: 0 2px;
+`
+
+const InputGroup = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 2px;
+`
+
+const StatusMessage = styled.div`
+  color: ${(props) => props.color};
+  margin-top: 8px;
+  font-style: italic;
+`
+
+const attributes = [
+  { attribute: "Strength", value: 2, modifier: 0 },
+  { attribute: "Agility", value: 2, modifier: 0 },
+  { attribute: "Vigor", value: 2, modifier: 0 },
+  { attribute: "Smarts", value: 2, modifier: 0 },
+  { attribute: "Spirit", value: 2, modifier: 0 },
+]
+
+const Sheet = () => {
+  const [result, setResult] = useState(null)
+
+  const rollD6 = () => Math.floor(Math.random() * 6) + 1
+
+  const rollForRow = (attribute, numDice, modifier) => {
+    let rolls = []
+    let wildDieRolls = []
+    let wildDieTotal = 0
+    let wildDieStatus = "normal"
+
+    // Roll the wild die first
+    let currentWildRoll = rollD6()
+    wildDieRolls.push(currentWildRoll)
+
+    if (currentWildRoll === 1) {
+      wildDieStatus = "fail"
+      currentWildRoll = rollD6()
+      wildDieRolls.push(-currentWildRoll)
+      wildDieTotal -= currentWildRoll
+    } else if (currentWildRoll === 6) {
+      wildDieStatus = "explode"
+      wildDieTotal = currentWildRoll
+      currentWildRoll = rollD6()
+      while (currentWildRoll === 6) {
+        wildDieRolls.push(currentWildRoll)
+        wildDieTotal += currentWildRoll
+        currentWildRoll = rollD6()
+      }
+      wildDieRolls.push(currentWildRoll)
+      wildDieTotal += currentWildRoll
+    } else {
+      wildDieTotal = currentWildRoll
+    }
+
+    // Roll the regular dice
+    for (let i = 0; i < numDice - 1; i++) {
+      rolls.push(rollD6())
+    }
+
+    // Calculate total
+    const regularTotal = rolls.reduce((sum, roll) => sum + roll, 0)
+    const total = regularTotal + wildDieTotal + modifier
+
+    const quality = getQualityRating(total)
+
+    setResult({
+      rolls: {
+        regular: rolls,
+        wild: wildDieRolls,
+      },
+      attribute,
+      total,
+      modifier,
+      wildDieStatus,
+      quality,
+    })
+  }
+
+  const getQualityRating = (total) => {
+    if (total <= 5) return { text: "Bad", class: "quality-bad" }
+    if (total <= 12) return { text: "OK", class: "quality-ok" }
+    if (total <= 18) return { text: "Good", class: "quality-good" }
+    return { text: "Great", class: "quality-great" }
+  }
+
+  return (
+    <Container>
+      <Title>D6 Fantasy Character Sheet</Title>
+      <Table>
+        <thead>
+          <tr>
+            <Th>Attribute</Th>
+            <Th>Value (D6)</Th>
+            <Th>Modifier</Th>
+            <Th>Make a Probe</Th>
+          </tr>
+        </thead>
+        <tbody>
+          {attributes.map((row, index) => (
+            <tr key={index}>
+              <Td>
+                <AttributeInput type="text" defaultValue={row.attribute} />
+              </Td>
+              <Td>
+                <InputGroup>
+                  <AdjustButton onClick={() => {}}> - </AdjustButton>
+                  <NumberInput type="number" defaultValue={row.value} readOnly />
+                  <AdjustButton onClick={() => {}}> + </AdjustButton>
+                </InputGroup>
+              </Td>
+              <Td>
+                <InputGroup>
+                  <AdjustButton onClick={() => {}}> - </AdjustButton>
+                  <NumberInput type="number" defaultValue={row.modifier} readOnly />
+                  <AdjustButton onClick={() => {}}> + </AdjustButton>
+                </InputGroup>
+              </Td>
+              <Td>
+                <RollButton onClick={() => rollForRow(row.attribute, row.value, row.modifier)}>
+                  Roll
+                </RollButton>
+              </Td>
+            </tr>
+          ))}
+        </tbody>
+      </Table>
+      {result && (
+        <Result>
+          {console.log(result)}
+          <h3>{result.attribute} Check</h3>
+          <p>
+            Total: {result.total} (including {result.modifier >= 0 ? "+" : ""}
+            {result.modifier} modifier)
+          </p>
+          <DiceDetail>
+            <DiceContainer>
+              {result.rolls.regular.map((item, index) => (
+                <DiceImage key={index} src={`./dice-${Math.abs(item)}.svg`} alt={`dice-${item}`} />
+              ))}
+              {result.rolls.wild.map((item, index) => (
+                <DiceImage
+                  key={index}
+                  className={result.wildDieStatus}
+                  src={`./dice-${Math.abs(item)}.svg`}
+                  alt={`dice-${item}`}
+                />
+              ))}
+            </DiceContainer>
+          </DiceDetail>
+          {result.wildDieStatus === "fail" && (
+            <StatusMessage color={"#e74c3c"}>
+              Critical failure! Wild die rolls were subtracted.
+            </StatusMessage>
+          )}
+          {result.wildDieStatus === "explode" && (
+            <StatusMessage color={"#27ae60"}>Wild die exploded!</StatusMessage>
+          )}
+          <QualityRating className={result.quality.class}>
+            Quality Rating: {result.quality.text}
+          </QualityRating>
+        </Result>
+      )}
+    </Container>
+  )
+}
 
 export default Sheet
