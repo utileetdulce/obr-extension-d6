@@ -8,6 +8,7 @@ const Container = styled.div`
   font-family: "Arial", sans-serif;
   padding: 20px;
   background-color: #f5f5f5;
+  color: black;
 `
 
 const Table = styled.table`
@@ -130,6 +131,8 @@ const QualityRating = styled.div`
 `
 
 const AttributeInput = styled.input`
+  background-color: white;
+  color: black;
   border: 1px solid #ddd;
   padding: 4px 8px;
   border-radius: 3px;
@@ -137,10 +140,13 @@ const AttributeInput = styled.input`
 `
 
 const NumberInput = styled.input`
+  background-color: white;
+  color: black;
   width: 30px;
   padding: 0;
   box-sizing: border-box;
   text-align: center;
+  padding-top: 2px;
   margin: 0 2px;
   &::-webkit-inner-spin-button {
     -webkit-appearance: none;
@@ -161,11 +167,15 @@ const StatusMessage = styled.div`
 `
 
 const initialAttributes = [
-  { attribute: "Strength", value: 2, modifier: 0 },
-  { attribute: "Agility", value: 2, modifier: 0 },
-  { attribute: "Vigor", value: 2, modifier: 0 },
-  { attribute: "Smarts", value: 2, modifier: 0 },
-  { attribute: "Spirit", value: 2, modifier: 0 },
+  { attribute: "Reflexe", value: 2, modifier: 0 },
+  { attribute: "Koordination", value: 2, modifier: 0 },
+  { attribute: "Physis", value: 2, modifier: 0 },
+  { attribute: "Ratio", value: 2, modifier: 0 },
+  { attribute: "Autreten", value: 2, modifier: 0 },
+  { attribute: "Wahrnehmung", value: 2, modifier: 0 },
+  { value: 2, modifier: 0 },
+  { value: 2, modifier: 0 },
+  { value: 2, modifier: 0 },
 ]
 
 const Sheet = () => {
@@ -264,7 +274,7 @@ const Sheet = () => {
                       }),
                     )
                   }
-                  defaultValue={row.attribute}
+                  placeholder={row.attribute}
                 />
               </Td>
               <Td>
@@ -355,7 +365,7 @@ const Sheet = () => {
       {result && (
         <Result>
           {console.log(result)}
-          <h3>{result.attribute} Probe</h3>
+          <h3>Probe &quot;{result.attribute}&quot;</h3>
           <h2>Ergebnis: {result.total}</h2>
           <DiceDetail>
             <DiceContainer>
