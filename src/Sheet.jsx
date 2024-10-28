@@ -88,6 +88,7 @@ const DiceImage = styled.img`
   &.normal {
     background-color: blue;
   }
+
   &.fail {
     background-color: red;
   }
