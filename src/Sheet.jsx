@@ -245,7 +245,20 @@ const Sheet = () => {
           {attributes.map((row, index) => (
             <tr key={index}>
               <Td>
-                <AttributeInput type="text" defaultValue={row.attribute} />
+                <AttributeInput
+                  type="text"
+                  onChange={(event) =>
+                    setAttributeValues(
+                      attributeValues.map((item, i) => {
+                        if (i === index) {
+                          return { ...item, attribute: event.target.value }
+                        }
+                        return item
+                      }),
+                    )
+                  }
+                  defaultValue={row.attribute}
+                />
               </Td>
               <Td>
                 <InputGroup>
@@ -319,7 +332,7 @@ const Sheet = () => {
                 <RollButton
                   onClick={() =>
                     rollForRow(
-                      row.attribute,
+                      attributeValues[index].attribute,
                       attributeValues[index].value,
                       attributeValues[index].modifier,
                     )
