@@ -183,30 +183,17 @@ const initialAttributes = [
 const Sheet = () => {
   const [result, setResult] = useState(null)
   const [attributeValues, setAttributeValues] = useState(initialAttributes)
-  const isReady = OBR.isReady
-
-  console.log(OBR)
 
   useEffect(() => {
-    if (isReady) {
-      OBR.broadcast.onMessage(MESSAGE_CHANNEL, (event) => {
-        console.log("event:", event)
-        try {
-          OBR.notification.show(`Message: ${event.data}`)
-        } catch (error) {
-          console.error(error)
-        }
-      })
-    }
-    // return OBR.broadcast.onMessage(MESSAGE_CHANNEL, (event) => {
-    //   console.log("event:", event)
-    //   try {
-    //     OBR.notification.show(`Message: ${event.data}`)
-    //   } catch (error) {
-    //     console.error(error)
-    //   }
-    // })
-  }, [isReady])
+    return OBR.broadcast.onMessage(MESSAGE_CHANNEL, (event) => {
+      console.log("event:", event)
+      try {
+        OBR.notification.show(`Message: ${event.data}`)
+      } catch (error) {
+        console.error(error)
+      }
+    })
+  }, [])
 
   const rollForRow = async (attribute, numDice, modifier) => {
     let rolls = []
@@ -263,21 +250,14 @@ const Sheet = () => {
 
     const playerName = await OBR.player.getName()
     try {
-      if (isReady) {
-        await OBR.broadcast.sendMessage(
-          MESSAGE_CHANNEL,
-          `Player ${playerName} rolled ${total} for ${attribute}`,
-          { destination: "ALL" },
-        )
-      }
+      await OBR.broadcast.sendMessage(
+        MESSAGE_CHANNEL,
+        `Player ${playerName} rolled ${total} for ${attribute}`,
+        { destination: "ALL" },
+      )
     } catch (error) {
       console.error(error)
     }
-    // OBR.broadcast.sendMessage(
-    //   MESSAGE_CHANNEL,
-    //   `Player ${playerName} rolled ${total} for ${attribute}`,
-    //   { destination: "ALL" },
-    // )
   }
 
   const getQualityRating = (total) => {
