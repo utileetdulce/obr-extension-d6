@@ -4,14 +4,15 @@ import Sheet from "./Sheet"
 import { useEffect, useState } from "react"
 
 function App() {
-  const [ready, setReady] = useState(true)
+  const [ready, setReady] = useState(false)
 
-  // useEffect(() => {
-  //   OBR.onReady = () => {
-  //     OBR.log("AAAAAAAAAAAAAAAAAAA")
-  //     setReady(true)
-  //   }
-  // }, [])
+  useEffect(() => {
+    OBR.onReady(() => {
+      console.log("OBR is ready !!!!!!!!!!!!!!!!!!!!!!!")
+
+      setReady(true)
+    })
+  }, [])
 
   return <>{ready && <Sheet />}</>
 }
