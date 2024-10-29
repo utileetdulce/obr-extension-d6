@@ -102,34 +102,6 @@ const QualityRating = styled.div`
   border-radius: 4px;
   font-weight: bold;
   color: rgba(0, 0, 0, 0.5);
-
-  &.quality-bad {
-    background-color: #ff0000;
-  }
-
-  &.quality-average {
-    background-color: #ff4000;
-  }
-
-  &.quality-ok {
-    background-color: #ff8000;
-  }
-
-  &.quality-good {
-    background-color: #ffbf00;
-  }
-
-  &.quality-master {
-    background-color: #bfff00;
-  }
-
-  &.quality-brilliant {
-    background-color: #80ff00;
-  }
-
-  &.quality-god {
-    background-color: #40ff00;
-  }
 `
 
 const AttributeInput = styled.input`
@@ -381,12 +353,12 @@ const Sheet = () => {
           ))}
         </tbody>
       </Table>
+
       {result && (
         <Result>
-          {console.log(result)}
-          <h3>Probe &quot;{result.attribute}&quot;</h3>
-          <h2>Ergebnis: {result.total}</h2>
           <DiceDetail>
+            <QualityRating>{`${result.attribute} ist ${result.quality.text} (${result.total}) ${result.quality.icon}`}</QualityRating>
+
             <DiceContainer>
               {result.rolls.regular.map((item, index) => (
                 <DiceImage key={index} src={`./dice-${Math.abs(item)}.svg`} alt={`dice-${item}`} />
@@ -407,7 +379,6 @@ const Sheet = () => {
           {result.wildDieStatus === "explode" && (
             <StatusMessage color={"#27ae60"}>Kritische Treffer!</StatusMessage>
           )}
-          <QualityRating className={result.quality.class}>{result.quality.text}</QualityRating>
         </Result>
       )}
     </Container>
