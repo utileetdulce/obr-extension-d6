@@ -251,19 +251,19 @@ const Sheet = () => {
     const playerName = await OBR.player.getName()
     await OBR.broadcast.sendMessage(
       MESSAGE_CHANNEL,
-      `Player ${playerName} rolled ${total} for ${attribute}`,
+      `${playerName}s Probe auf ${attribute} war ${quality.text} (${total}) ${quality.icon}`,
       { destination: "ALL" },
     )
   }
 
   const getQualityRating = (total) => {
-    if (total <= 5) return { text: "Ungeschickt", class: "quality-bad" }
-    if (total <= 10) return { text: "Durchschnittlich", class: "quality-average" }
-    if (total <= 15) return { text: "Geschickt", class: "quality-ok" }
-    if (total <= 20) return { text: "Gut", class: "quality-good" }
-    if (total <= 25) return { text: "Meisterlich", class: "quality-master" }
-    if (total <= 30) return { text: "Brilliant", class: "quality-brilliant" }
-    return { text: "Göttlich", class: "quality-god" }
+    if (total <= 5) return { text: "Ungeschickt", class: "quality-bad", icon: "🔴" }
+    if (total <= 10) return { text: "Durchschnittlich", class: "quality-average", icon: "🟠" }
+    if (total <= 15) return { text: "Geschickt", class: "quality-ok", icon: "🟡" }
+    if (total <= 20) return { text: "Gut", class: "quality-good", icon: "🟢" }
+    if (total <= 25) return { text: "Meisterlich", class: "quality-master", icon: "🔵" }
+    if (total <= 30) return { text: "Brilliant", class: "quality-brilliant", icon: "🟣" }
+    return { text: "Göttlich", class: "quality-god", icon: "⚪" }
   }
 
   return (
