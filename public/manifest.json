@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "manifest_version": 1,
   "action": {
-    "title": "Hello, World!",
+    "title": "D6-Chaos-Truppe",
     "icon": "/icon.svg",
     "popover": "/",
     "height": 740,
