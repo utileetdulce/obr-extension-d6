@@ -249,15 +249,11 @@ const Sheet = () => {
     })
 
     const playerName = await OBR.player.getName()
-    try {
-      await OBR.broadcast.sendMessage(
-        MESSAGE_CHANNEL,
-        `Player ${playerName} rolled ${total} for ${attribute}`,
-        { destination: "ALL" },
-      )
-    } catch (error) {
-      console.error(error)
-    }
+    await OBR.broadcast.sendMessage(
+      MESSAGE_CHANNEL,
+      `Player ${playerName} rolled ${total} for ${attribute}`,
+      { destination: "ALL" },
+    )
   }
 
   const getQualityRating = (total) => {
