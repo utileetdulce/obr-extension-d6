@@ -188,7 +188,7 @@ const Sheet = () => {
     return OBR.broadcast.onMessage(MESSAGE_CHANNEL, (event) => {
       console.log("event:", event)
       try {
-        OBR.notification.show(`Message: ${event.data}`)
+        OBR.notification.show(`${event.data}`)
       } catch (error) {
         console.error(error)
       }
@@ -251,7 +251,7 @@ const Sheet = () => {
     const playerName = await OBR.player.getName()
     await OBR.broadcast.sendMessage(
       MESSAGE_CHANNEL,
-      `${playerName}s Probe auf ${attribute} war ${quality.text} (${total}) ${quality.icon}`,
+      `${playerName}s ${attribute} ist ${quality.text} (${total}) ${quality.icon}`,
       { destination: "ALL" },
     )
   }
