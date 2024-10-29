@@ -1,0 +1,12 @@
+{
+  "name": "D6-development",
+  "version": "1.0.0",
+  "manifest_version": 1,
+  "action": {
+    "title": "D6-development",
+    "icon": "/icon.svg",
+    "popover": "/",
+    "height": 740,
+    "width": 510
+  }
+}
