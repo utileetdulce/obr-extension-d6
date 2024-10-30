@@ -140,6 +140,14 @@ const InputGroup = styled.div`
   gap: 2px;
 `
 
+const History = styled.div`
+  margin-top: 20px;
+  padding: 10px;
+  background-color: white;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+`
+
 const initialAttributes = [
   { attribute: "Reflexe", value: 2, modifier: 0 },
   { attribute: "Koordination", value: 2, modifier: 0 },
@@ -154,8 +162,16 @@ const initialAttributes = [
 
 const Sheet = () => {
   const [result, setResult] = useState(null)
+  const [history, setHistory] = useState([])
+  console.log("history:", history)
   console.log("result:", result)
   const [attributeValues, setAttributeValues] = useState(initialAttributes)
+
+  const pushMessageToHistory = (message) => {
+    setHistory((history) => {
+      return [message, ...history.slice(0, 7)]
+    })
+  }
 
   useEffect(() => {
     if (OBR.isReady) {
@@ -163,6 +179,7 @@ const Sheet = () => {
         console.log("event:", event)
         try {
           OBR.notification.show(`${event.data}`)
+          pushMessageToHistory(event.data)
         } catch (error) {
           console.error(error)
         }
@@ -374,6 +391,11 @@ const Sheet = () => {
           </DiceDetail>
         </Result>
       )}
+      <History>
+        {history.map((item, index) => (
+          <div key={item + index}>{item}</div>
+        ))}
+      </History>
     </Container>
   )
 }
