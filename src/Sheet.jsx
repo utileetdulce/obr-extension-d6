@@ -3,6 +3,11 @@ import { styled } from "styled-components"
 import OBR from "@owlbear-rodeo/sdk"
 
 const MESSAGE_CHANNEL = "com.onrender.obr-extension-d6"
+const WILD_DIE_STATUS_TEXT = {
+  normal: "",
+  fail: "Patzer!",
+  explode: "Kritischer Treffer",
+}
 
 const Container = styled.div`
   width: 450px;
@@ -58,10 +63,10 @@ const AdjustButton = styled(Button)`
 `
 
 const Result = styled.div`
-  height: 300px;
+  height: 80px;
   color: black;
   margin-top: 20px;
-  padding: 15px;
+  padding: 0 15px;
   background-color: white;
   border-radius: 4px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
@@ -82,6 +87,7 @@ const DiceImage = styled.img`
   width: 40px;
 
   background-color: black;
+  border-radius: 4px;
 
   &.normal {
     background-color: blue;
@@ -134,12 +140,6 @@ const InputGroup = styled.div`
   gap: 2px;
 `
 
-const StatusMessage = styled.div`
-  color: ${(props) => props.color};
-  margin-top: 8px;
-  font-style: italic;
-`
-
 const initialAttributes = [
   { attribute: "Reflexe", value: 2, modifier: 0 },
   { attribute: "Koordination", value: 2, modifier: 0 },
@@ -158,14 +158,14 @@ const Sheet = () => {
 
   useEffect(() => {
     if (OBR.isReady) {
-    return OBR.broadcast.onMessage(MESSAGE_CHANNEL, (event) => {
-      console.log("event:", event)
-      try {
-        OBR.notification.show(`${event.data}`)
-      } catch (error) {
-        console.error(error)
-      }
-    })
+      return OBR.broadcast.onMessage(MESSAGE_CHANNEL, (event) => {
+        console.log("event:", event)
+        try {
+          OBR.notification.show(`${event.data}`)
+        } catch (error) {
+          console.error(error)
+        }
+      })
     }
   }, [])
 
@@ -349,7 +349,11 @@ const Sheet = () => {
       {result && (
         <Result>
           <DiceDetail>
-            <QualityRating>{`${result.attribute} ist ${result.quality.text} (${result.total}) ${result.quality.icon}`}</QualityRating>
+            <QualityRating>
+              {`${result.attribute} ist ${result.quality.text} (${result.total})`}
+              {WILD_DIE_STATUS_TEXT[result.wildDieStatus]}
+              {result.quality.icon}
+            </QualityRating>
 
             <DiceContainer>
               {result.rolls.regular.map((item, index) => (
@@ -365,12 +369,6 @@ const Sheet = () => {
               ))}
             </DiceContainer>
           </DiceDetail>
-          {result.wildDieStatus === "fail" && (
-            <StatusMessage color={"#e74c3c"}>Patzer!</StatusMessage>
-          )}
-          {result.wildDieStatus === "explode" && (
-            <StatusMessage color={"#27ae60"}>Kritische Treffer!</StatusMessage>
-          )}
         </Result>
       )}
     </Container>
