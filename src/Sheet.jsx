@@ -4,9 +4,9 @@ import OBR from "@owlbear-rodeo/sdk"
 
 const MESSAGE_CHANNEL = "com.onrender.obr-extension-d6"
 const WILD_DIE_STATUS_TEXT = {
-  normal: "",
-  fail: "Patzer!",
-  explode: "Kritischer Treffer",
+  normal: " ",
+  fail: "Patzer! ",
+  explode: "Kritischer Treffer! ",
 }
 
 const Container = styled.div`
@@ -154,6 +154,7 @@ const initialAttributes = [
 
 const Sheet = () => {
   const [result, setResult] = useState(null)
+  console.log("result:", result)
   const [attributeValues, setAttributeValues] = useState(initialAttributes)
 
   useEffect(() => {
@@ -210,6 +211,9 @@ const Sheet = () => {
 
     const quality = getQualityRating(total)
 
+    const [firstWildDie, ...restWildDie] = wildDieRolls
+    const diceString = `${rolls.join("+")}${firstWildDie === 1 ? restWildDie.join("") : "+" + wildDieRolls.join("+")}${modifier ? "+" + modifier : ""}=${total}`
+
     setResult({
       rolls: {
         regular: rolls,
@@ -220,12 +224,13 @@ const Sheet = () => {
       modifier,
       wildDieStatus,
       quality,
+      diceString,
     })
 
     const playerName = await OBR.player.getName()
     await OBR.broadcast.sendMessage(
       MESSAGE_CHANNEL,
-      `${playerName}s ${attribute} ist ${quality.text} (${total}) ${quality.icon}`,
+      `${playerName}s ${attribute} ist ${quality.text} (${diceString}) ${quality.icon}`,
       { destination: "ALL" },
     )
   }
@@ -350,9 +355,7 @@ const Sheet = () => {
         <Result>
           <DiceDetail>
             <QualityRating>
-              {`${result.attribute} ist ${result.quality.text} (${result.total})`}
-              {WILD_DIE_STATUS_TEXT[result.wildDieStatus]}
-              {result.quality.icon}
+              {`${result.attribute} ist ${result.quality.text} (${result.diceString}) ${WILD_DIE_STATUS_TEXT[result.wildDieStatus]} ${result.quality.icon}`}
             </QualityRating>
 
             <DiceContainer>
@@ -380,13 +383,13 @@ function rollD6() {
 }
 
 function getQualityRating(total) {
-  if (total <= 5) return { text: "ungeschickt", class: "quality-bad", icon: "🔴" }
-  if (total <= 10) return { text: "durchschnittlich", class: "quality-average", icon: "🟠" }
-  if (total <= 15) return { text: "geschickt", class: "quality-ok", icon: "🟡" }
-  if (total <= 20) return { text: "gut", class: "quality-good", icon: "🟢" }
-  if (total <= 25) return { text: "meisterlich", class: "quality-master", icon: "🔵" }
-  if (total <= 30) return { text: "brilliant", class: "quality-brilliant", icon: "🟣" }
-  return { text: "göttlich", class: "quality-god", icon: "⚪" }
+  if (total <= 5) return { text: "ungeschickt", class: "quality-bad", icon: "🔴🔴" }
+  if (total <= 10) return { text: "durchschnittlich", class: "quality-average", icon: "🔴🟠" }
+  if (total <= 15) return { text: "geschickt", class: "quality-ok", icon: "🟠🟠" }
+  if (total <= 20) return { text: "gut", class: "quality-good", icon: "🟢🟠" }
+  if (total <= 25) return { text: "meisterlich", class: "quality-master", icon: "🟢🟢" }
+  if (total <= 30) return { text: "brilliant", class: "quality-brilliant", icon: "🟢🟢🟢" }
+  return { text: "göttlich", class: "quality-god", icon: "🟢🟢🟢🟢" }
 }
 
 export default Sheet
