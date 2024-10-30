@@ -4,12 +4,11 @@ import Sheet from "./Sheet"
 import { useEffect, useState } from "react"
 
 function App() {
-  const [ready, setReady] = useState(false)
+  const [ready, setReady] = useState(!OBR.isAvailable)
 
   useEffect(() => {
     OBR.onReady(() => {
-      console.log("OBR is ready !!!!!!!!!!!!!!!!!!!!!!!")
-
+      console.log("OBR is ready !")
       setReady(true)
     })
   }, [])

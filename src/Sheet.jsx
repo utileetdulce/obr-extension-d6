@@ -157,6 +157,7 @@ const Sheet = () => {
   const [attributeValues, setAttributeValues] = useState(initialAttributes)
 
   useEffect(() => {
+    if (OBR.isReady) {
     return OBR.broadcast.onMessage(MESSAGE_CHANNEL, (event) => {
       console.log("event:", event)
       try {
@@ -165,6 +166,7 @@ const Sheet = () => {
         console.error(error)
       }
     })
+    }
   }, [])
 
   const rollForRow = async (attribute, numDice, modifier) => {
