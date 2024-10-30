@@ -230,16 +230,6 @@ const Sheet = () => {
     )
   }
 
-  const getQualityRating = (total) => {
-    if (total <= 5) return { text: "Ungeschickt", class: "quality-bad", icon: "🔴" }
-    if (total <= 10) return { text: "Durchschnittlich", class: "quality-average", icon: "🟠" }
-    if (total <= 15) return { text: "Geschickt", class: "quality-ok", icon: "🟡" }
-    if (total <= 20) return { text: "Gut", class: "quality-good", icon: "🟢" }
-    if (total <= 25) return { text: "Meisterlich", class: "quality-master", icon: "🔵" }
-    if (total <= 30) return { text: "Brilliant", class: "quality-brilliant", icon: "🟣" }
-    return { text: "Göttlich", class: "quality-god", icon: "⚪" }
-  }
-
   return (
     <Container>
       <Table>
@@ -389,6 +379,16 @@ const Sheet = () => {
 
 function rollD6() {
   return Math.floor(Math.random() * 6) + 1
+}
+
+function getQualityRating(total) {
+  if (total <= 5) return { text: "ungeschickt", class: "quality-bad", icon: "🔴" }
+  if (total <= 10) return { text: "durchschnittlich", class: "quality-average", icon: "🟠" }
+  if (total <= 15) return { text: "geschickt", class: "quality-ok", icon: "🟡" }
+  if (total <= 20) return { text: "gut", class: "quality-good", icon: "🟢" }
+  if (total <= 25) return { text: "meisterlich", class: "quality-master", icon: "🔵" }
+  if (total <= 30) return { text: "brilliant", class: "quality-brilliant", icon: "🟣" }
+  return { text: "göttlich", class: "quality-god", icon: "⚪" }
 }
 
 export default Sheet
