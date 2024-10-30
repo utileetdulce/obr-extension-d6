@@ -163,8 +163,6 @@ const initialAttributes = [
 const Sheet = () => {
   const [result, setResult] = useState(null)
   const [history, setHistory] = useState([])
-  console.log("history:", history)
-  console.log("result:", result)
   const [attributeValues, setAttributeValues] = useState(initialAttributes)
 
   const pushMessageToHistory = (message) => {
@@ -176,7 +174,7 @@ const Sheet = () => {
   useEffect(() => {
     if (OBR.isReady) {
       return OBR.broadcast.onMessage(MESSAGE_CHANNEL, (event) => {
-        console.log("event:", event)
+        console.log(event.data)
         try {
           OBR.notification.show(`${event.data}`)
           pushMessageToHistory(event.data)
