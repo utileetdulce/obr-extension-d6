@@ -145,7 +145,7 @@ const initialAttributes = [
   { attribute: "Koordination", value: 2, modifier: 0 },
   { attribute: "Physis", value: 2, modifier: 0 },
   { attribute: "Ratio", value: 2, modifier: 0 },
-  { attribute: "Autreten", value: 2, modifier: 0 },
+  { attribute: "Auftreten", value: 2, modifier: 0 },
   { attribute: "Wahrnehmung", value: 2, modifier: 0 },
   { value: 2, modifier: 0 },
   { value: 2, modifier: 0 },
