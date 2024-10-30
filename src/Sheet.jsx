@@ -2,15 +2,16 @@ import { useEffect, useState } from "react"
 import { styled } from "styled-components"
 import OBR from "@owlbear-rodeo/sdk"
 
-const MESSAGE_CHANNEL = "com.onrender.obr-extension-d6"
+const MESSAGE_CHANNEL_PUBLIC = "com.onrender.obr-extension-d6.public"
+const MESSAGE_CHANNEL_GM = "com.onrender.obr-extension-d6.gm"
 const WILD_DIE_STATUS_TEXT = {
-  normal: " ",
+  normal: "",
   fail: "Patzer! ",
   explode: "Kritischer Treffer! ",
 }
 
 const Container = styled.div`
-  width: 450px;
+  width: 500px;
   height: 670px;
   font-family: "Arial", sans-serif;
   padding: 20px;
@@ -149,19 +150,20 @@ const History = styled.div`
 `
 
 const initialAttributes = [
-  { attribute: "Reflexe", value: 2, modifier: 0 },
-  { attribute: "Koordination", value: 2, modifier: 0 },
-  { attribute: "Physis", value: 2, modifier: 0 },
-  { attribute: "Ratio", value: 2, modifier: 0 },
-  { attribute: "Auftreten", value: 2, modifier: 0 },
-  { attribute: "Wahrnehmung", value: 2, modifier: 0 },
-  { value: 2, modifier: 0 },
-  { value: 2, modifier: 0 },
-  { value: 2, modifier: 0 },
+  { attribute: "Reflexe", value: 2, modifier: 0, isPublic: true },
+  { attribute: "Koordination", value: 2, modifier: 0, isPublic: true },
+  { attribute: "Physis", value: 2, modifier: 0, isPublic: true },
+  { attribute: "Ratio", value: 2, modifier: 0, isPublic: true },
+  { attribute: "Auftreten", value: 2, modifier: 0, isPublic: true },
+  { attribute: "Wahrnehmung", value: 2, modifier: 0, isPublic: true },
+  { value: 2, modifier: 0, isPublic: true },
+  { value: 2, modifier: 0, isPublic: true },
+  { value: 2, modifier: 0, isPublic: true },
 ]
 
 const Sheet = () => {
   const [result, setResult] = useState(null)
+  const [isGm, setIsGm] = useState(false)
   const [history, setHistory] = useState([])
   const [attributeValues, setAttributeValues] = useState(initialAttributes)
 
@@ -172,8 +174,26 @@ const Sheet = () => {
   }
 
   useEffect(() => {
+    OBR.player.getRole().then((role) => setIsGm(role === "GM"))
+  }, [])
+
+  useEffect(() => {
+    if (OBR.isReady && isGm) {
+      return OBR.broadcast.onMessage(MESSAGE_CHANNEL_GM, (event) => {
+        console.log(event.data)
+        try {
+          OBR.notification.show(`${event.data}`)
+          pushMessageToHistory(event.data)
+        } catch (error) {
+          console.error(error)
+        }
+      })
+    }
+  }, [isGm])
+
+  useEffect(() => {
     if (OBR.isReady) {
-      return OBR.broadcast.onMessage(MESSAGE_CHANNEL, (event) => {
+      return OBR.broadcast.onMessage(MESSAGE_CHANNEL_PUBLIC, (event) => {
         console.log(event.data)
         try {
           OBR.notification.show(`${event.data}`)
@@ -185,7 +205,7 @@ const Sheet = () => {
     }
   }, [])
 
-  const rollForRow = async (attribute, numDice, modifier) => {
+  const rollForRow = async (attribute, numDice, modifier, isPublic) => {
     let rolls = []
     let wildDieRolls = []
     let wildDieTotal = 0
@@ -244,7 +264,7 @@ const Sheet = () => {
 
     const playerName = await OBR.player.getName()
     await OBR.broadcast.sendMessage(
-      MESSAGE_CHANNEL,
+      isPublic ? MESSAGE_CHANNEL_PUBLIC : MESSAGE_CHANNEL_GM,
       `${playerName}s ${attribute} ist ${quality.text} (${diceString}) ${quality.icon}`,
       { destination: "ALL" },
     )
@@ -259,6 +279,7 @@ const Sheet = () => {
             <Th>Würfel (D6)</Th>
             <Th>Bonus/Malus</Th>
             <Th>Probe</Th>
+            <Th>Public</Th>
           </tr>
         </thead>
         <tbody>
@@ -355,11 +376,28 @@ const Sheet = () => {
                       attributeValues[index].attribute,
                       attributeValues[index].value,
                       attributeValues[index].modifier,
+                      attributeValues[index].isPublic,
                     )
                   }
                 >
                   Roll
                 </RollButton>
+              </Td>
+              <Td>
+                <input
+                  type="checkbox"
+                  checked={attributeValues[index].isPublic}
+                  onChange={(event) => {
+                    setAttributeValues(
+                      attributeValues.map((item, i) => {
+                        if (i === index) {
+                          return { ...item, isPublic: event.target.checked }
+                        }
+                        return item
+                      }),
+                    )
+                  }}
+                />
               </Td>
             </tr>
           ))}
