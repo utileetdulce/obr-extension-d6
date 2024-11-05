@@ -283,7 +283,7 @@ const Sheet = () => {
           </tr>
         </thead>
         <tbody>
-          {initialAttributes.map((row, index) => (
+          {attributeValues.map((row, index) => (
             <tr key={index}>
               <Td>
                 <AttributeInput
@@ -399,8 +399,27 @@ const Sheet = () => {
                   }}
                 />
               </Td>
+              <Td>
+                <Button
+                  onClick={() => {
+                    setAttributeValues(attributeValues.filter((_, i) => i !== index))
+                  }}
+                >
+                  -{" "}
+                </Button>
+              </Td>
             </tr>
           ))}
+          <tr>
+            <Td></Td>
+            <Td></Td>
+            <Td></Td>
+            <Td></Td>
+            <Td></Td>
+            <Td>
+              <Button onClick={() => setAttributeValues((values) => [...values, {}])}>+ </Button>
+            </Td>
+          </tr>
         </tbody>
       </Table>
 
