@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { styled } from "styled-components"
 import OBR from "@owlbear-rodeo/sdk"
+import { SliderButton } from "./SliderButton"
 
 const MESSAGE_CHANNEL_PUBLIC = "com.onrender.obr-extension-d6.public"
 const MESSAGE_CHANNEL_GM = "com.onrender.obr-extension-d6.gm"
@@ -27,7 +28,7 @@ const Table = styled.table`
 
 const Th = styled.th`
   padding: 12px;
-  text-align: left;
+  text-align: center;
   border: 1px solid #ddd;
   background-color: #2c3e50;
   color: white;
@@ -43,7 +44,7 @@ const Button = styled.button`
   background-color: #3498db;
   color: white;
   border: none;
-  padding: 8px 16px;
+  padding: 4px 8px;
   border-radius: 4px;
   cursor: pointer;
 
@@ -58,7 +59,8 @@ const RollButton = styled(Button)`
 `
 
 const AdjustButton = styled(Button)`
-  padding: 4px 8px;
+  height: 30px;
+  width: 30px;
   margin: 0 2px;
   width: 30px;
 `
@@ -120,19 +122,10 @@ const AttributeInput = styled.input`
   width: 100px;
 `
 
-const NumberInput = styled.input`
-  background-color: white;
+const NumberInput = styled.div`
   color: black;
-  width: 30px;
-  padding: 0;
-  box-sizing: border-box;
+  width: 20px;
   text-align: center;
-  padding-top: 2px;
-  margin: 0 2px;
-  &::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-  }
 `
 
 const InputGroup = styled.div`
@@ -164,6 +157,7 @@ const initialAttributes = [
 const Sheet = () => {
   const [result, setResult] = useState(null)
   const [isGm, setIsGm] = useState(false)
+  const [isPublicRoll, setIsPublicRoll] = useState(true)
   const [history, setHistory] = useState([])
   const [attributeValues, setAttributeValues] = useState(initialAttributes)
 
@@ -205,7 +199,7 @@ const Sheet = () => {
     }
   }, [])
 
-  const rollForRow = async (attribute, numDice, modifier, isPublic) => {
+  const rollForRow = async (attribute, numDice, modifier) => {
     let rolls = []
     let wildDieRolls = []
     let wildDieTotal = 0
@@ -264,7 +258,7 @@ const Sheet = () => {
 
     const playerName = await OBR.player.getName()
     await OBR.broadcast.sendMessage(
-      isPublic ? MESSAGE_CHANNEL_PUBLIC : MESSAGE_CHANNEL_GM,
+      isPublicRoll ? MESSAGE_CHANNEL_PUBLIC : MESSAGE_CHANNEL_GM,
       `${playerName}s ${attribute} ist ${quality.text} (${diceString}) ${quality.icon}`,
       { destination: "ALL" },
     )
@@ -272,14 +266,19 @@ const Sheet = () => {
 
   return (
     <Container>
+      <SliderButton
+        isOn={isPublicRoll}
+        onStateChange={setIsPublicRoll}
+        onCaption={"Public Roll"}
+        offCaption={"Private Roll"}
+      />
       <Table>
         <thead>
           <tr>
             <Th>Fertigkeit</Th>
-            <Th>Würfel (D6)</Th>
-            <Th>Bonus/Malus</Th>
+            <Th>D6</Th>
+            <Th>Bonus</Th>
             <Th>Probe</Th>
-            <Th>Public</Th>
           </tr>
         </thead>
         <tbody>
@@ -317,7 +316,7 @@ const Sheet = () => {
                   >
                     -
                   </AdjustButton>
-                  <NumberInput type="number" value={attributeValues[index].value} readOnly />
+                  <NumberInput>{attributeValues[index].value}</NumberInput>
                   <AdjustButton
                     onClick={() => {
                       setAttributeValues(
@@ -348,10 +347,9 @@ const Sheet = () => {
                       )
                     }}
                   >
-                    {" "}
-                    -{" "}
+                    -
                   </AdjustButton>
-                  <NumberInput type="number" value={attributeValues[index].modifier} readOnly />
+                  <NumberInput>{attributeValues[index].modifier}</NumberInput>
                   <AdjustButton
                     onClick={() => {
                       setAttributeValues(
@@ -364,8 +362,7 @@ const Sheet = () => {
                       )
                     }}
                   >
-                    {" "}
-                    +{" "}
+                    +
                   </AdjustButton>
                 </InputGroup>
               </Td>
@@ -383,30 +380,15 @@ const Sheet = () => {
                   Roll
                 </RollButton>
               </Td>
+
               <Td>
-                <input
-                  type="checkbox"
-                  checked={attributeValues[index].isPublic}
-                  onChange={(event) => {
-                    setAttributeValues(
-                      attributeValues.map((item, i) => {
-                        if (i === index) {
-                          return { ...item, isPublic: event.target.checked }
-                        }
-                        return item
-                      }),
-                    )
-                  }}
-                />
-              </Td>
-              <Td>
-                <Button
+                <AdjustButton
                   onClick={() => {
                     setAttributeValues(attributeValues.filter((_, i) => i !== index))
                   }}
                 >
-                  -{" "}
-                </Button>
+                  -
+                </AdjustButton>
               </Td>
             </tr>
           ))}
@@ -415,14 +397,14 @@ const Sheet = () => {
             <Td></Td>
             <Td></Td>
             <Td></Td>
-            <Td></Td>
             <Td>
-              <Button onClick={() => setAttributeValues((values) => [...values, {}])}>+ </Button>
+              <AdjustButton onClick={() => setAttributeValues((values) => [...values, {}])}>
+                +
+              </AdjustButton>
             </Td>
           </tr>
         </tbody>
       </Table>
-
       {result && (
         <Result>
           <DiceDetail>
