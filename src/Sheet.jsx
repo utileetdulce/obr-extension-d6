@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import { styled } from "styled-components"
 import OBR from "@owlbear-rodeo/sdk"
 import { SliderButton } from "./SliderButton"
+import { Row } from "./Row"
 
 const MESSAGE_CHANNEL_PUBLIC = "com.onrender.obr-extension-d6.public"
 const MESSAGE_CHANNEL_GM = "com.onrender.obr-extension-d6.gm"
@@ -51,11 +52,6 @@ const Button = styled.button`
   &:hover {
     background-color: #2980b9;
   }
-`
-
-const RollButton = styled(Button)`
-  width: 60px;
-  padding: 4px 8px;
 `
 
 const AdjustButton = styled(Button)`
@@ -111,27 +107,6 @@ const QualityRating = styled.div`
   border-radius: 4px;
   font-weight: bold;
   color: rgba(0, 0, 0, 0.5);
-`
-
-const AttributeInput = styled.input`
-  background-color: white;
-  color: black;
-  border: 1px solid #ddd;
-  padding: 4px 8px;
-  border-radius: 3px;
-  width: 100px;
-`
-
-const NumberInput = styled.div`
-  color: black;
-  width: 20px;
-  text-align: center;
-`
-
-const InputGroup = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 2px;
 `
 
 const History = styled.div`
@@ -283,114 +258,13 @@ const Sheet = () => {
         </thead>
         <tbody>
           {attributeValues.map((row, index) => (
-            <tr key={index}>
-              <Td>
-                <AttributeInput
-                  type="text"
-                  onChange={(event) =>
-                    setAttributeValues(
-                      attributeValues.map((item, i) => {
-                        if (i === index) {
-                          return { ...item, attribute: event.target.value }
-                        }
-                        return item
-                      }),
-                    )
-                  }
-                  placeholder={row.attribute}
-                />
-              </Td>
-              <Td>
-                <InputGroup>
-                  <AdjustButton
-                    onClick={() => {
-                      setAttributeValues(
-                        attributeValues.map((item, i) => {
-                          if (i === index) {
-                            return { ...item, value: item.value - 1 }
-                          }
-                          return item
-                        }),
-                      )
-                    }}
-                  >
-                    -
-                  </AdjustButton>
-                  <NumberInput>{attributeValues[index].value}</NumberInput>
-                  <AdjustButton
-                    onClick={() => {
-                      setAttributeValues(
-                        attributeValues.map((item, i) => {
-                          if (i === index) {
-                            return { ...item, value: item.value + 1 }
-                          }
-                          return item
-                        }),
-                      )
-                    }}
-                  >
-                    +
-                  </AdjustButton>
-                </InputGroup>
-              </Td>
-              <Td>
-                <InputGroup>
-                  <AdjustButton
-                    onClick={() => {
-                      setAttributeValues(
-                        attributeValues.map((item, i) => {
-                          if (i === index) {
-                            return { ...item, modifier: item.modifier - 1 }
-                          }
-                          return item
-                        }),
-                      )
-                    }}
-                  >
-                    -
-                  </AdjustButton>
-                  <NumberInput>{attributeValues[index].modifier}</NumberInput>
-                  <AdjustButton
-                    onClick={() => {
-                      setAttributeValues(
-                        attributeValues.map((item, i) => {
-                          if (i === index) {
-                            return { ...item, modifier: item.modifier + 1 }
-                          }
-                          return item
-                        }),
-                      )
-                    }}
-                  >
-                    +
-                  </AdjustButton>
-                </InputGroup>
-              </Td>
-              <Td>
-                <RollButton
-                  onClick={() =>
-                    rollForRow(
-                      attributeValues[index].attribute,
-                      attributeValues[index].value,
-                      attributeValues[index].modifier,
-                      attributeValues[index].isPublic,
-                    )
-                  }
-                >
-                  Roll
-                </RollButton>
-              </Td>
-
-              <Td>
-                <AdjustButton
-                  onClick={() => {
-                    setAttributeValues(attributeValues.filter((_, i) => i !== index))
-                  }}
-                >
-                  -
-                </AdjustButton>
-              </Td>
-            </tr>
+            <Row
+              key={index}
+              index={index}
+              attributeValues={attributeValues}
+              setAttributeValues={setAttributeValues}
+              rollForRow={rollForRow}
+            />
           ))}
           <tr>
             <Td></Td>
@@ -398,7 +272,11 @@ const Sheet = () => {
             <Td></Td>
             <Td></Td>
             <Td>
-              <AdjustButton onClick={() => setAttributeValues((values) => [...values, {}])}>
+              <AdjustButton
+                onClick={() =>
+                  setAttributeValues((values) => [...values, { value: 1, modifier: 0 }])
+                }
+              >
                 +
               </AdjustButton>
             </Td>
