@@ -3,7 +3,7 @@ import styled from "styled-components"
 const SliderContainer = styled.div`
   width: 60px;
   height: 30px;
-  background-color: ${(props) => (props.isOn ? "#8c8" : "#c88")};
+  background-color: ${(props) => (props.$isOn ? "#8c8" : "#c88")};
   border-radius: 15px;
   position: relative;
   cursor: pointer;
@@ -19,7 +19,7 @@ const Slider = styled.div`
   display: flex;
   align-items: center;
   position: absolute;
-  left: ${(props) => (props.isOn ? "30px" : "0px")};
+  left: ${(props) => (props.$isOn ? "30px" : "0px")};
   padding: 5px;
   box-sizing: border-box;
   transition: all 0.3s;
@@ -38,7 +38,7 @@ const Caption = styled.div`
   left: 70px;
   font-size: 14px;
   white-space: nowrap;
-  color: ${(props) => (props.isOn ? "#6a6" : "#a66")};
+  color: ${(props) => (props.$isOn ? "#6a6" : "#a66")};
 `
 
 export const SliderButton = ({ isOn, onStateChange, onCaption = "On", offCaption = "Off" }) => {
@@ -49,9 +49,9 @@ export const SliderButton = ({ isOn, onStateChange, onCaption = "On", offCaption
   }
 
   return (
-    <SliderContainer isOn={isOn} onClick={toggleState}>
-      <Caption isOn={isOn}>{isOn ? onCaption : offCaption}</Caption>
-      <Slider isOn={isOn}>
+    <SliderContainer $isOn={isOn} onClick={toggleState}>
+      <Caption $isOn={isOn}>{isOn ? onCaption : offCaption}</Caption>
+      <Slider $isOn={isOn}>
         <Handle />
       </Slider>
     </SliderContainer>

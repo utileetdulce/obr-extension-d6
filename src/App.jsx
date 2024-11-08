@@ -2,11 +2,16 @@ import OBR from "@owlbear-rodeo/sdk"
 import "./App.css"
 import Sheet from "./Sheet"
 import { useEffect, useState } from "react"
+import { mockObr } from "./Obr"
 
 function App() {
-  const [ready, setReady] = useState(!OBR.isAvailable)
+  const [ready, setReady] = useState(false)
 
   useEffect(() => {
+    if (!OBR.isAvailable) {
+      mockObr()
+      setReady(true)
+    }
     OBR.onReady(() => {
       console.log("OBR is ready !")
       setReady(true)

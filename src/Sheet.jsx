@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react"
 import { styled } from "styled-components"
-import OBR from "@owlbear-rodeo/sdk"
+
 import { SliderButton } from "./SliderButton"
 import { Row } from "./Row"
+import { rollD6, getQualityRating } from "./utils"
+import OBR from "@owlbear-rodeo/sdk"
 
 const MESSAGE_CHANNEL_PUBLIC = "com.onrender.obr-extension-d6.public"
 const MESSAGE_CHANNEL_GM = "com.onrender.obr-extension-d6.gm"
@@ -132,6 +134,7 @@ const initialAttributes = [
 const Sheet = () => {
   const [result, setResult] = useState(null)
   const [isGm, setIsGm] = useState(false)
+  const [playerName, setPlayerName] = useState("Player 1")
   const [isPublicRoll, setIsPublicRoll] = useState(true)
   const [history, setHistory] = useState([])
   const [attributeValues, setAttributeValues] = useState(initialAttributes)
@@ -147,7 +150,11 @@ const Sheet = () => {
   }, [])
 
   useEffect(() => {
-    if (OBR.isReady && isGm) {
+    OBR.player.getName().then(setPlayerName)
+  }, [])
+
+  useEffect(() => {
+    if (isGm) {
       return OBR.broadcast.onMessage(MESSAGE_CHANNEL_GM, (event) => {
         console.log(event.data)
         try {
@@ -161,17 +168,15 @@ const Sheet = () => {
   }, [isGm])
 
   useEffect(() => {
-    if (OBR.isReady) {
-      return OBR.broadcast.onMessage(MESSAGE_CHANNEL_PUBLIC, (event) => {
-        console.log(event.data)
-        try {
-          OBR.notification.show(`${event.data}`)
-          pushMessageToHistory(event.data)
-        } catch (error) {
-          console.error(error)
-        }
-      })
-    }
+    return OBR.broadcast.onMessage(MESSAGE_CHANNEL_PUBLIC, (event) => {
+      console.log("adsd" + event.data)
+      try {
+        OBR.notification.show(`dd${event.data}`)
+        pushMessageToHistory(event.data)
+      } catch (error) {
+        console.error(error)
+      }
+    })
   }, [])
 
   const rollForRow = async (attribute, numDice, modifier) => {
@@ -231,7 +236,6 @@ const Sheet = () => {
       diceString,
     })
 
-    const playerName = await OBR.player.getName()
     await OBR.broadcast.sendMessage(
       isPublicRoll ? MESSAGE_CHANNEL_PUBLIC : MESSAGE_CHANNEL_GM,
       `${playerName}s ${attribute} ist ${quality.text} (${diceString}) ${quality.icon}`,
@@ -313,20 +317,6 @@ const Sheet = () => {
       </History>
     </Container>
   )
-}
-
-function rollD6() {
-  return Math.floor(Math.random() * 6) + 1
-}
-
-function getQualityRating(total) {
-  if (total <= 5) return { text: "ungeschickt", class: "quality-bad", icon: "🔴🔴" }
-  if (total <= 10) return { text: "durchschnittlich", class: "quality-average", icon: "🔴🟠" }
-  if (total <= 15) return { text: "geschickt", class: "quality-ok", icon: "🟠🟠" }
-  if (total <= 20) return { text: "gut", class: "quality-good", icon: "🟢🟠" }
-  if (total <= 25) return { text: "meisterlich", class: "quality-master", icon: "🟢🟢" }
-  if (total <= 30) return { text: "brilliant", class: "quality-brilliant", icon: "🟢🟢🟢" }
-  return { text: "göttlich", class: "quality-god", icon: "🟢🟢🟢🟢" }
 }
 
 export default Sheet
