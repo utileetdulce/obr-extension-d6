@@ -5,6 +5,7 @@ import { SliderButton } from "./SliderButton"
 import { Row } from "./Row"
 import { rollD6, getQualityRating } from "./utils"
 import OBR from "@owlbear-rodeo/sdk"
+import { AdjustButton } from "./AdjustButton"
 
 const MESSAGE_CHANNEL_PUBLIC = "com.onrender.obr-extension-d6.public"
 const MESSAGE_CHANNEL_GM = "com.onrender.obr-extension-d6.gm"
@@ -41,26 +42,6 @@ const Td = styled.td`
   padding: 2px;
   text-align: left;
   border: 1px solid #ddd;
-`
-
-const Button = styled.button`
-  background-color: #3498db;
-  color: white;
-  border: none;
-  padding: 4px 8px;
-  border-radius: 4px;
-  cursor: pointer;
-
-  &:hover {
-    background-color: #2980b9;
-  }
-`
-
-const AdjustButton = styled(Button)`
-  height: 30px;
-  width: 30px;
-  margin: 0 2px;
-  width: 30px;
 `
 
 const Result = styled.div`
@@ -120,15 +101,15 @@ const History = styled.div`
 `
 
 const initialAttributes = [
-  { attribute: "Reflexe", value: 2, modifier: 0, isPublic: true },
-  { attribute: "Koordination", value: 2, modifier: 0, isPublic: true },
-  { attribute: "Physis", value: 2, modifier: 0, isPublic: true },
-  { attribute: "Ratio", value: 2, modifier: 0, isPublic: true },
-  { attribute: "Auftreten", value: 2, modifier: 0, isPublic: true },
-  { attribute: "Wahrnehmung", value: 2, modifier: 0, isPublic: true },
-  { value: 2, modifier: 0, isPublic: true },
-  { value: 2, modifier: 0, isPublic: true },
-  { value: 2, modifier: 0, isPublic: true },
+  { attribute: "Reflexe", numDice: 2, modifier: 0 },
+  { attribute: "Koordination", numDice: 2, modifier: 0 },
+  { attribute: "Physis", numDice: 2, modifier: 0 },
+  { attribute: "Ratio", numDice: 2, modifier: 0 },
+  { attribute: "Auftreten", numDice: 2, modifier: 0 },
+  { attribute: "Wahrnehmung", numDice: 2, modifier: 0 },
+  { numDice: 2, modifier: 0 },
+  { numDice: 2, modifier: 0 },
+  { numDice: 2, modifier: 0 },
 ]
 
 const Sheet = () => {
@@ -137,7 +118,7 @@ const Sheet = () => {
   const [playerName, setPlayerName] = useState("Player 1")
   const [isPublicRoll, setIsPublicRoll] = useState(true)
   const [history, setHistory] = useState([])
-  const [attributeValues, setAttributeValues] = useState(initialAttributes)
+  const [attributes, setAttributes] = useState(initialAttributes)
 
   const pushMessageToHistory = (message) => {
     setHistory((history) => {
@@ -169,7 +150,6 @@ const Sheet = () => {
 
   useEffect(() => {
     return OBR.broadcast.onMessage(MESSAGE_CHANNEL_PUBLIC, (event) => {
-      console.log("adsd" + event.data)
       try {
         OBR.notification.show(`dd${event.data}`)
         pushMessageToHistory(event.data)
@@ -179,7 +159,7 @@ const Sheet = () => {
     })
   }, [])
 
-  const rollForRow = async (attribute, numDice, modifier) => {
+  const rollForRow = async ({ attribute, numDice, modifier }) => {
     let rolls = []
     let wildDieRolls = []
     let wildDieTotal = 0
@@ -261,12 +241,20 @@ const Sheet = () => {
           </tr>
         </thead>
         <tbody>
-          {attributeValues.map((row, index) => (
+          {attributes.map((row, index) => (
             <Row
               key={index}
-              index={index}
-              attributeValues={attributeValues}
-              setAttributeValues={setAttributeValues}
+              row={row}
+              updateRow={(newRownumDice) => {
+                setAttributes(
+                  attributes.map((item, i) => {
+                    if (i === index) {
+                      return { ...item, ...newRownumDice }
+                    }
+                    return item
+                  }),
+                )
+              }}
               rollForRow={rollForRow}
             />
           ))}
@@ -278,7 +266,7 @@ const Sheet = () => {
             <Td>
               <AdjustButton
                 onClick={() =>
-                  setAttributeValues((values) => [...values, { value: 1, modifier: 0 }])
+                  setAttributes((numDices) => [...numDices, { numDice: 1, modifier: 0 }])
                 }
               >
                 +

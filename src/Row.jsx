@@ -52,110 +52,38 @@ const InputGroup = styled.div`
   gap: 2px;
 `
 
-export const Row = ({ index, attributeValues, setAttributeValues, rollForRow }) => {
+export const Row = ({ index, row, updateRow, rollForRow }) => {
   return (
     <tr>
       <Td>
         <AttributeInput
           type="text"
-          onChange={(event) =>
-            setAttributeValues(
-              attributeValues.map((item, i) => {
-                if (i === index) {
-                  return { ...item, attribute: event.target.value }
-                }
-                return item
-              }),
-            )
-          }
-          value={attributeValues[index].attribute}
+          onChange={(event) => updateRow({ attribute: event.target.numDice })}
+          value={row.attribute}
         />
       </Td>
       <Td>
         <InputGroup>
-          <AdjustButton
-            onClick={() => {
-              setAttributeValues(
-                attributeValues.map((item, i) => {
-                  if (i === index) {
-                    return { ...item, value: item.value - 1 }
-                  }
-                  return item
-                }),
-              )
-            }}
-          >
-            -
-          </AdjustButton>
-          <NumberInput>{attributeValues[index].value}</NumberInput>
-          <AdjustButton
-            onClick={() => {
-              setAttributeValues(
-                attributeValues.map((item, i) => {
-                  if (i === index) {
-                    return { ...item, value: item.value + 1 }
-                  }
-                  return item
-                }),
-              )
-            }}
-          >
-            +
-          </AdjustButton>
+          <AdjustButton onClick={() => updateRow({ numDice: row.numDice - 1 })}>-</AdjustButton>
+          <NumberInput>{row.numDice}</NumberInput>
+          <AdjustButton onClick={() => updateRow({ numDice: row.numDice + 1 })}>+</AdjustButton>
         </InputGroup>
       </Td>
       <Td>
         <InputGroup>
-          <AdjustButton
-            onClick={() => {
-              setAttributeValues(
-                attributeValues.map((item, i) => {
-                  if (i === index) {
-                    return { ...item, modifier: item.modifier - 1 }
-                  }
-                  return item
-                }),
-              )
-            }}
-          >
-            -
-          </AdjustButton>
-          <NumberInput>{attributeValues[index].modifier}</NumberInput>
-          <AdjustButton
-            onClick={() => {
-              setAttributeValues(
-                attributeValues.map((item, i) => {
-                  if (i === index) {
-                    return { ...item, modifier: item.modifier + 1 }
-                  }
-                  return item
-                }),
-              )
-            }}
-          >
-            +
-          </AdjustButton>
+          <AdjustButton onClick={() => updateRow({ modifier: row.modifier - 1 })}>-</AdjustButton>
+          <NumberInput>{row.modifier}</NumberInput>
+          <AdjustButton onClick={() => updateRow({ modifier: row.modifier + 1 })}>+</AdjustButton>
         </InputGroup>
       </Td>
       <Td>
-        <RollButton
-          onClick={() =>
-            rollForRow(
-              attributeValues[index].attribute,
-              attributeValues[index].value,
-              attributeValues[index].modifier,
-              attributeValues[index].isPublic,
-            )
-          }
-        >
-          Roll
-        </RollButton>
+        <RollButton onClick={() => rollForRow(row)}>Roll</RollButton>
       </Td>
 
       <Td>
         <AdjustButton
           onClick={() => {
-            setAttributeValues(attributeValues.filter((_, i) => i !== index))
+            updateRow(row.filter((_, i) => i !== index))
           }}
         >
           -
