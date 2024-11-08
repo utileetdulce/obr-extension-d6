@@ -1,8 +1,7 @@
 import OBR from "@owlbear-rodeo/sdk"
-import "./App.css"
 import Sheet from "./Sheet"
 import { useEffect, useState } from "react"
-import { mockObr } from "./Obr"
+import { mockObr } from "../obr"
 
 function App() {
   const [ready, setReady] = useState(false)

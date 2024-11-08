@@ -3,7 +3,7 @@ import { styled } from "styled-components"
 
 import { SliderButton } from "./SliderButton"
 import { Row } from "./Row"
-import { rollD6, getQualityRating } from "./utils"
+import { rollD6, getQualityRating } from "../utils"
 import OBR from "@owlbear-rodeo/sdk"
 import { AdjustButton } from "./AdjustButton"
 
