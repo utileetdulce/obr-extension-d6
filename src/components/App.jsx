@@ -1,5 +1,5 @@
 import OBR from "@owlbear-rodeo/sdk"
-import Sheet from "./Sheet"
+import { Sheet } from "./Sheet"
 import { useEffect, useState } from "react"
 import { mockObr } from "../obrMock"
 

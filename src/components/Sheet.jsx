@@ -9,6 +9,7 @@ import { AdjustButton } from "./AdjustButton"
 import { usePlayer } from "../hooks/usePlayer"
 import { useMessageSubscription } from "../hooks/useMessageSubscription"
 import { MESSAGE_CHANNEL_PUBLIC, MESSAGE_CHANNEL_GM, WILD_DIE_STATUS_TEXT } from "../constants"
+import { MessageHistory } from "./MessageHistory"
 
 const Container = styled.div`
   width: 500px;
@@ -87,14 +88,6 @@ const QualityRating = styled.div`
   color: rgba(0, 0, 0, 0.5);
 `
 
-const History = styled.div`
-  margin-top: 20px;
-  padding: 10px;
-  background-color: white;
-  border-radius: 4px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-`
-
 const initialAttributes = [
   { attribute: "Reflexe", numDice: 2, modifier: 0 },
   { attribute: "Koordination", numDice: 2, modifier: 0 },
@@ -107,7 +100,7 @@ const initialAttributes = [
   { numDice: 2, modifier: 0 },
 ]
 
-const Sheet = () => {
+export const Sheet = () => {
   const [result, setResult] = useState(null)
   const player = usePlayer()
   const [isPublicRoll, setIsPublicRoll] = useState(true)
@@ -253,13 +246,7 @@ const Sheet = () => {
           </DiceDetail>
         </Result>
       )}
-      <History>
-        {history.map((item, index) => (
-          <div key={item + index}>{item}</div>
-        ))}
-      </History>
+      <MessageHistory history={history} />
     </Container>
   )
 }
-
-export default Sheet
