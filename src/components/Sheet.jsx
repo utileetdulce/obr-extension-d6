@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { styled } from "styled-components"
 
 import { SliderButton } from "./SliderButton"
@@ -6,16 +6,9 @@ import { Row } from "./Row"
 import { rollD6, getQualityRating } from "../utils"
 import OBR from "@owlbear-rodeo/sdk"
 import { AdjustButton } from "./AdjustButton"
-import { useRole } from "../hooks/useRole"
 import { usePlayer } from "../hooks/usePlayer"
-
-const MESSAGE_CHANNEL_PUBLIC = "com.onrender.obr-extension-d6.public"
-const MESSAGE_CHANNEL_GM = "com.onrender.obr-extension-d6.gm"
-const WILD_DIE_STATUS_TEXT = {
-  normal: "",
-  fail: "Patzer! ",
-  explode: "Kritischer Treffer! ",
-}
+import { useMessageSubscription } from "../hooks/useMessageSubscription"
+import { MESSAGE_CHANNEL_PUBLIC, MESSAGE_CHANNEL_GM, WILD_DIE_STATUS_TEXT } from "../constants"
 
 const Container = styled.div`
   width: 500px;
@@ -116,42 +109,10 @@ const initialAttributes = [
 
 const Sheet = () => {
   const [result, setResult] = useState(null)
-  const { isGm } = useRole()
   const player = usePlayer()
   const [isPublicRoll, setIsPublicRoll] = useState(true)
-  const [history, setHistory] = useState([])
   const [attributes, setAttributes] = useState(initialAttributes)
-
-  const pushMessageToHistory = (message) => {
-    setHistory((history) => {
-      return [message, ...history.slice(0, 7)]
-    })
-  }
-
-  useEffect(() => {
-    if (isGm) {
-      return OBR.broadcast.onMessage(MESSAGE_CHANNEL_GM, (event) => {
-        console.log(event.data)
-        try {
-          OBR.notification.show(`${event.data}`)
-          pushMessageToHistory(event.data)
-        } catch (error) {
-          console.error(error)
-        }
-      })
-    }
-  }, [isGm])
-
-  useEffect(() => {
-    return OBR.broadcast.onMessage(MESSAGE_CHANNEL_PUBLIC, (event) => {
-      try {
-        OBR.notification.show(`${event.data}`)
-        pushMessageToHistory(event.data)
-      } catch (error) {
-        console.error(error)
-      }
-    })
-  }, [])
+  const { history } = useMessageSubscription()
 
   const rollForRow = async ({ attribute, numDice, modifier }) => {
     let rolls = []
