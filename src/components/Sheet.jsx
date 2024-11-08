@@ -6,6 +6,8 @@ import { Row } from "./Row"
 import { rollD6, getQualityRating } from "../utils"
 import OBR from "@owlbear-rodeo/sdk"
 import { AdjustButton } from "./AdjustButton"
+import { useRole } from "../hooks/useRole"
+import { usePlayer } from "../hooks/usePlayer"
 
 const MESSAGE_CHANNEL_PUBLIC = "com.onrender.obr-extension-d6.public"
 const MESSAGE_CHANNEL_GM = "com.onrender.obr-extension-d6.gm"
@@ -114,8 +116,8 @@ const initialAttributes = [
 
 const Sheet = () => {
   const [result, setResult] = useState(null)
-  const [isGm, setIsGm] = useState(false)
-  const [playerName, setPlayerName] = useState("Player 1")
+  const { isGm } = useRole()
+  const player = usePlayer()
   const [isPublicRoll, setIsPublicRoll] = useState(true)
   const [history, setHistory] = useState([])
   const [attributes, setAttributes] = useState(initialAttributes)
@@ -125,14 +127,6 @@ const Sheet = () => {
       return [message, ...history.slice(0, 7)]
     })
   }
-
-  useEffect(() => {
-    OBR.player.getRole().then((role) => setIsGm(role === "GM"))
-  }, [])
-
-  useEffect(() => {
-    OBR.player.getName().then(setPlayerName)
-  }, [])
 
   useEffect(() => {
     if (isGm) {
@@ -151,7 +145,7 @@ const Sheet = () => {
   useEffect(() => {
     return OBR.broadcast.onMessage(MESSAGE_CHANNEL_PUBLIC, (event) => {
       try {
-        OBR.notification.show(`dd${event.data}`)
+        OBR.notification.show(`${event.data}`)
         pushMessageToHistory(event.data)
       } catch (error) {
         console.error(error)
@@ -218,7 +212,7 @@ const Sheet = () => {
 
     await OBR.broadcast.sendMessage(
       isPublicRoll ? MESSAGE_CHANNEL_PUBLIC : MESSAGE_CHANNEL_GM,
-      `${playerName}s ${attribute} ist ${quality.text} (${diceString}) ${quality.icon}`,
+      `${player.name}s ${attribute} ist ${quality.text} (${diceString}) ${quality.icon}`,
       { destination: "ALL" },
     )
   }
