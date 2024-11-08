@@ -1,4 +1,5 @@
 import { styled } from "styled-components"
+import { AdjustButton } from "./AdjustButton"
 
 const Td = styled.td`
   padding: 2px;
@@ -22,13 +23,6 @@ const Button = styled.button`
 const RollButton = styled(Button)`
   width: 60px;
   padding: 4px 8px;
-`
-
-const AdjustButton = styled(Button)`
-  height: 30px;
-  width: 30px;
-  margin: 0 2px;
-  width: 30px;
 `
 
 const AttributeInput = styled.input`

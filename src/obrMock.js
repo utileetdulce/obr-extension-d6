@@ -18,6 +18,12 @@ export const mockObr = () => {
         resolve(role)
       })
     },
+    onChange: (callback) => {
+      console.log("Listening for player changes")
+      return () => {
+        console.log("Unsubscribed from player changes")
+      }
+    },
   }
   OBR.notification = {
     show: (msg) => console.log(msg),
@@ -32,7 +38,7 @@ export const mockObr = () => {
       }
     },
     sendMessage: (channel, message) => {
-      console.log(`Sending message to channel ${channel}: ${message}`)
+      console.log(`Sending message: ${message}`)
       mockSubscriptions.forEach((sub) => {
         if (sub.channel === channel) {
           sub.callback({ data: message })
