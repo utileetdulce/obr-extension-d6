@@ -146,6 +146,9 @@ export const Sheet = () => {
             <Row
               key={index}
               row={row}
+              deleteRow={() => {
+                setAttributes(attributes.filter((_, i) => i !== index))
+              }}
               updateRow={(newRownumDice) => {
                 setAttributes(
                   attributes.map((item, i) => {

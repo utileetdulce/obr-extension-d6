@@ -46,7 +46,7 @@ const InputGroup = styled.div`
   gap: 2px;
 `
 
-export const Row = ({ index, row, updateRow, rollForRow }) => {
+export const Row = ({ deleteRow, row, updateRow, rollForRow }) => {
   return (
     <tr>
       <Td>
@@ -75,13 +75,7 @@ export const Row = ({ index, row, updateRow, rollForRow }) => {
       </Td>
 
       <Td>
-        <AdjustButton
-          onClick={() => {
-            updateRow(row.filter((_, i) => i !== index))
-          }}
-        >
-          -
-        </AdjustButton>
+        <AdjustButton onClick={deleteRow}>-</AdjustButton>
       </Td>
     </tr>
   )
