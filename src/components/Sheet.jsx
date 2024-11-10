@@ -8,7 +8,7 @@ import OBR from "@owlbear-rodeo/sdk"
 import { AdjustButton } from "./AdjustButton"
 import { usePlayer } from "../hooks/usePlayer"
 import { useMessageSubscription } from "../hooks/useMessageSubscription"
-import { MESSAGE_CHANNEL_PUBLIC, MESSAGE_CHANNEL_GM, WILD_DIE_STATUS_TEXT } from "../constants"
+import { MESSAGE_CHANNEL_PUBLIC, MESSAGE_CHANNEL_GM } from "../constants"
 import { MessageHistory } from "./MessageHistory"
 import { RollResult } from "./RollResult"
 
