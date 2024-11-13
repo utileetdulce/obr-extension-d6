@@ -52,8 +52,8 @@ export const Row = ({ deleteRow, row, updateRow, rollForRow }) => {
       <Td>
         <AttributeInput
           type="text"
-          onChange={(event) => updateRow({ attribute: event.target.numDice })}
-          value={row.attribute}
+          onChange={(e) => updateRow({ attribute: e.target.value })}
+          value={row.attribute || ""}
         />
       </Td>
       <Td>
