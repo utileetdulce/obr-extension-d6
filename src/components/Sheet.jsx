@@ -149,11 +149,11 @@ export const Sheet = () => {
               deleteRow={() => {
                 setAttributes(attributes.filter((_, i) => i !== index))
               }}
-              updateRow={(newRownumDice) => {
+              updateRow={(row) => {
                 setAttributes(
                   attributes.map((item, i) => {
                     if (i === index) {
-                      return { ...item, ...newRownumDice }
+                      return { ...item, ...row }
                     }
                     return item
                   }),
