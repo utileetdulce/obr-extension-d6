@@ -166,6 +166,7 @@ export const Sheet = () => {
             <Th>D6</Th>
             <Th>Bonus</Th>
             <Th>Probe</Th>
+            <Th>+</Th>
           </tr>
         </thead>
         <tbody>
@@ -174,6 +175,9 @@ export const Sheet = () => {
               <Row
                 key={key}
                 row={value}
+                addRow={() => {
+                  setAttributes(() => [...attributes, { numDice: 0, modifier: 0, class: key }])
+                }}
                 updateRow={(row) => {
                   setAttributeClasses({
                     ...attributeClasses,
@@ -206,19 +210,6 @@ export const Sheet = () => {
                     rollForRow={rollForRow}
                   />
                 ))}
-
-              <tr>
-                <AdjustButton
-                  onClick={() =>
-                    setAttributes((numDices) => [
-                      ...numDices,
-                      { numDice: 0, modifier: 0, class: key },
-                    ])
-                  }
-                >
-                  +
-                </AdjustButton>
-              </tr>
             </React.Fragment>
           ))}
         </tbody>
