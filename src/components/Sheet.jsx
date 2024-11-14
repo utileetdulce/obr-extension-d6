@@ -163,7 +163,7 @@ export const Sheet = () => {
         <thead>
           <tr>
             <Th>Fertigkeit</Th>
-            <Th>D6</Th>
+            <Th>W6</Th>
             <Th>Bonus</Th>
             <Th>Probe</Th>
             <Th>+</Th>
