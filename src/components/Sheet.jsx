@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { styled } from "styled-components"
 
 import { SliderButton } from "./SliderButton"
@@ -34,56 +34,21 @@ const Th = styled.th`
   color: white;
 `
 
-const initialAttributes = [
-  { attribute: "Akrobatik", numDice: 2, modifier: 0, class: "physis" },
-  { attribute: "Klingenkampf", numDice: 2, modifier: 0, class: "reflexe" },
-  { attribute: "Schusswaffen", numDice: 2, modifier: 0, class: "koordination" },
-  { attribute: "Reiten", numDice: 2, modifier: 0, class: "koordination" },
-  { attribute: "Alchemie", numDice: 2, modifier: 0, class: "ratio" },
-  { attribute: "Umgarnen", numDice: 2, modifier: 0, class: "auftreten" },
-  { attribute: "Lügen erkennen", numDice: 2, modifier: 0, class: "wahrnehmung" },
-]
-
-const initialAttributeClasses = {
-  physis: {
-    attribute: "Physis",
-    numDice: 2,
-    modifier: 0,
-  },
-  reflexe: {
-    attribute: "Reflexe",
-    numDice: 2,
-    modifier: 0,
-  },
-  koordination: {
-    attribute: "Koordination",
-    numDice: 2,
-    modifier: 0,
-  },
-  ratio: {
-    attribute: "Ratio",
-    numDice: 2,
-    modifier: 0,
-  },
-  auftreten: {
-    attribute: "Auftreten",
-    numDice: 2,
-    modifier: 0,
-  },
-  wahrnehmung: {
-    attribute: "Wahrnehmung",
-    numDice: 2,
-    modifier: 0,
-  },
-}
-
-export const Sheet = () => {
+export const Sheet = ({
+  player,
+  attributes,
+  setAttributes,
+  attributeClasses,
+  setAttributeClasses,
+}) => {
   const [result, setResult] = useState(null)
-  const player = usePlayer()
   const [isPublicRoll, setIsPublicRoll] = useState(true)
-  const [attributes, setAttributes] = useState(initialAttributes)
-  const [attributeClasses, setAttributeClasses] = useState(initialAttributeClasses)
+
   const { history } = useMessageSubscription()
+
+  useEffect(() => {
+    OBR.player.setMetadata({ attributes, attributeClasses })
+  }, [attributes, attributeClasses, player])
 
   const rollForRow = async ({ attribute, numDice, modifier }) => {
     let rolls = []
@@ -151,6 +116,7 @@ export const Sheet = () => {
 
   return (
     <Container>
+      <h1>{player.name}</h1>
       <SliderButton
         isOn={isPublicRoll}
         onStateChange={setIsPublicRoll}

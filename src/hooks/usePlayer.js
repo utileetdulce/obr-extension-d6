@@ -7,7 +7,7 @@ export const usePlayer = () => {
   useEffect(() => {
     OBR.player.getName().then((name) => setPlayer((player) => ({ ...player, name })))
 
-    return OBR.player.onChange(setPlayer)
+    // return OBR.player.onChange(setPlayer)
   }, [])
 
   return player

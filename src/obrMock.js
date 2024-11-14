@@ -5,12 +5,21 @@ let mockSubscriptions = []
 const urlParams = new URLSearchParams(window.location.search)
 const playerName = urlParams.get("player") || "Peter"
 const role = urlParams.get("role") || "GM"
+const player = {
+  metadata: {},
+}
 
 export const mockObr = () => {
   OBR.player = {
     getName: () => {
       return new Promise((resolve) => {
         resolve(playerName)
+      })
+    },
+    setMetadata: (metadata) => {
+      return new Promise((resolve) => {
+        player.metadata = { ...player.metadata, ...metadata }
+        resolve()
       })
     },
     getRole: () => {
