@@ -1,4 +1,4 @@
-import { useState } from "react"
+import React, { useState } from "react"
 import { styled } from "styled-components"
 
 import { SliderButton } from "./SliderButton"
@@ -35,29 +35,55 @@ const Th = styled.th`
   color: white;
 `
 
-const Td = styled.td`
-  padding: 2px;
-  text-align: left;
-  border: 1px solid #ddd;
-`
-
 const initialAttributes = [
-  { attribute: "Reflexe", numDice: 2, modifier: 0 },
-  { attribute: "Koordination", numDice: 2, modifier: 0 },
-  { attribute: "Physis", numDice: 2, modifier: 0 },
-  { attribute: "Ratio", numDice: 2, modifier: 0 },
-  { attribute: "Auftreten", numDice: 2, modifier: 0 },
-  { attribute: "Wahrnehmung", numDice: 2, modifier: 0 },
-  { numDice: 2, modifier: 0 },
-  { numDice: 2, modifier: 0 },
-  { numDice: 2, modifier: 0 },
+  { attribute: "Akrobatik", numDice: 2, modifier: 0, class: "physis" },
+  { attribute: "Klingenkampf", numDice: 2, modifier: 0, class: "reflexe" },
+  { attribute: "Schusswaffen", numDice: 2, modifier: 0, class: "koordination" },
+  { attribute: "Reiten", numDice: 2, modifier: 0, class: "koordination" },
+  { attribute: "Alchemie", numDice: 2, modifier: 0, class: "ratio" },
+  { attribute: "Umgarnen", numDice: 2, modifier: 0, class: "auftreten" },
+  { attribute: "Lügen erkennen", numDice: 2, modifier: 0, class: "wahrnehmung" },
 ]
+
+const initialAttributeClasses = {
+  physis: {
+    attribute: "Physis",
+    numDice: 2,
+    modifier: 0,
+  },
+  reflexe: {
+    attribute: "Reflexe",
+    numDice: 2,
+    modifier: 0,
+  },
+  koordination: {
+    attribute: "Koordination",
+    numDice: 2,
+    modifier: 0,
+  },
+  ratio: {
+    attribute: "Ratio",
+    numDice: 2,
+    modifier: 0,
+  },
+  auftreten: {
+    attribute: "Auftreten",
+    numDice: 2,
+    modifier: 0,
+  },
+  wahrnehmung: {
+    attribute: "Wahrnehmung",
+    numDice: 2,
+    modifier: 0,
+  },
+}
 
 export const Sheet = () => {
   const [result, setResult] = useState(null)
   const player = usePlayer()
   const [isPublicRoll, setIsPublicRoll] = useState(true)
   const [attributes, setAttributes] = useState(initialAttributes)
+  const [attributeClasses, setAttributeClasses] = useState(initialAttributeClasses)
   const { history } = useMessageSubscription()
 
   const rollForRow = async ({ attribute, numDice, modifier }) => {
@@ -132,6 +158,7 @@ export const Sheet = () => {
         onCaption={"Public Roll"}
         offCaption={"Private Roll"}
       />
+
       <Table>
         <thead>
           <tr>
@@ -142,41 +169,58 @@ export const Sheet = () => {
           </tr>
         </thead>
         <tbody>
-          {attributes.map((row, index) => (
-            <Row
-              key={index}
-              row={row}
-              deleteRow={() => {
-                setAttributes(attributes.filter((_, i) => i !== index))
-              }}
-              updateRow={(row) => {
-                setAttributes(
-                  attributes.map((item, i) => {
-                    if (i === index) {
-                      return { ...item, ...row }
-                    }
-                    return item
-                  }),
-                )
-              }}
-              rollForRow={rollForRow}
-            />
+          {Object.entries(attributeClasses).map(([key, value]) => (
+            <React.Fragment key={key}>
+              <Row
+                key={key}
+                row={value}
+                updateRow={(row) => {
+                  setAttributeClasses({
+                    ...attributeClasses,
+                    [key]: { ...attributeClasses[key], ...row },
+                  })
+                }}
+                rollForRow={rollForRow}
+              />
+
+              {attributes
+                .filter((attr) => attr.class === key)
+                .map((row, index) => (
+                  <Row
+                    key={key + index}
+                    row={row}
+                    attributeClass={value}
+                    deleteRow={() => {
+                      setAttributes(attributes.filter((attribute) => attribute !== row))
+                    }}
+                    updateRow={(updatedRow) => {
+                      setAttributes(
+                        attributes.map((item) => {
+                          if (item === row) {
+                            return { ...item, ...updatedRow }
+                          }
+                          return item
+                        }),
+                      )
+                    }}
+                    rollForRow={rollForRow}
+                  />
+                ))}
+
+              <tr>
+                <AdjustButton
+                  onClick={() =>
+                    setAttributes((numDices) => [
+                      ...numDices,
+                      { numDice: 0, modifier: 0, class: key },
+                    ])
+                  }
+                >
+                  +
+                </AdjustButton>
+              </tr>
+            </React.Fragment>
           ))}
-          <tr>
-            <Td></Td>
-            <Td></Td>
-            <Td></Td>
-            <Td></Td>
-            <Td>
-              <AdjustButton
-                onClick={() =>
-                  setAttributes((numDices) => [...numDices, { numDice: 1, modifier: 0 }])
-                }
-              >
-                +
-              </AdjustButton>
-            </Td>
-          </tr>
         </tbody>
       </Table>
       <RollResult result={result} />
