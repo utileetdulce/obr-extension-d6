@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@owlbear-rodeo/sdk": "^3.0.0",
+    "@uidotdev/usehooks": "^2.4.1",
     "prettier": "^3.3.3",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",

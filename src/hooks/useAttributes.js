@@ -1,6 +1,7 @@
 import OBR from "@owlbear-rodeo/sdk"
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import { usePlayer } from "./usePlayer"
+import { useLocalStorage } from "@uidotdev/usehooks"
 
 const initialAttributes = [
   { attribute: "Akrobatik", numDice: 2, modifier: 0, class: "physis" },
@@ -46,8 +47,11 @@ const initialAttributeClasses = {
 }
 
 export const useAttributes = () => {
-  const [attributes, setAttributes] = useState(initialAttributes)
-  const [attributeClasses, setAttributeClasses] = useState(initialAttributeClasses)
+  const [attributes, setAttributes] = useLocalStorage("initialAttributes", initialAttributes)
+  const [attributeClasses, setAttributeClasses] = useLocalStorage(
+    "initialAttributeClasses",
+    initialAttributeClasses,
+  )
   const player = usePlayer()
 
   useEffect(() => {
