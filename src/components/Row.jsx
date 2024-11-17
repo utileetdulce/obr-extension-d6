@@ -43,11 +43,12 @@ const AttributeInput = styled.input`
 `
 
 const NumberInput = styled.div`
-  border: 2px solid #333;
+  outline: 2px solid #333;
   border-radius: 50%;
   color: black;
   width: 20px;
   height: 20px;
+  margin-left: 3px;
   text-align: center;
   display: flex;
   align-items: center;
