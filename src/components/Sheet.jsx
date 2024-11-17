@@ -131,7 +131,7 @@ export const Sheet = ({
             <Th>W6</Th>
             <Th>Bonus</Th>
             <Th>Probe</Th>
-            <Th>+</Th>
+            <Th>±</Th>
           </tr>
         </thead>
         <tbody>
