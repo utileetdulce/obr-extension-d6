@@ -58,10 +58,33 @@ export const useAttributes = () => {
     OBR.player.setMetadata({ attributes, attributeClasses })
   }, [attributes, attributeClasses, player])
 
+  const saveAttibutesToJsonFile = () => {
+    const element = document.createElement("a")
+    const file = new Blob([JSON.stringify({ attributes, attributeClasses })], {
+      type: "application/json",
+    })
+    element.href = URL.createObjectURL(file)
+    element.download = "attributes.json"
+    document.body.appendChild(element)
+    element.click()
+  }
+
+  const restoreAttributesFromJsonFile = (file) => {
+    const reader = new FileReader()
+    reader.onload = (e) => {
+      const { attributes, attributeClasses } = JSON.parse(e.target.result)
+      setAttributes(attributes)
+      setAttributeClasses(attributeClasses)
+    }
+    reader.readAsText(file)
+  }
+
   return {
     attributeClasses,
     attributes,
     setAttributeClasses,
     setAttributes,
+    saveAttibutesToJsonFile,
+    restoreAttributesFromJsonFile,
   }
 }

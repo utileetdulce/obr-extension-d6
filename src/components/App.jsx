@@ -40,12 +40,37 @@ const Container = styled.div`
   color: black;
 `
 
+const Button = styled.button`
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  text-align: center;
+  width: 230px;
+
+  font-size: 16px;
+  margin: 2px 0;
+
+  &:hover {
+    background-color: #2980b9;
+  }
+`
+
 function App() {
   const [ready, setReady] = useState(!OBR.isAvailable)
   const [tab, setTab] = useState(TABS.MY_PLAYER)
   const player = usePlayer()
   const { isGm } = useRole()
-  const { attributes, setAttributes, attributeClasses, setAttributeClasses } = useAttributes()
+  const {
+    attributes,
+    setAttributes,
+    attributeClasses,
+    setAttributeClasses,
+    saveAttibutesToJsonFile,
+    restoreAttributesFromJsonFile,
+  } = useAttributes()
 
   const { history } = useMessageSubscription()
   const [isPublicRoll, setIsPublicRoll] = useState(true)
@@ -86,6 +111,19 @@ function App() {
         />
         <RollResult result={result} />
         <MessageHistory history={history} />
+        <Button onClick={saveAttibutesToJsonFile}> 💾 Save Attributes</Button>
+        <Button as="label" htmlFor="files">
+          ↺ Restore attributes from file
+        </Button>
+        <input
+          id="files"
+          style={{ visibility: "hidden" }}
+          type="file"
+          onChange={(e) => {
+            restoreAttributesFromJsonFile(e.target.files[0])
+            e.target.value = ""
+          }}
+        />
       </TabContainer>
     </Container>
   )
