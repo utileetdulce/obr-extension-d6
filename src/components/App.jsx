@@ -80,7 +80,6 @@ function App() {
 
   useEffect(() => {
     if (!OBR.isAvailable) {
-      mockObr()
       setReady(true)
     }
     OBR.onReady(() => {

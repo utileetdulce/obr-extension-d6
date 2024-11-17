@@ -23,9 +23,9 @@ export function AllPlayers() {
 
   return (
     <Container>
-      {players.map((player) => (
+      {players.map((player, index) => (
         <Sheet
-          key={player.id}
+          key={player.id + index}
           player={player}
           attributes={player.metadata.attributes}
           attributeClasses={player.metadata.attributeClasses}
