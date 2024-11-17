@@ -1,5 +1,6 @@
 import { styled } from "styled-components"
 import { AdjustButton } from "./AdjustButton"
+import { ArrowDownRightSvg } from "./ArrowDownRightSvg"
 
 const Td = styled.td`
   padding: 2px;
@@ -42,8 +43,11 @@ const AttributeInput = styled.input`
 `
 
 const NumberInput = styled.div`
+  border: 2px solid #333;
+  border-radius: 50%;
   color: black;
   width: 20px;
+  height: 20px;
   text-align: center;
   display: flex;
   align-items: center;
@@ -51,11 +55,12 @@ const NumberInput = styled.div`
 `
 
 const NumberInputDice = styled(NumberInput)`
-  border: 2px solid #333;
   border-radius: 3px;
 `
 
 const InputGroup = styled.div`
+  position: relative;
+  left: ${(props) => (props.$isClass ? "-5px" : "0px")};
   display: flex;
   align-items: center;
   gap: 2px;
@@ -91,10 +96,12 @@ export const Row = ({ addRow, deleteRow, attributeClass, row, updateRow, rollFor
           />
         </Td>
         <Td>
-          <InputGroup>
+          <InputGroup $isClass={isClass}>
             <AdjustButton $decrease onClick={() => updateRow({ numDice: row.numDice - 1 })}>
               -
             </AdjustButton>
+            {!isClass && <ArrowDownRightSvg />}
+            {isClass ? "" : "+"}
             <NumberInputDice>{row.numDice}</NumberInputDice>
             <AdjustButton onClick={() => updateRow({ numDice: row.numDice + 1 })}>+</AdjustButton>
           </InputGroup>
@@ -104,6 +111,8 @@ export const Row = ({ addRow, deleteRow, attributeClass, row, updateRow, rollFor
             <AdjustButton $decrease onClick={() => updateRow({ modifier: row.modifier - 1 })}>
               -
             </AdjustButton>
+            {!isClass && <ArrowDownRightSvg />}
+            {isClass ? "" : "+"}
             <NumberInput>{row.modifier}</NumberInput>
             <AdjustButton onClick={() => updateRow({ modifier: row.modifier + 1 })}>+</AdjustButton>
           </InputGroup>
