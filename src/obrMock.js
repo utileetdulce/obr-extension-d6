@@ -10,6 +10,13 @@ const player = {
 }
 
 export const mockObr = () => {
+  OBR.party = {
+    getPlayers: () => {
+      return new Promise((resolve) => {
+        resolve([player])
+      })
+    },
+  }
   OBR.player = {
     getName: () => {
       return new Promise((resolve) => {
