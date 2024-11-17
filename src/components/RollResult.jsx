@@ -6,7 +6,7 @@ const Result = styled.div`
   height: 80px;
   color: black;
   margin-top: 20px;
-  padding: 0 15px;
+  padding: 15px;
   background-color: white;
   border-radius: 4px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
