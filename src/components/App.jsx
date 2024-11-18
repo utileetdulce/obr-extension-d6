@@ -111,7 +111,7 @@ function App() {
         />
         <RollResult result={result} />
         <MessageHistory history={history} />
-        <Button onClick={saveAttibutesToJsonFile}> 💾 Save Attributes</Button>
+        <Button onClick={saveAttibutesToJsonFile}> 💾 Save Attributes to file</Button>
         <Button as="label" htmlFor="files">
           ↺ Restore attributes from file
         </Button>

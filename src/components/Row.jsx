@@ -2,6 +2,11 @@ import { styled } from "styled-components"
 import { AdjustButton } from "./AdjustButton"
 import { ArrowDownRightSvg } from "./ArrowDownRightSvg"
 
+const Tr = styled.tr`
+  background: ${(props) => (props.$isClass ? "rgb(222,222,222)" : "white")};
+  font-weight: ${(props) => (props.$isClass ? "bold" : "normal")};
+`
+
 const Td = styled.td`
   padding: 2px;
   text-align: left;
@@ -43,12 +48,13 @@ const AttributeInput = styled.input`
 `
 
 const NumberInput = styled.div`
-  outline: 2px solid #333;
+  outline: 2px solid ${(props) => (props.$isClass ? "#3498db" : "#333")};
   border-radius: 50%;
-  color: black;
+  color: ${(props) => (props.$isClass ? "#3498db" : "black")};
   width: 20px;
   height: 20px;
-  margin-left: 3px;
+  font-weight: ${(props) => (props.$isClass ? "bold" : "normal")};
+
   text-align: center;
   display: flex;
   align-items: center;
@@ -59,9 +65,14 @@ const NumberInputDice = styled(NumberInput)`
   border-radius: 3px;
 `
 
+const Sign = styled.span`
+  width: 12px;
+  text-align: center;
+`
+
 const InputGroup = styled.div`
   position: relative;
-  left: ${(props) => (props.$isClass ? "-5px" : "0px")};
+  left: ${(props) => (props.$isClass ? "0px" : "0px")};
   display: flex;
   align-items: center;
   gap: 2px;
@@ -81,12 +92,7 @@ export const Row = ({ addRow, deleteRow, attributeClass, row, updateRow, rollFor
 
   return (
     <>
-      <tr
-        style={{
-          background: isClass ? "rgb(222,222,222)" : "white",
-          fontWeight: isClass ? "bold" : "normal",
-        }}
-      >
+      <Tr $isClass={isClass}>
         <Td>
           <AttributeInput
             $isClass={isClass}
@@ -101,9 +107,14 @@ export const Row = ({ addRow, deleteRow, attributeClass, row, updateRow, rollFor
             <AdjustButton $decrease onClick={() => updateRow({ numDice: row.numDice - 1 })}>
               -
             </AdjustButton>
-            {!isClass && <ArrowDownRightSvg />}
-            {isClass ? "" : "+"}
-            <NumberInputDice>{row.numDice}</NumberInputDice>
+            {!isClass && (
+              <>
+                <NumberInputDice $isClass={true}>{attributeClass?.numDice}</NumberInputDice>
+                <Sign>{Math.sign(row.numDice) === -1 ? "-" : "+"} </Sign>
+              </>
+            )}
+
+            <NumberInputDice $isClass={isClass}>{Math.abs(row.numDice)}</NumberInputDice>
             <AdjustButton onClick={() => updateRow({ numDice: row.numDice + 1 })}>+</AdjustButton>
           </InputGroup>
         </Td>
@@ -112,16 +123,22 @@ export const Row = ({ addRow, deleteRow, attributeClass, row, updateRow, rollFor
             <AdjustButton $decrease onClick={() => updateRow({ modifier: row.modifier - 1 })}>
               -
             </AdjustButton>
-            {!isClass && <ArrowDownRightSvg />}
-            {isClass ? "" : "+"}
-            <NumberInput>{row.modifier}</NumberInput>
+            {!isClass && (
+              <>
+                <NumberInput $isClass={true}>{attributeClass?.modifier}</NumberInput>
+                <Sign>{Math.sign(row.modifier) === -1 ? "-" : "+"} </Sign>
+              </>
+            )}
+            <NumberInput $isClass={isClass}>{Math.abs(row.modifier)}</NumberInput>
             <AdjustButton onClick={() => updateRow({ modifier: row.modifier + 1 })}>+</AdjustButton>
           </InputGroup>
         </Td>
         <Td>
-          <RollButton
-            onClick={() => rollForRow({ ...row, numDice, modifier })}
-          >{`${numDice}W+${modifier}`}</RollButton>
+          <RollButton onClick={() => rollForRow({ ...row, numDice, modifier })}>
+            {`${numDice}W`}
+            {Math.sign(modifier) === -1 ? "-" : "+"}
+            {Math.abs(modifier)}
+          </RollButton>
         </Td>
 
         <Td>
@@ -135,7 +152,7 @@ export const Row = ({ addRow, deleteRow, attributeClass, row, updateRow, rollFor
             )}
           </InputGroup>
         </Td>
-      </tr>
+      </Tr>
     </>
   )
 }
