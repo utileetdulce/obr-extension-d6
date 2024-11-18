@@ -8,7 +8,7 @@ export const usePlayer = (ready) => {
     if (ready) {
       OBR.player.getName().then((name) => setPlayer((player) => ({ ...player, name })))
 
-      return OBR.player.onChange(setPlayer)
+      // return OBR.player.onChange(setPlayer)
     }
   }, [ready])
 
