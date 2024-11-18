@@ -1,6 +1,5 @@
 import { styled } from "styled-components"
 import { AdjustButton } from "./AdjustButton"
-import { ArrowDownRightSvg } from "./ArrowDownRightSvg"
 
 const Tr = styled.tr`
   background: ${(props) => (props.$isClass ? "rgb(222,222,222)" : "white")};
