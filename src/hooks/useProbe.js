@@ -2,11 +2,9 @@ import OBR from "@owlbear-rodeo/sdk"
 import { useState } from "react"
 import { MESSAGE_CHANNEL_GM, MESSAGE_CHANNEL_PUBLIC } from "../constants"
 import { getQualityRating, rollD6 } from "../utils"
-import { usePlayer } from "./usePlayer"
 
-export const useProbe = (isPublicRoll) => {
+export const useProbe = (isPublicRoll, player) => {
   const [result, setResult] = useState(null)
-  const player = usePlayer()
 
   const rollForRow = async ({ attribute, numDice, modifier }) => {
     let rolls = []

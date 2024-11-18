@@ -6,7 +6,7 @@ import { useMessageHistory } from "./useMessageHistory"
 
 export const useMessageSubscription = (ready) => {
   const { history, pushMessageToHistory } = useMessageHistory()
-  const { isGm } = useRole()
+  const { isGm } = useRole(ready)
 
   useEffect(() => {
     if (isGm && ready) {

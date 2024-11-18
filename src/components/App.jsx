@@ -96,13 +96,14 @@ function App() {
           <Sheet
             player={player}
             attributes={attributes}
+            isPublicRoll={isPublicRoll}
             rollForRow={rollForRow}
             setAttributes={setAttributes}
             attributeClasses={attributeClasses}
             setAttributeClasses={setAttributeClasses}
           />
         )}
-        {tab === TABS.ALL_PLAYERS && <AllPlayers />}
+        {tab === TABS.ALL_PLAYERS && <AllPlayers isPublicRoll={isPublicRoll} />}
         <SliderButton
           isOn={isPublicRoll}
           onStateChange={setIsPublicRoll}

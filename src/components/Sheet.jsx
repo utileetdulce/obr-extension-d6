@@ -2,6 +2,7 @@ import React from "react"
 import { styled } from "styled-components"
 
 import { Row } from "./Row"
+import { useProbe } from "../hooks/useProbe"
 
 const Table = styled.table`
   border-collapse: collapse;
@@ -19,12 +20,14 @@ const Th = styled.th`
 
 export const Sheet = ({
   player,
-  rollForRow,
+  isPublicRoll = true,
   attributes,
   setAttributes,
   attributeClasses,
   setAttributeClasses,
 }) => {
+  const { rollForRow } = useProbe(isPublicRoll, player)
+
   return (
     <>
       <h1>{player.name}</h1>

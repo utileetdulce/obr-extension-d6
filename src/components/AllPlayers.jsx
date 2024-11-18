@@ -2,16 +2,14 @@ import OBR from "@owlbear-rodeo/sdk"
 import { Sheet } from "./Sheet"
 import { useEffect, useState } from "react"
 import { styled } from "styled-components"
-import { useProbe } from "../hooks/useProbe"
 
 const Container = styled.div`
   height: 100%;
   overflow-y: scroll;
 `
 
-export function AllPlayers() {
+export function AllPlayers({ isPublicRoll }) {
   const [players, setPlayers] = useState([])
-  const { rollForRow } = useProbe(false)
 
   useEffect(() => {
     const initPlayers = async () => {
@@ -24,11 +22,11 @@ export function AllPlayers() {
 
   return (
     <Container>
-      {players.map((player, index) => (
+      {players.map((player) => (
         <Sheet
-          key={player.id + index}
+          key={player.id}
           player={player}
-          rollForRow={rollForRow}
+          isPublicRoll={isPublicRoll}
           attributes={player.metadata.attributes}
           attributeClasses={player.metadata.attributeClasses}
         />

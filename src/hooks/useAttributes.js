@@ -1,6 +1,5 @@
 import OBR from "@owlbear-rodeo/sdk"
 import { useEffect } from "react"
-import { usePlayer } from "./usePlayer"
 import { useLocalStorage } from "@uidotdev/usehooks"
 
 const initialAttributes = [
@@ -52,11 +51,10 @@ export const useAttributes = () => {
     "initialAttributeClasses",
     initialAttributeClasses,
   )
-  const player = usePlayer()
 
   useEffect(() => {
     OBR.player.setMetadata({ attributes, attributeClasses })
-  }, [attributes, attributeClasses, player])
+  }, [attributes, attributeClasses])
 
   const saveAttibutesToJsonFile = () => {
     const element = document.createElement("a")
