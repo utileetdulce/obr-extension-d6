@@ -71,6 +71,7 @@ export const useProbe = (isPublicRoll) => {
       { destination: "ALL" },
     )
   }
+
   return {
     result,
     rollForRow,

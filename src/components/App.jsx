@@ -61,8 +61,8 @@ const Button = styled.button`
 function App() {
   const [ready, setReady] = useState(!OBR.isAvailable)
   const [tab, setTab] = useState(TABS.MY_PLAYER)
-  const player = usePlayer()
-  const { isGm } = useRole()
+  const player = usePlayer(ready)
+  const { isGm } = useRole(ready)
   const {
     attributes,
     setAttributes,
@@ -72,7 +72,7 @@ function App() {
     restoreAttributesFromJsonFile,
   } = useAttributes()
 
-  const { history } = useMessageSubscription()
+  const { history } = useMessageSubscription(ready)
   const [isPublicRoll, setIsPublicRoll] = useState(true)
   const { result, rollForRow } = useProbe(isPublicRoll)
 
