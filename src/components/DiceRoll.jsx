@@ -1,12 +1,18 @@
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import styled from "styled-components"
-import DiceBox from "@3d-dice/dice-box-threejs"
+import DiceBox from "./DiceBox"
+// import * as THREE from "three"
+// import MyThree from "./MyThree"
 
-const Container = styled.div``
+const Container = styled.div`
+  height: 500px;
+  width: 500px;
+  background-color: red;
+`
 
 const defaultConfig = {
   framerate: 1 / 60,
-  sounds: false,
+  sounds: true,
   volume: 100,
   color_spotlight: 0xefdfd5,
   shadows: true,
@@ -31,10 +37,27 @@ const defaultConfig = {
 
 export const DiceRoll = () => {
   const diceBoxRef = useRef(null)
+  const [box, setBox] = useState(null)
+  console.log("box:", box)
 
   useEffect(() => {
-    new DiceBox(diceBoxRef.current, defaultConfig)
+    const DBox = new DiceBox("#asdf", defaultConfig)
+    DBox.initialize()
+    setBox(DBox)
+    // const test = new THREE.WebGLRenderer()
+    // console.log("test:", test)
   }, [diceBoxRef])
 
-  return <Container ref={diceBoxRef}>Dice roll</Container>
+  return (
+    <>
+      <button
+        onClick={() => {
+          box.roll("6d6@6,6,6,6,6,6")
+        }}
+      >
+        add
+      </button>
+      <Container id={"asdf"} ref={diceBoxRef}></Container>
+    </>
+  )
 }
