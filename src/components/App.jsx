@@ -11,6 +11,7 @@ import { MessageHistory } from "./MessageHistory"
 import { SliderButton } from "./SliderButton"
 import { useAttributes } from "../hooks/useAttributes"
 import { useProbe } from "../hooks/useProbe"
+import { DiceRoll } from "./DiceRoll"
 
 const TABS = {
   MY_PLAYER: "MY_PLAYER",
@@ -87,6 +88,7 @@ function App() {
 
   return (
     <Container>
+      {/* <DiceRoll /> */}
       <TabNavigation>
         <button onClick={() => setTab(TABS.MY_PLAYER)}>My Player</button>
         {isGm && <button onClick={() => setTab(TABS.ALL_PLAYERS)}>All Players</button>}
