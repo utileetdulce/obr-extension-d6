@@ -12,8 +12,8 @@ if (!OBR.isAvailable) {
 }
 
 createRoot(document.getElementById("root")).render(
-  <>
+  <StrictMode>
     <DiceRoll />
     <GlobalStyles />
-  </>,
+  </StrictMode>,
 )

@@ -1,8 +1,6 @@
 import { useEffect, useRef, useState } from "react"
 import styled from "styled-components"
-import DiceBox from "./DiceBox"
-// import * as THREE from "three"
-// import MyThree from "./MyThree"
+import DiceBox from "@3d-dice/dice-box-threejs"
 
 const Container = styled.div`
   height: 500px;
@@ -38,14 +36,21 @@ const defaultConfig = {
 export const DiceRoll = () => {
   const diceBoxRef = useRef(null)
   const [box, setBox] = useState(null)
-  console.log("box:", box)
 
   useEffect(() => {
     const DBox = new DiceBox("#asdf", defaultConfig)
-    DBox.initialize()
-    setBox(DBox)
-    // const test = new THREE.WebGLRenderer()
-    // console.log("test:", test)
+    DBox.initialize().then(() => {
+      console.log("DBox initialized:", DBox)
+      setBox(DBox)
+    })
+
+    return () => {
+      try {
+        document.body.removeChild(DBox.renderer.domElement)
+      } catch (e) {
+        console.log("error:", e)
+      }
+    }
   }, [diceBoxRef])
 
   return (
@@ -55,7 +60,7 @@ export const DiceRoll = () => {
           box.roll("6d6@6,6,6,6,6,6")
         }}
       >
-        add
+        add(
       </button>
       <Container id={"asdf"} ref={diceBoxRef}></Container>
     </>
