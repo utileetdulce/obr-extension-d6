@@ -12,6 +12,7 @@ import { SliderButton } from "./SliderButton"
 import { useAttributes } from "../hooks/useAttributes"
 import { useProbe } from "../hooks/useProbe"
 import { DiceRoll } from "./DiceRoll"
+import { useDiceBox } from "./useDiceBox"
 
 const TABS = {
   MY_PLAYER: "MY_PLAYER",
@@ -76,6 +77,7 @@ function App() {
   const { history } = useMessageSubscription(ready)
   const [isPublicRoll, setIsPublicRoll] = useState(true)
   const { result, rollForRow } = useProbe(isPublicRoll)
+  const { diceBoxRef, box } = useDiceBox()
 
   useEffect(() => {
     OBR.onReady(() => {
@@ -88,7 +90,14 @@ function App() {
 
   return (
     <Container>
-      <DiceRoll />
+      <button
+        onClick={() => {
+          box.roll("6d6@6,6,6,6,6,6")
+        }}
+      >
+        add(
+      </button>
+      <DiceRoll diceBoxRef={diceBoxRef} />
       <TabNavigation>
         <button onClick={() => setTab(TABS.MY_PLAYER)}>My Player</button>
         {isGm && <button onClick={() => setTab(TABS.ALL_PLAYERS)}>All Players</button>}
@@ -97,6 +106,7 @@ function App() {
         {tab === TABS.MY_PLAYER && (
           <Sheet
             player={player}
+            box={box}
             attributes={attributes}
             isPublicRoll={isPublicRoll}
             rollForRow={rollForRow}

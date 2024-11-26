@@ -20,13 +20,14 @@ const Th = styled.th`
 
 export const Sheet = ({
   player,
+  box,
   isPublicRoll = true,
   attributes,
   setAttributes,
   attributeClasses,
   setAttributeClasses,
 }) => {
-  const { rollForRow } = useProbe(isPublicRoll, player)
+  const { rollForRow } = useProbe(isPublicRoll, player, box)
 
   return (
     <>
