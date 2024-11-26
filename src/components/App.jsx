@@ -88,7 +88,7 @@ function App() {
 
   return (
     <Container>
-      {/* <DiceRoll /> */}
+      <DiceRoll />
       <TabNavigation>
         <button onClick={() => setTab(TABS.MY_PLAYER)}>My Player</button>
         {isGm && <button onClick={() => setTab(TABS.ALL_PLAYERS)}>All Players</button>}

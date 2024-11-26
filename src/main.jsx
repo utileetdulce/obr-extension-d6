@@ -5,7 +5,7 @@ import { GlobalStyles } from "./components/GlobalStyles.jsx"
 import OBR from "@owlbear-rodeo/sdk"
 import { mockObr } from "./obrMock.js"
 import "./styles.css"
-import { DiceRoll } from "./components/DiceRoll.jsx"
+import App from "./components/App.jsx"
 
 if (!OBR.isAvailable) {
   mockObr()
@@ -13,7 +13,7 @@ if (!OBR.isAvailable) {
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <DiceRoll />
+    <App />
     <GlobalStyles />
   </StrictMode>,
 )

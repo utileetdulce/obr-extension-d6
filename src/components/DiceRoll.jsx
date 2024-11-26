@@ -3,9 +3,16 @@ import styled from "styled-components"
 import DiceBox from "@3d-dice/dice-box-threejs"
 
 const Container = styled.div`
-  height: 500px;
-  width: 500px;
-  background-color: red;
+  position: absolute;
+  top: 60px;
+  left: 0;
+  opacity: 1;
+  z-index: 1;
+  height: 100%;
+  width: 100%;
+  width: 512px;
+  height: 700px;
+  pointer-events: none;
 `
 
 const defaultConfig = {
@@ -27,29 +34,24 @@ const defaultConfig = {
   onRollComplete: () => {},
 }
 
-// const Box = new DiceBox("#scene-container",{
-//   onRollComplete: (results) => {
-//     console.log(`I've got results :>> `, results);
-//   }
-// });
-
 export const DiceRoll = () => {
   const diceBoxRef = useRef(null)
   const [box, setBox] = useState(null)
 
   useEffect(() => {
-    const DBox = new DiceBox("#asdf", defaultConfig)
+    const DBox = new DiceBox("#dice-box-container", defaultConfig)
     DBox.initialize().then(() => {
       console.log("DBox initialized:", DBox)
       setBox(DBox)
     })
 
+    const domElement = diceBoxRef.current
+
     return () => {
-      try {
-        document.body.removeChild(DBox.renderer.domElement)
-      } catch (e) {
-        console.log("error:", e)
+      while (domElement.firstChild) {
+        domElement.removeChild(domElement.lastChild)
       }
+      setBox(null)
     }
   }, [diceBoxRef])
 
@@ -62,7 +64,7 @@ export const DiceRoll = () => {
       >
         add(
       </button>
-      <Container id={"asdf"} ref={diceBoxRef}></Container>
+      <Container id={"dice-box-container"} ref={diceBoxRef}></Container>
     </>
   )
 }
