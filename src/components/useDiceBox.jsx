@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react"
-import styled from "styled-components"
-import DiceBox from "@3d-dice/dice-box-threejs"
+import DiceBox from "./DiceBox"
 
 const defaultConfig = {
   framerate: 1 / 60,
