@@ -1149,6 +1149,7 @@ class DiceBox {
     }
 
     this.simulateThrow()
+
     this.steps = 0
     this.iteration = 0
 
@@ -1168,6 +1169,8 @@ class DiceBox {
         const index = dieCount + i
         let dicemesh = this.diceList[index]
         if (!dicemesh) continue
+        console.log("dicemesh:", dicemesh.getLastValue().value)
+
         if (dicemesh.getLastValue().value == addNotationVectors.result[i]) continue
         this.swapDiceFace(dicemesh, addNotationVectors.result[i])
       }
@@ -1249,6 +1252,7 @@ class DiceBox {
     if (this.notationVectors.result && this.notationVectors.result.length > 0) {
       for (let i = 0; i < this.notationVectors.result.length; i++) {
         let dicemesh = this.diceList[i]
+        console.log("dicemesh:", dicemesh.getLastValue().value)
         if (!dicemesh) continue
         if (dicemesh.getLastValue().value == this.notationVectors.result[i]) continue
         this.swapDiceFace(dicemesh, this.notationVectors.result[i])
