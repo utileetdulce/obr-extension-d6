@@ -38,7 +38,6 @@ class DiceBox {
     //private variables
     this.initialized = false
     this.container = document.querySelector(element_container)
-    console.log("container:", this.container)
     this.dimensions = new THREE.Vector2(this.container.clientWidth, this.container.clientHeight)
     this.adaptive_timestep = false
     this.last_time = 0
@@ -1246,6 +1245,11 @@ class DiceBox {
 
       //reset dice vectors
       this.spawnDice(this.notationVectors.vectors[i], this.diceList[i])
+    }
+
+    for (let i = 0; i < this.diceList.length; i++) {
+      let dicemesh = this.diceList[i]
+      console.log("dicemesh:", dicemesh.getLastValue().value)
     }
 
     //check forced results, fix dice faces if necessary

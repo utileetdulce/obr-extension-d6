@@ -4,9 +4,41 @@ import { MESSAGE_CHANNEL_GM, MESSAGE_CHANNEL_PUBLIC } from "../constants"
 import { getQualityRating, rollD6 } from "../utils"
 
 export const useProbe = (isPublicRoll, player, box) => {
+  console.log("box:", box)
   const [result, setResult] = useState(null)
 
   const rollForRow = async ({ attribute, numDice, modifier }) => {
+    // const regularRolls = await box.roll(`1d6+1d6`)
+    if (box) {
+      const regularRolls = await box.roll(`${numDice}d6`)
+      console.log("regularRolls:", regularRolls)
+    }
+    // console.log("sim:", sim)
+    // await box.updateConfig({
+    //   theme_customColorset: {
+    //     name: "Fire",
+    //     category: "Damage Types",
+    //     foreground: "#f8d84f",
+    //     background: ["#f8d84f", "#f9b02d", "#f43c04", "#910200", "#4c1009"],
+    //     outline: "black",
+    //     texture: "fire",
+    //     description: "Fire",
+    //   },
+    // })
+    // const regularRolls2 = await box.roll(`2d6`)
+    // await box.updateConfig({
+    //   theme_customColorset: {
+    //     name: "Ice",
+    //     category: "Damage Types",
+    //     foreground: "#60E9FF",
+    //     background: ["#214fa3", "#3c6ac1", "#253f70", "#0b56e2", "#09317a"],
+    //     outline: "black",
+    //     texture: "ice",
+    //     description: "Ice",
+    //   },
+    // })
+  }
+  const rollForRow2 = async ({ attribute, numDice, modifier }) => {
     const regularRolls = await box.roll(`${numDice - 1}d6`)
     const wildDieRoll = await box.add(`1d6!r>3@6`)
     console.log("regularRolls:", regularRolls)

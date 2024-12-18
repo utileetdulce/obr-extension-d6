@@ -95,7 +95,7 @@ function App() {
           box.roll("6d6@6,6,6,6,6,6")
         }}
       >
-        add(
+        add
       </button>
       <DiceRoll diceBoxRef={diceBoxRef} />
       <TabNavigation>
