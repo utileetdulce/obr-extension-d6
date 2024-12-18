@@ -2,44 +2,65 @@ import OBR from "@owlbear-rodeo/sdk"
 import { useEffect } from "react"
 import { useLocalStorage } from "@uidotdev/usehooks"
 
+const STAERKE = "Stärke"
+const GESCHICKLICHKEIT = "Geschicklichkeit"
+const KONDITION = "Kondition"
+const AUFTRETEN = "Auftreten"
+const WAHRNEHMUNG = "Wahrnehmung"
+const INTELLIGENZ = "Intelligenz"
+
 const initialAttributes = [
-  { attribute: "Akrobatik", numDice: 2, modifier: 0, class: "physis" },
-  { attribute: "Klingenkampf", numDice: 2, modifier: 0, class: "reflexe" },
-  { attribute: "Schusswaffen", numDice: 2, modifier: 0, class: "koordination" },
-  { attribute: "Reiten", numDice: 2, modifier: 0, class: "koordination" },
-  { attribute: "Alchemie", numDice: 2, modifier: 0, class: "ratio" },
-  { attribute: "Umgarnen", numDice: 2, modifier: 0, class: "auftreten" },
-  { attribute: "Lügen erkennen", numDice: 2, modifier: 0, class: "wahrnehmung" },
+  { attribute: "waffenloser Kampf (S)", numDice: 0, modifier: 0, class: STAERKE },
+  { attribute: "bewaffneter Nahkampf (S)", numDice: 0, modifier: 0, class: STAERKE },
+  { attribute: "Schild (S)", numDice: 0, modifier: 0, class: STAERKE },
+  { attribute: "Athletik", numDice: 0, modifier: 0, class: STAERKE },
+  { attribute: "waffenloser Kampf (G)", numDice: 0, modifier: 0, class: GESCHICKLICHKEIT },
+  { attribute: "bewaffneter Nahkampf (G)", numDice: 0, modifier: 0, class: GESCHICKLICHKEIT },
+  { attribute: "Schild (G)", numDice: 0, modifier: 0, class: GESCHICKLICHKEIT },
+  { attribute: "Akrobatik", numDice: 0, modifier: 0, class: GESCHICKLICHKEIT },
+  { attribute: "Diebeskunst", numDice: 0, modifier: 0, class: GESCHICKLICHKEIT },
+  { attribute: "Fernwaffen / Werfen", numDice: 0, modifier: 0, class: GESCHICKLICHKEIT },
+  { attribute: "Ausweichen", numDice: 0, modifier: 0, class: GESCHICKLICHKEIT },
+  { attribute: "Schleichen", numDice: 0, modifier: 0, class: GESCHICKLICHKEIT },
+  { attribute: "Ausdauer / Zähigkeit", numDice: 0, modifier: 0, class: KONDITION },
+  { attribute: "Resistenz", numDice: 0, modifier: 0, class: KONDITION },
+  { attribute: "Medizin / erst Hilfe", numDice: 0, modifier: 0, class: INTELLIGENZ },
+  { attribute: "Navigation", numDice: 0, modifier: 0, class: INTELLIGENZ },
+  { attribute: "Handwerks- / Ingenieurskunst", numDice: 0, modifier: 0, class: INTELLIGENZ },
+  { attribute: "Recherche / Wissen", numDice: 0, modifier: 0, class: INTELLIGENZ },
+  { attribute: "Naturkunde", numDice: 0, modifier: 0, class: INTELLIGENZ },
+  { attribute: "Verkleiden", numDice: 0, modifier: 0, class: WAHRNEHMUNG },
+  { attribute: "Untersuchen", numDice: 0, modifier: 0, class: WAHRNEHMUNG },
+  { attribute: "Spuren lesen / Suchen", numDice: 0, modifier: 0, class: WAHRNEHMUNG },
+  { attribute: "Tierhandhabung", numDice: 0, modifier: 0, class: AUFTRETEN },
+  { attribute: "Betören / Beeinflussen / Befehlen", numDice: 0, modifier: 0, class: AUFTRETEN },
+  { attribute: "Schauspielern", numDice: 0, modifier: 0, class: AUFTRETEN },
+  { attribute: "Willensstärke", numDice: 0, modifier: 0, class: AUFTRETEN },
 ]
 
 const initialAttributeClasses = {
-  physis: {
-    attribute: "Physis",
+  [STAERKE]: {
+    attribute: STAERKE,
     numDice: 2,
     modifier: 0,
   },
-  reflexe: {
-    attribute: "Reflexe",
+  [GESCHICKLICHKEIT]: {
+    attribute: GESCHICKLICHKEIT,
     numDice: 2,
     modifier: 0,
   },
-  koordination: {
-    attribute: "Koordination",
+  [KONDITION]: {
+    attribute: KONDITION,
     numDice: 2,
     modifier: 0,
   },
-  ratio: {
-    attribute: "Ratio",
+  [AUFTRETEN]: {
+    attribute: AUFTRETEN,
     numDice: 2,
     modifier: 0,
   },
-  auftreten: {
-    attribute: "Auftreten",
-    numDice: 2,
-    modifier: 0,
-  },
-  wahrnehmung: {
-    attribute: "Wahrnehmung",
+  [WAHRNEHMUNG]: {
+    attribute: WAHRNEHMUNG,
     numDice: 2,
     modifier: 0,
   },
