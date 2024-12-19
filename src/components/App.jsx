@@ -70,6 +70,7 @@ function App() {
     setAttributeClasses,
     saveAttibutesToJsonFile,
     restoreAttributesFromJsonFile,
+    resetAttributes,
   } = useAttributes()
 
   const { history } = useMessageSubscription(ready)
@@ -116,6 +117,7 @@ function App() {
         <Button as="label" htmlFor="files">
           ↺ Restore attributes from file
         </Button>
+        <Button onClick={resetAttributes}>↺ Reset attributes to initial values</Button>
         <input
           id="files"
           style={{ visibility: "hidden" }}

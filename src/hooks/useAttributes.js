@@ -11,29 +11,29 @@ const INTELLIGENZ = "Intelligenz"
 
 const initialAttributes = [
   { attribute: "Waffenloser Kampf (S)", numDice: 0, modifier: 0, class: STAERKE },
-  { attribute: "Bewaffneter Nahkampf (S)", numDice: 0, modifier: 0, class: STAERKE },
+  { attribute: "Bewaffneter Kampf (S)", numDice: 0, modifier: 0, class: STAERKE },
   { attribute: "Schild (S)", numDice: 0, modifier: 0, class: STAERKE },
   { attribute: "Athletik", numDice: 0, modifier: 0, class: STAERKE },
   { attribute: "Waffenloser Kampf (G)", numDice: 0, modifier: 0, class: GESCHICKLICHKEIT },
-  { attribute: "Bewaffneter Nahkampf (G)", numDice: 0, modifier: 0, class: GESCHICKLICHKEIT },
+  { attribute: "Bewaffneter Kampf (G)", numDice: 0, modifier: 0, class: GESCHICKLICHKEIT },
   { attribute: "Schild (G)", numDice: 0, modifier: 0, class: GESCHICKLICHKEIT },
   { attribute: "Akrobatik", numDice: 0, modifier: 0, class: GESCHICKLICHKEIT },
   { attribute: "Diebeskunst", numDice: 0, modifier: 0, class: GESCHICKLICHKEIT },
-  { attribute: "Fernwaffen / Werfen", numDice: 0, modifier: 0, class: GESCHICKLICHKEIT },
+  { attribute: "Fernwaffen", numDice: 0, modifier: 0, class: GESCHICKLICHKEIT },
   { attribute: "Ausweichen", numDice: 0, modifier: 0, class: GESCHICKLICHKEIT },
   { attribute: "Schleichen", numDice: 0, modifier: 0, class: GESCHICKLICHKEIT },
-  { attribute: "Ausdauer / Zähigkeit", numDice: 0, modifier: 0, class: KONDITION },
+  { attribute: "Robustheit", numDice: 0, modifier: 0, class: KONDITION },
   { attribute: "Resistenz", numDice: 0, modifier: 0, class: KONDITION },
-  { attribute: "Medizin / erst Hilfe", numDice: 0, modifier: 0, class: INTELLIGENZ },
+  { attribute: "Medizin", numDice: 0, modifier: 0, class: INTELLIGENZ },
   { attribute: "Navigation", numDice: 0, modifier: 0, class: INTELLIGENZ },
-  { attribute: "Handwerks- / Ingenieurskunst", numDice: 0, modifier: 0, class: INTELLIGENZ },
-  { attribute: "Recherche / Wissen", numDice: 0, modifier: 0, class: INTELLIGENZ },
+  { attribute: "Handwerkskunst", numDice: 0, modifier: 0, class: INTELLIGENZ },
+  { attribute: "Wissen", numDice: 0, modifier: 0, class: INTELLIGENZ },
   { attribute: "Naturkunde", numDice: 0, modifier: 0, class: INTELLIGENZ },
   { attribute: "Verkleiden", numDice: 0, modifier: 0, class: WAHRNEHMUNG },
   { attribute: "Untersuchen", numDice: 0, modifier: 0, class: WAHRNEHMUNG },
-  { attribute: "Spuren lesen / Suchen", numDice: 0, modifier: 0, class: WAHRNEHMUNG },
+  { attribute: "Spuren suchen", numDice: 0, modifier: 0, class: WAHRNEHMUNG },
   { attribute: "Tierhandhabung", numDice: 0, modifier: 0, class: AUFTRETEN },
-  { attribute: "Betören / Beeinflussen / Befehlen", numDice: 0, modifier: 0, class: AUFTRETEN },
+  { attribute: "Beeinflussen", numDice: 0, modifier: 0, class: AUFTRETEN },
   { attribute: "Schauspielern", numDice: 0, modifier: 0, class: AUFTRETEN },
   { attribute: "Willensstärke", numDice: 0, modifier: 0, class: AUFTRETEN },
 ]
@@ -98,11 +98,17 @@ export const useAttributes = () => {
     reader.readAsText(file)
   }
 
+  const resetAttributes = () => {
+    setAttributes(initialAttributes)
+    setAttributeClasses(initialAttributeClasses)
+  }
+
   return {
     attributeClasses,
     attributes,
     setAttributeClasses,
     setAttributes,
+    resetAttributes,
     saveAttibutesToJsonFile,
     restoreAttributesFromJsonFile,
   }
