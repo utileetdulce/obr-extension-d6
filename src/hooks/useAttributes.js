@@ -1,6 +1,7 @@
 import OBR from "@owlbear-rodeo/sdk"
 import { useEffect } from "react"
 import { useLocalStorage } from "@uidotdev/usehooks"
+import { usePlayer } from "./usePlayer"
 
 const STAERKE = "Stärke"
 const GESCHICKLICHKEIT = "Geschicklichkeit"
@@ -72,6 +73,7 @@ const initialAttributeClasses = {
 }
 
 export const useAttributes = () => {
+  const player = usePlayer(true)
   const [attributes, setAttributes] = useLocalStorage("initialAttributes", initialAttributes)
   const [attributeClasses, setAttributeClasses] = useLocalStorage(
     "initialAttributeClasses",
@@ -88,7 +90,14 @@ export const useAttributes = () => {
       type: "application/json",
     })
     element.href = URL.createObjectURL(file)
-    element.download = "attributes.json"
+
+    const now = new Date()
+    const formattedDateTime = [
+      now.toLocaleDateString("de-DE"),
+      now.toLocaleTimeString("de-DE"),
+    ].join("-")
+
+    element.download = `${player.name}-${formattedDateTime}.json`
     document.body.appendChild(element)
     element.click()
   }
