@@ -11,23 +11,12 @@ import { MessageHistory } from "./MessageHistory"
 import { SliderButton } from "./SliderButton"
 import { useAttributes } from "../hooks/useAttributes"
 import { useProbe } from "../hooks/useProbe"
+import { ManageSheetData } from "./ManageSheetData"
 
 const TABS = {
   MY_PLAYER: "MY_PLAYER",
   ALL_PLAYERS: "ALL_PLAYERS",
 }
-
-const TabNavigation = styled.div`
-  display: flex;
-  justify-content: center;
-  margin-bottom: 20px;
-`
-
-const TabContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-`
 
 const Container = styled.div`
   width: 512px;
@@ -39,21 +28,16 @@ const Container = styled.div`
   color: black;
 `
 
-const Button = styled.button`
-  background-color: #3498db;
-  color: white;
-  border: none;
-  padding: 4px 8px;
-  border-radius: 4px;
-  cursor: pointer;
-  text-align: center;
-  width: 230px;
+const TabContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+`
 
-  margin: 2px 0;
-
-  &:hover {
-    background-color: #2980b9;
-  }
+const TabNavigation = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
 `
 
 function App() {
@@ -61,15 +45,7 @@ function App() {
   const [tab, setTab] = useState(TABS.MY_PLAYER)
   const player = usePlayer(ready)
   const { isGm } = useRole(ready)
-  const {
-    attributes,
-    setAttributes,
-    attributeClasses,
-    setAttributeClasses,
-    saveAttibutesToJsonFile,
-    restoreAttributesFromJsonFile,
-    resetAttributes,
-  } = useAttributes()
+  const { attributes, setAttributes, attributeClasses, setAttributeClasses } = useAttributes()
 
   const { history } = useMessageSubscription(ready)
   const [isPublicRoll, setIsPublicRoll] = useState(true)
@@ -111,20 +87,7 @@ function App() {
         />
         <RollResult result={result} />
         <MessageHistory history={history} />
-        <Button onClick={saveAttibutesToJsonFile}> 💾 Save Attributes to file</Button>
-        <Button as="label" htmlFor="files">
-          ↺ Restore attributes from file
-        </Button>
-        <Button onClick={resetAttributes}>↺ Reset attributes to initial values</Button>
-        <input
-          id="files"
-          style={{ visibility: "hidden" }}
-          type="file"
-          onChange={(e) => {
-            restoreAttributesFromJsonFile(e.target.files[0])
-            e.target.value = ""
-          }}
-        />
+        <ManageSheetData />
       </TabContainer>
     </Container>
   )
