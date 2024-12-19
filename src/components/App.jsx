@@ -31,7 +31,7 @@ const TabContainer = styled.div`
 
 const Container = styled.div`
   width: 512px;
-  height: 700px;
+  height: 1000px;
   box-sizing: border-box;
   overflow-y: scroll;
   font-family: "Arial", sans-serif;
