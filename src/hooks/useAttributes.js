@@ -4,7 +4,7 @@ import { useLocalStorage } from "@uidotdev/usehooks"
 
 const STAERKE = "Stärke"
 const GESCHICKLICHKEIT = "Geschicklichkeit"
-const KONDITION = "Kondition"
+const ROBUSTHEIT = "Robustheit"
 const AUFTRETEN = "Auftreten"
 const WAHRNEHMUNG = "Wahrnehmung"
 const INTELLIGENZ = "Intelligenz"
@@ -22,8 +22,8 @@ const initialAttributes = [
   { attribute: "Fernwaffen", numDice: 0, modifier: 0, class: GESCHICKLICHKEIT },
   { attribute: "Ausweichen", numDice: 0, modifier: 0, class: GESCHICKLICHKEIT },
   { attribute: "Schleichen", numDice: 0, modifier: 0, class: GESCHICKLICHKEIT },
-  { attribute: "Robustheit", numDice: 0, modifier: 0, class: KONDITION },
-  { attribute: "Resistenz", numDice: 0, modifier: 0, class: KONDITION },
+  { attribute: "Ausdauer", numDice: 0, modifier: 0, class: ROBUSTHEIT },
+  { attribute: "Resistenz", numDice: 0, modifier: 0, class: ROBUSTHEIT },
   { attribute: "Medizin", numDice: 0, modifier: 0, class: INTELLIGENZ },
   { attribute: "Navigation", numDice: 0, modifier: 0, class: INTELLIGENZ },
   { attribute: "Handwerkskunst", numDice: 0, modifier: 0, class: INTELLIGENZ },
@@ -49,8 +49,8 @@ const initialAttributeClasses = {
     numDice: 2,
     modifier: 0,
   },
-  [KONDITION]: {
-    attribute: KONDITION,
+  [ROBUSTHEIT]: {
+    attribute: ROBUSTHEIT,
     numDice: 2,
     modifier: 0,
   },
