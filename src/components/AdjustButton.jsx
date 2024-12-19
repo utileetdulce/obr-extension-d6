@@ -10,8 +10,8 @@ export const Button = styled.button`
 `
 
 export const AdjustButton = styled(Button)`
-  height: 20px;
-  width: 20px;
+  height: 16px;
+  width: 16px;
   border-radius: 50%;
 
   padding: 0;

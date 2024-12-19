@@ -5,13 +5,14 @@ import { Row } from "./Row"
 import { useProbe } from "../hooks/useProbe"
 
 const Table = styled.table`
+  width: min-content;
   border-collapse: collapse;
   background-color: white;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 `
 
 const Th = styled.th`
-  padding: 12px;
+  padding: 4px;
   text-align: center;
   border: 1px solid #ddd;
   background-color: #2c3e50;

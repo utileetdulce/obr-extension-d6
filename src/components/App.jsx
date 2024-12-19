@@ -34,7 +34,6 @@ const Container = styled.div`
   height: 1000px;
   box-sizing: border-box;
   overflow-y: scroll;
-  font-family: "Arial", sans-serif;
   padding: 20px;
   background-color: #f5f5f5;
   color: black;
@@ -50,7 +49,6 @@ const Button = styled.button`
   text-align: center;
   width: 230px;
 
-  font-size: 16px;
   margin: 2px 0;
 
   &:hover {

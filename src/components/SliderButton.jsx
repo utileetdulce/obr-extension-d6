@@ -2,7 +2,7 @@ import styled from "styled-components"
 
 const SliderContainer = styled.div`
   width: 60px;
-  height: 30px;
+  height: 20px;
   background-color: ${(props) => (props.$isOn ? "#8c8" : "#c88")};
   border-radius: 15px;
   position: relative;
@@ -27,8 +27,8 @@ const Slider = styled.div`
 `
 
 const Handle = styled.div`
-  width: 20px;
-  height: 20px;
+  width: 16px;
+  height: 16px;
   background-color: white;
   border-radius: 50%;
   transition: transform 0.3s;
@@ -37,7 +37,6 @@ const Handle = styled.div`
 const Caption = styled.div`
   position: absolute;
   left: 70px;
-  font-size: 14px;
   white-space: nowrap;
   color: ${(props) => (props.$isOn ? "#6a6" : "#a66")};
 `

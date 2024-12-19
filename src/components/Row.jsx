@@ -19,6 +19,7 @@ const Button = styled.button`
   padding: 4px 8px;
   border-radius: 4px;
   cursor: pointer;
+  font-size: 1rem;
 
   &:hover {
     background-color: #2980b9;
@@ -26,8 +27,8 @@ const Button = styled.button`
 `
 
 const RollButton = styled(Button)`
-  width: 60px;
-  padding: 4px 8px;
+  width: 100%;
+  padding: 4px 4px;
 `
 
 const AttributeInput = styled.input`
@@ -37,9 +38,11 @@ const AttributeInput = styled.input`
   font-weight: ${(props) => (props.$isClass ? "bold" : "normal")};
   color: black;
   padding: 4px 8px;
-  border-radius: 3px;
+  border: none;
   width: 130px;
+  height: 16px;
   box-sizing: border-box;
+  font-size: 1rem;
 
   &:focus {
     border: ${(props) => (props.$isClass ? "none" : "1px solid #008")};
@@ -50,8 +53,8 @@ const NumberInput = styled.div`
   outline: 2px solid ${(props) => (props.$isClass ? "#3498db" : "#333")};
   border-radius: 50%;
   color: ${(props) => (props.$isClass ? "#3498db" : "black")};
-  width: 20px;
-  height: 20px;
+  width: 16px;
+  height: 16px;
   font-weight: ${(props) => (props.$isClass ? "bold" : "normal")};
 
   text-align: center;
