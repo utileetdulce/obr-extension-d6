@@ -37,7 +37,6 @@ const TabContainer = styled.div`
 const TabNavigation = styled.div`
   display: flex;
   justify-content: center;
-  margin-bottom: 20px;
 `
 
 function App() {

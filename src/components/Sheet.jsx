@@ -4,6 +4,10 @@ import { styled } from "styled-components"
 import { Row } from "./Row"
 import { useProbe } from "../hooks/useProbe"
 
+const PlayerName = styled.h1`
+  margin: 10px 0;
+`
+
 const Table = styled.table`
   width: min-content;
   border-collapse: collapse;
@@ -31,7 +35,7 @@ export const Sheet = ({
 
   return (
     <>
-      <h1>{player.name}</h1>
+      <PlayerName>{player.name}</PlayerName>
 
       <Table>
         <thead>
