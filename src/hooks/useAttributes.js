@@ -10,12 +10,12 @@ const WAHRNEHMUNG = "Wahrnehmung"
 const INTELLIGENZ = "Intelligenz"
 
 const initialAttributes = [
-  { attribute: "waffenloser Kampf (S)", numDice: 0, modifier: 0, class: STAERKE },
-  { attribute: "bewaffneter Nahkampf (S)", numDice: 0, modifier: 0, class: STAERKE },
+  { attribute: "Waffenloser Kampf (S)", numDice: 0, modifier: 0, class: STAERKE },
+  { attribute: "Bewaffneter Nahkampf (S)", numDice: 0, modifier: 0, class: STAERKE },
   { attribute: "Schild (S)", numDice: 0, modifier: 0, class: STAERKE },
   { attribute: "Athletik", numDice: 0, modifier: 0, class: STAERKE },
-  { attribute: "waffenloser Kampf (G)", numDice: 0, modifier: 0, class: GESCHICKLICHKEIT },
-  { attribute: "bewaffneter Nahkampf (G)", numDice: 0, modifier: 0, class: GESCHICKLICHKEIT },
+  { attribute: "Waffenloser Kampf (G)", numDice: 0, modifier: 0, class: GESCHICKLICHKEIT },
+  { attribute: "Bewaffneter Nahkampf (G)", numDice: 0, modifier: 0, class: GESCHICKLICHKEIT },
   { attribute: "Schild (G)", numDice: 0, modifier: 0, class: GESCHICKLICHKEIT },
   { attribute: "Akrobatik", numDice: 0, modifier: 0, class: GESCHICKLICHKEIT },
   { attribute: "Diebeskunst", numDice: 0, modifier: 0, class: GESCHICKLICHKEIT },
