@@ -5,7 +5,7 @@ import { usePlayer } from "./usePlayer"
 
 const STAERKE = "Stärke"
 const GESCHICKLICHKEIT = "Geschicklichkeit"
-const ROBUSTHEIT = "Robustheit"
+const ROBUSTHEIT = "Kondition"
 const AUFTRETEN = "Auftreten"
 const WAHRNEHMUNG = "Wahrnehmung"
 const INTELLIGENZ = "Intelligenz"
