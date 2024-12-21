@@ -70,6 +70,11 @@ const initialAttributeClasses = {
     numDice: 2,
     modifier: 0,
   },
+  [INTELLIGENZ]: {
+    attribute: INTELLIGENZ,
+    numDice: 2,
+    modifier: 0,
+  },
 }
 
 export const useAttributes = () => {
