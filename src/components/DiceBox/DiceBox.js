@@ -8,6 +8,7 @@ import { THEMES } from "./const/themes.js"
 // import CannonDebugger from 'cannon-es-debugger'
 
 import { debounce } from "./helpers"
+import { COLORSETS } from "./const/colorsets.js"
 
 const defaultConfig = {
   assetPath: "./",
@@ -704,12 +705,12 @@ class DiceBox {
   }
 
   //spawns one dicemesh object from a single vectordata object
-  spawnDice(vectordata, reset = false) {
+  spawnDice(vectordata, reset = false, colorData = this.colorData) {
     const { pos, axis, angle, velocity } = vectordata
     let dicemesh
 
     if (!reset) {
-      dicemesh = this.DiceFactory.create(vectordata.type, this.colorData)
+      dicemesh = this.DiceFactory.create(vectordata.type, colorData)
       if (!dicemesh) return
       dicemesh.notation = vectordata
       dicemesh.result = []
@@ -1136,7 +1137,7 @@ class DiceBox {
     })
   }
 
-  async add(notationSting) {
+  async add(notationSting, colorData = this.colorData) {
     let dieCount = this.diceList.length
     if (!dieCount) return this.roll(notationSting)
 
@@ -1144,7 +1145,7 @@ class DiceBox {
     let diceIdArray = []
 
     for (let i = 0, len = addNotationVectors.vectors.length; i < len; ++i) {
-      this.spawnDice(addNotationVectors.vectors[i])
+      this.spawnDice(addNotationVectors.vectors[i], undefined, colorData)
     }
 
     this.simulateThrow()
@@ -1158,7 +1159,11 @@ class DiceBox {
       if (!this.diceList[index]) continue
 
       //reset dice vectors
-      this.spawnDice(addNotationVectors.vectors[i], this.diceList[index])
+      this.spawnDice(
+        addNotationVectors.vectors[i],
+        this.diceList[index],
+        i === 0 ? COLORSETS["blue"] : COLORSETS["white"],
+      )
       diceIdArray.push(index)
     }
 
@@ -1234,7 +1239,11 @@ class DiceBox {
     this.clearDice()
 
     for (let i = 0, len = this.notationVectors.vectors.length; i < len; ++i) {
-      this.spawnDice(this.notationVectors.vectors[i])
+      this.spawnDice(
+        this.notationVectors.vectors[i],
+        undefined,
+        i === 0 ? COLORSETS["blue"] : COLORSETS["white"],
+      )
     }
     this.simulateThrow()
     this.steps = 0
@@ -1244,7 +1253,11 @@ class DiceBox {
       if (!this.diceList[i]) continue
 
       //reset dice vectors
-      this.spawnDice(this.notationVectors.vectors[i], this.diceList[i])
+      this.spawnDice(
+        this.notationVectors.vectors[i],
+        this.diceList[i],
+        i === 0 ? COLORSETS["blue"] : COLORSETS["white"],
+      )
     }
 
     for (let i = 0; i < this.diceList.length; i++) {
