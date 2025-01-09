@@ -1087,7 +1087,7 @@ class DiceBox {
     return result
   }
 
-  async roll(notationSting) {
+  async roll(notationSting, colorData) {
     this.notationVectors = this.startClickThrow(notationSting)
     if (this.notationVectors) {
       // const DL = this.diceList
@@ -1104,7 +1104,7 @@ class DiceBox {
           document.dispatchEvent(event)
 
           resolve(results)
-        })
+        }, colorData)
       })
     }
   }
@@ -1229,7 +1229,7 @@ class DiceBox {
     })
   }
 
-  rollDice(callback) {
+  rollDice(callback, colorData = COLORSETS["blue"]) {
     if (this.notationVectors.error) {
       callback.call(this)
       return
@@ -1242,7 +1242,7 @@ class DiceBox {
       this.spawnDice(
         this.notationVectors.vectors[i],
         undefined,
-        i === 0 ? COLORSETS["blue"] : COLORSETS["white"],
+        i === 0 ? colorData : COLORSETS["white"],
       )
     }
     this.simulateThrow()

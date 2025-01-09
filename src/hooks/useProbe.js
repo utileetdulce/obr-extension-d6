@@ -15,9 +15,16 @@ export const useProbe = (isPublicRoll, player, box) => {
     const wildDieRolls = []
     console.log("result:", regularRolls)
 
-    await box.roll(`${numDice}d6@${regularRolls.join(",")}`)
-
     let wildDie = regularRolls[0]
+    const wildDieColors = {
+      1: COLORSETS.red,
+      2: COLORSETS.blue,
+      3: COLORSETS.blue,
+      4: COLORSETS.blue,
+      5: COLORSETS.blue,
+      6: COLORSETS.green,
+    }
+    await box.roll(`${numDice}d6@${regularRolls.join(",")}`, wildDieColors[wildDie])
 
     while (wildDie === 6) {
       wildDieStatus = "explode"
