@@ -21,9 +21,9 @@ const defaultConfig = {
   theme_customColorset: null,
   theme_colorset: "white",
   theme_texture: "",
-  theme_material: "glass",
+  theme_material: "wood",
   gravity_multiplier: 400,
-  light_intensity: 0.7,
+  light_intensity: 1.7,
   baseScale: 100,
   strength: 1,
   iterationLimit: 1000,
@@ -844,7 +844,7 @@ class DiceBox {
     // all dice in a set/dice group will have the same function and arguments due to sorting beforehand
     // this means the list passed in is the set of dice that need to be affected by this function
     let diceFunc = dicemesh.notation.func ? dicemesh.notation.func.toLowerCase() : ""
-    // let funcdata = this.DiceFunctions.rethrowFunctions[diceFunc];
+    // let funcdata = this.DiceFunctions.rethrowFunctions[diceFunc]
     let funcdata
 
     let reroll = false
@@ -1168,7 +1168,7 @@ class DiceBox {
         const index = dieCount + i
         let dicemesh = this.diceList[index]
         if (!dicemesh) continue
-        console.log("dicemesh:", dicemesh.getLastValue().value)
+        // console.log("dicemesh:", dicemesh.getLastValue().value)
 
         if (dicemesh.getLastValue().value == addNotationVectors.result[i]) continue
         this.swapDiceFace(dicemesh, addNotationVectors.result[i])

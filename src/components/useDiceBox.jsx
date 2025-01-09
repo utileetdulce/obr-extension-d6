@@ -12,9 +12,9 @@ const defaultConfig = {
   theme_customColorset: null,
   theme_colorset: "white", // see available colorsets in https://github.com/3d-dice/dice-box-threejs/blob/main/src/const/colorsets.js
   theme_texture: "", // see available textures in https://github.com/3d-dice/dice-box-threejs/blob/main/src/const/texturelist.js
-  theme_material: "glass", // "none" | "metal" | "wood" | "glass" | "plastic"
+  theme_material: "plastic", // "none" | "metal" | "wood" | "glass" | "plastic"
   gravity_multiplier: 400,
-  light_intensity: 0.7,
+  light_intensity: 1.7,
   baseScale: 100,
   strength: 1, // toss strength of dice
   onRollComplete: () => {},

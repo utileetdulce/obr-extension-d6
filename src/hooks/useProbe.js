@@ -1,18 +1,100 @@
 import OBR from "@owlbear-rodeo/sdk"
 import { useState } from "react"
 import { MESSAGE_CHANNEL_GM, MESSAGE_CHANNEL_PUBLIC } from "../constants"
-import { getQualityRating, rollD6 } from "../utils"
+import { getQualityRating, rollD6Dices } from "../utils"
 
 export const useProbe = (isPublicRoll, player, box) => {
-  console.log("box:", box)
   const [result, setResult] = useState(null)
 
   const rollForRow = async ({ attribute, numDice, modifier }) => {
-    // const regularRolls = await box.roll(`1d6+1d6`)
-    if (box) {
-      const regularRolls = await box.roll(`${numDice}d6`)
-      console.log("regularRolls:", regularRolls)
+    if (!box) return
+
+    await box.updateConfig({
+      theme_customColorset: {
+        name: "Test",
+        category: "Colors",
+        foreground: ["#00FF00", "#0000FF", "#FF0000"],
+        background: ["#FF0000", "#00FF00", "#0000FF"],
+        outline: "black",
+        texture: "none",
+        description: "Test",
+      },
+    })
+
+    let wildDieStatus = "normal"
+    const regularRolls = rollD6Dices(numDice)
+    const wildDieRolls = []
+    console.log("result:", regularRolls)
+
+    await box.roll(`${numDice}d6@${regularRolls.join(",")}`)
+    // await box.updateConfig({
+    //   theme_customColorset: {
+    //     name: "Fire",
+    //     category: "Damage Types",
+    //     foreground: "#fff",
+    //     background: ["#000", "#000", "#000", "#000", "#000"],
+    //     outline: "black",
+    //     texture: "fire",
+    //     description: "Fire",
+    //   },
+    // })
+    // await box.add(`1d6`)
+
+    let wildDie = regularRolls[0]
+
+    while (wildDie < 3) {
+      // await box.updateConfig({
+      //   theme_customColorset: {
+      //     name: "Fire",
+      //     category: "Damage Types",
+      //     foreground: "#f8d84f",
+      //     background: ["#f8d84f", "#f9b02d", "#f43c04", "#910200", "#4c1009"],
+      //     outline: "black",
+      //     texture: "fire",
+      //     description: "Fire",
+      //   },
+      // })
+      wildDieStatus = "explode"
+      const wildDieRoll = await box.add(`1d6`)
+      wildDie = wildDieRoll[0].value
+      wildDieRolls.push(wildDie)
     }
+
+    if (wildDie === 1) {
+      wildDieStatus = "fail"
+      const wildDieRoll = await box.add(`1d6`)
+      wildDieRolls.push(-wildDieRoll[0].value)
+    }
+
+    const regularRollsTotal = regularRolls.reduce((sum, roll) => sum + roll, 0) + modifier
+    const wildDieTotal = wildDieRolls.reduce((sum, roll) => sum + roll, 0)
+    const total = regularRollsTotal + wildDieTotal
+    const quality = getQualityRating(total)
+    console.log("result", {
+      regularRolls,
+      regularRollsTotal,
+      wildDieRolls,
+      wildDieTotal,
+      total,
+      quality,
+    })
+
+    const [firstWildDie, ...restWildDie] = wildDieRolls
+    const diceString = `${regularRolls.join("+")}${firstWildDie === 1 ? restWildDie.join("") : "+" + wildDieRolls.join("+")}${modifier ? "+" + modifier : ""}=${total}`
+
+    setResult({
+      rolls: {
+        regular: regularRolls,
+        wild: wildDieRolls,
+      },
+      attribute,
+      total,
+      modifier,
+      wildDieStatus,
+      quality,
+      diceString,
+    })
+
     // console.log("sim:", sim)
     // await box.updateConfig({
     //   theme_customColorset: {
