@@ -13,6 +13,7 @@ import { useAttributes } from "../hooks/useAttributes"
 import { useProbe } from "../hooks/useProbe"
 import { DiceRoll } from "./DiceRoll"
 import { useDiceBox } from "./useDiceBox"
+import { useRollVisualizer } from "../hooks/useRollVisualizer"
 
 const TABS = {
   MY_PLAYER: "MY_PLAYER",
@@ -74,10 +75,11 @@ function App() {
     restoreAttributesFromJsonFile,
   } = useAttributes()
 
-  const { history } = useMessageSubscription(ready)
+  const { diceBoxRef, box } = useDiceBox()
+  const { history } = useMessageSubscription(ready, box)
+  const { roll } = useRollVisualizer(box)
   const [isPublicRoll, setIsPublicRoll] = useState(true)
   const { result, rollForRow } = useProbe(isPublicRoll)
-  const { diceBoxRef, box } = useDiceBox()
 
   useEffect(() => {
     OBR.onReady(() => {
@@ -92,7 +94,8 @@ function App() {
     <Container>
       <button
         onClick={() => {
-          box.roll("6d6@6,6,6,6,6,6")
+          // box.roll("6d6@6,6,6,6,6,6")
+          roll({ result: [6, 6, 6, 6, 6, 6] })
         }}
       >
         add

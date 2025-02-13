@@ -25,21 +25,23 @@ export const useDiceBox = () => {
   const [box, setBox] = useState(null)
 
   useEffect(() => {
-    const DBox = new DiceBox("#dice-box-container", defaultConfig)
-    DBox.initialize().then(() => {
-      console.log("DBox initialized:", DBox)
-      setBox(DBox)
-    })
+    if (diceBoxRef.current) {
+      const DBox = new DiceBox(diceBoxRef, defaultConfig)
+      DBox.initialize().then(() => {
+        console.log("Box initialized:", DBox)
+        setBox(DBox)
+      })
 
-    const domElement = diceBoxRef.current
+      const domElement = diceBoxRef.current
 
-    return () => {
-      while (domElement.firstChild) {
-        domElement.removeChild(domElement.lastChild)
+      return () => {
+        while (domElement.firstChild) {
+          domElement.removeChild(domElement.lastChild)
+        }
+        setBox(null)
       }
-      setBox(null)
     }
-  }, [diceBoxRef])
+  }, [diceBoxRef.current])
 
   return { diceBoxRef, box }
 }

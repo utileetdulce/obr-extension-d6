@@ -42,7 +42,22 @@ export const mockObr = () => {
     },
   }
   OBR.notification = {
-    show: (msg) => console.log(msg),
+    show: (msg) => {
+      console.log(msg)
+      const toast = document.createElement("div")
+      toast.innerHTML = msg
+      toast.style.position = "absolute"
+      toast.style.top = "10px"
+      toast.style.left = "50%"
+      toast.style.transform = "translateX(-50%)"
+      toast.style.padding = "10px"
+      toast.style.backgroundColor = "black"
+      toast.style.color = "white"
+      document.body.appendChild(toast)
+      setTimeout(() => {
+        document.body.removeChild(toast)
+      }, 1000)
+    },
   }
   OBR.broadcast = {
     onMessage: (channel, callback) => {

@@ -14,8 +14,25 @@ export const useProbe = (isPublicRoll, player, box) => {
     const regularRolls = rollD6Dices(numDice)
     const wildDieRolls = []
     console.log("result:", regularRolls)
-
     let wildDie = regularRolls[0]
+
+    const rollText = {
+      1: "fail! Roll:",
+      2: "Roll:",
+      3: "Roll:",
+      4: "Roll:",
+      5: "Roll:",
+      6: "explode! Roll:",
+    }
+    await OBR.broadcast.sendMessage(
+      isPublicRoll ? MESSAGE_CHANNEL_PUBLIC : MESSAGE_CHANNEL_GM,
+      {
+        message: `${rollText[wildDie]} ${regularRolls.join(",")},${wildDieRolls.join(",")}`,
+        data: { result: regularRolls, type: "regular" },
+      },
+      { destination: "REMOTE" },
+    )
+
     const wildDieColors = {
       1: COLORSETS.red,
       2: COLORSETS.blue,
@@ -27,16 +44,28 @@ export const useProbe = (isPublicRoll, player, box) => {
     // await box.roll(`${numDice}d6@${regularRolls.join(",")}`, wildDieColors[wildDie])
     await box.roll(`${numDice}d6@${regularRolls.join(",")}`)
 
-    while (wildDie === 6) {
-      wildDieStatus = "explode"
-      const wildDieRoll = await box.add(`1d6`, COLORSETS.green)
-      wildDie = wildDieRoll[0].value
-      wildDieRolls.push(wildDie)
-    }
-
-    if (wildDie === 1) {
+    if (wildDie === 6) {
+      while (wildDie === 6) {
+        const wildDieResult = rollD6Dices(1)
+        await OBR.broadcast.sendMessage(
+          isPublicRoll ? MESSAGE_CHANNEL_PUBLIC : MESSAGE_CHANNEL_GM,
+          { message: `+ ${wildDieResult}`, data: { result: wildDieResult, type: "explode" } },
+          { destination: "REMOTE" },
+        )
+        wildDieStatus = "explode"
+        const wildDieRoll = await box.add(`1d6@${wildDieResult}`, COLORSETS.green)
+        wildDie = wildDieRoll[0].value
+        wildDieRolls.push(wildDie)
+      }
+    } else if (wildDie === 1) {
+      const wildDieResult = rollD6Dices(1)
+      await OBR.broadcast.sendMessage(
+        isPublicRoll ? MESSAGE_CHANNEL_PUBLIC : MESSAGE_CHANNEL_GM,
+        { message: `- ${wildDieResult}`, data: { result: wildDieResult, type: "fail" } },
+        { destination: "REMOTE" },
+      )
       wildDieStatus = "fail"
-      const wildDieRoll = await box.add(`1d6`, COLORSETS.red)
+      const wildDieRoll = await box.add(`1d6@${wildDieResult}`, COLORSETS.red)
       wildDieRolls.push(-wildDieRoll[0].value)
     }
 

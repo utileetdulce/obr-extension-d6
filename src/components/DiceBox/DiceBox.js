@@ -35,11 +35,11 @@ const defaultConfig = {
 }
 
 class DiceBox {
-  constructor(element_container, options = {}) {
+  constructor(diceBoxRef, options = {}) {
     //private variables
     this.initialized = false
-    this.container = document.querySelector(element_container)
-    this.dimensions = new THREE.Vector2(this.container.clientWidth, this.container.clientHeight)
+    this.container = diceBoxRef.current
+    this.dimensions = new THREE.Vector2(400, 800)
     this.adaptive_timestep = false
     this.last_time = 0
     this.running = false
@@ -1260,16 +1260,16 @@ class DiceBox {
       )
     }
 
-    for (let i = 0; i < this.diceList.length; i++) {
-      let dicemesh = this.diceList[i]
-      console.log("dicemesh:", dicemesh.getLastValue().value)
-    }
+    // for (let i = 0; i < this.diceList.length; i++) {
+    //   let dicemesh = this.diceList[i]
+    //   console.log("dicemesh:", dicemesh.getLastValue().value)
+    // }
 
     //check forced results, fix dice faces if necessary
     if (this.notationVectors.result && this.notationVectors.result.length > 0) {
       for (let i = 0; i < this.notationVectors.result.length; i++) {
         let dicemesh = this.diceList[i]
-        console.log("dicemesh:", dicemesh.getLastValue().value)
+        // console.log("dicemesh:", dicemesh.getLastValue().value)
         if (!dicemesh) continue
         if (dicemesh.getLastValue().value == this.notationVectors.result[i]) continue
         this.swapDiceFace(dicemesh, this.notationVectors.result[i])
