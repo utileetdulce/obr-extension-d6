@@ -48,6 +48,7 @@ export const Sheet = ({
             <React.Fragment key={key}>
               <Row
                 key={key}
+                name={key}
                 row={value}
                 addRow={() => {
                   setAttributes(() => [...attributes, { numDice: 0, modifier: 0, class: key }])
@@ -66,6 +67,7 @@ export const Sheet = ({
                 .map((row, index) => (
                   <Row
                     key={key + index}
+                    name={value}
                     row={row}
                     attributeClass={value}
                     deleteRow={() => {

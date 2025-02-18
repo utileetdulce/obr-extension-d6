@@ -16,22 +16,28 @@ export const useMessageSubscription = (ready, box) => {
         console.log(event.data)
         try {
           OBR.notification.show(`${event.data.message}`)
-          pushMessageToHistory(event.data.message)
+          pushMessageToHistory(`Private: ${event.data.message}`)
+          if (event.data.data) {
+            roll(event.data.data)
+          }
         } catch (error) {
           console.error(error)
         }
       })
     }
-  }, [isGm, ready, pushMessageToHistory])
+  }, [isGm, ready, pushMessageToHistory, roll])
 
   useEffect(() => {
     if (ready) {
-      return OBR.broadcast.onMessage(MESSAGE_CHANNEL_PUBLIC, (event) => {
+      return OBR.broadcast.onMessage(MESSAGE_CHANNEL_PUBLIC, async (event) => {
         try {
-          OBR.notification.show(`${event.data.message}`)
-          pushMessageToHistory(event.data.message)
           if (event.data.data) {
-            roll(event.data.data)
+            await roll(event.data.data)
+            OBR.notification.show(`${event.data.message}`)
+            pushMessageToHistory(event.data.message)
+          } else {
+            OBR.notification.show(`${event.data.message}`)
+            pushMessageToHistory(event.data.message)
           }
         } catch (error) {
           console.error(error)

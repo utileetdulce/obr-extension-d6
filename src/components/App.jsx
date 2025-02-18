@@ -77,9 +77,8 @@ function App() {
 
   const { diceBoxRef, box } = useDiceBox()
   const { history } = useMessageSubscription(ready, box)
-  const { roll } = useRollVisualizer(box)
   const [isPublicRoll, setIsPublicRoll] = useState(true)
-  const { result, rollForRow } = useProbe(isPublicRoll)
+  const { result } = useProbe(isPublicRoll)
 
   useEffect(() => {
     OBR.onReady(() => {
@@ -92,14 +91,6 @@ function App() {
 
   return (
     <Container>
-      <button
-        onClick={() => {
-          // box.roll("6d6@6,6,6,6,6,6")
-          roll({ result: [6, 6, 6, 6, 6, 6] })
-        }}
-      >
-        add
-      </button>
       <DiceRoll diceBoxRef={diceBoxRef} />
       <TabNavigation>
         <button onClick={() => setTab(TABS.MY_PLAYER)}>My Player</button>
@@ -112,7 +103,6 @@ function App() {
             box={box}
             attributes={attributes}
             isPublicRoll={isPublicRoll}
-            rollForRow={rollForRow}
             setAttributes={setAttributes}
             attributeClasses={attributeClasses}
             setAttributeClasses={setAttributeClasses}

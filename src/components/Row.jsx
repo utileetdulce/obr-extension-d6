@@ -84,7 +84,8 @@ const InputGroup = styled.div`
   }
 `
 
-export const Row = ({ addRow, deleteRow, attributeClass, row, updateRow, rollForRow }) => {
+export const Row = ({ name, addRow, deleteRow, attributeClass, row, updateRow, rollForRow }) => {
+  console.log("name:", name)
   const isClass = row.class === undefined
   const numDice = (attributeClass?.numDice || 0) + row.numDice
   const modifier = (attributeClass?.modifier || 0) + row.modifier

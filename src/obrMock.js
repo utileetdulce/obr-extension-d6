@@ -56,7 +56,7 @@ export const mockObr = () => {
       document.body.appendChild(toast)
       setTimeout(() => {
         document.body.removeChild(toast)
-      }, 1000)
+      }, 2000)
     },
   }
   OBR.broadcast = {

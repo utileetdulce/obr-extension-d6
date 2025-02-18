@@ -10,6 +10,14 @@ export const useProbe = (isPublicRoll, player, box) => {
   const rollForRow = async ({ attribute, numDice, modifier }) => {
     if (!box) return
 
+    await OBR.broadcast.sendMessage(
+      isPublicRoll ? MESSAGE_CHANNEL_PUBLIC : MESSAGE_CHANNEL_GM,
+      {
+        message: `${player.name}s Probe auf ${attribute}...`,
+      },
+      { destination: "REMOTE" },
+    )
+
     let wildDieStatus = "normal"
     const regularRolls = rollD6Dices(numDice)
     const wildDieRolls = []
@@ -17,31 +25,22 @@ export const useProbe = (isPublicRoll, player, box) => {
     let wildDie = regularRolls[0]
 
     const rollText = {
-      1: "fail! Roll:",
-      2: "Roll:",
-      3: "Roll:",
-      4: "Roll:",
-      5: "Roll:",
-      6: "explode! Roll:",
+      1: "fail! ",
+      2: "",
+      3: "",
+      4: "",
+      5: "",
+      6: "explode! ",
     }
     await OBR.broadcast.sendMessage(
       isPublicRoll ? MESSAGE_CHANNEL_PUBLIC : MESSAGE_CHANNEL_GM,
       {
-        message: `${rollText[wildDie]} ${regularRolls.join(",")},${wildDieRolls.join(",")}`,
+        message: `${player.name}s Probe auf ${attribute}: ${rollText[wildDie]} ${regularRolls.join(" + ")} ${modifier ? `+${modifier}` : ""} = ${regularRolls.reduce((sum, roll) => sum + roll, 0) + modifier}`,
         data: { result: regularRolls, type: "regular" },
       },
       { destination: "REMOTE" },
     )
 
-    const wildDieColors = {
-      1: COLORSETS.red,
-      2: COLORSETS.blue,
-      3: COLORSETS.blue,
-      4: COLORSETS.blue,
-      5: COLORSETS.blue,
-      6: COLORSETS.green,
-    }
-    // await box.roll(`${numDice}d6@${regularRolls.join(",")}`, wildDieColors[wildDie])
     await box.roll(`${numDice}d6@${regularRolls.join(",")}`)
 
     if (wildDie === 6) {
@@ -73,6 +72,15 @@ export const useProbe = (isPublicRoll, player, box) => {
     const wildDieTotal = wildDieRolls.reduce((sum, roll) => sum + roll, 0)
     const total = regularRollsTotal + wildDieTotal
     const quality = getQualityRating(total)
+
+    await OBR.broadcast.sendMessage(
+      isPublicRoll ? MESSAGE_CHANNEL_PUBLIC : MESSAGE_CHANNEL_GM,
+      {
+        message: `${player.name}s Probe auf ${attribute} war ${quality.text} (${rollText[wildDie]} ${regularRolls.join(" + ")} ${modifier ? `+${modifier}` : ""} = ${regularRolls.reduce((sum, roll) => sum + roll, 0) + modifier})`,
+      },
+      { destination: "REMOTE" },
+    )
+
     console.log("result", {
       regularRolls,
       regularRollsTotal,
