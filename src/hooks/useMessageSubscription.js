@@ -4,9 +4,12 @@ import { useRole } from "./useRole"
 import { MESSAGE_CHANNEL_GM, MESSAGE_CHANNEL_PUBLIC } from "../constants"
 import { useMessageHistory } from "./useMessageHistory"
 import { useRollVisualizer } from "./useRollVisualizer"
+import { usePlayer } from "./usePlayer"
 
 export const useMessageSubscription = (ready, box) => {
   const { history, pushMessageToHistory } = useMessageHistory()
+  const player = usePlayer(ready)
+  console.log(" player:", player)
   const { isGm } = useRole(ready)
   const { roll } = useRollVisualizer(box)
 
@@ -31,11 +34,10 @@ export const useMessageSubscription = (ready, box) => {
     if (ready) {
       return OBR.broadcast.onMessage(MESSAGE_CHANNEL_PUBLIC, async (event) => {
         try {
-          if (event.data.data) {
+          if (event.data.data && event.data.data.player.name !== player.name) {
             await roll(event.data.data)
-            OBR.notification.show(`${event.data.message}`)
-            pushMessageToHistory(event.data.message)
-          } else {
+          }
+          if (event.data.message) {
             OBR.notification.show(`${event.data.message}`)
             pushMessageToHistory(event.data.message)
           }

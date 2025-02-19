@@ -13,7 +13,7 @@ export const useProbe = (isPublicRoll, player, box) => {
     await OBR.broadcast.sendMessage(
       isPublicRoll ? MESSAGE_CHANNEL_PUBLIC : MESSAGE_CHANNEL_GM,
       {
-        message: `${player.name}s Probe auf ${attribute}...`,
+        message: `${player.name}s Probe auf ${attribute} (${numDice}W6 ${modifier ? `+ ${modifier}` : ""})`,
       },
       { destination: "REMOTE" },
     )
@@ -32,11 +32,15 @@ export const useProbe = (isPublicRoll, player, box) => {
       5: "",
       6: "explode! ",
     }
+
     await OBR.broadcast.sendMessage(
       isPublicRoll ? MESSAGE_CHANNEL_PUBLIC : MESSAGE_CHANNEL_GM,
       {
-        message: `${player.name}s Probe auf ${attribute}: ${rollText[wildDie]} ${regularRolls.join(" + ")} ${modifier ? `+${modifier}` : ""} = ${regularRolls.reduce((sum, roll) => sum + roll, 0) + modifier}`,
-        data: { result: regularRolls, type: "regular" },
+        message:
+          wildDie === 6 || wildDie === 1
+            ? `${regularRolls.join(" + ")} ${modifier ? `+ ${modifier}` : ""}`
+            : null,
+        data: { result: regularRolls, type: "regular", player },
       },
       { destination: "REMOTE" },
     )
@@ -48,7 +52,10 @@ export const useProbe = (isPublicRoll, player, box) => {
         const wildDieResult = rollD6Dices(1)
         await OBR.broadcast.sendMessage(
           isPublicRoll ? MESSAGE_CHANNEL_PUBLIC : MESSAGE_CHANNEL_GM,
-          { message: `+ ${wildDieResult}`, data: { result: wildDieResult, type: "explode" } },
+          {
+            message: `${rollText[wildDie]} + ${wildDieResult}`,
+            data: { result: wildDieResult, type: "explode" },
+          },
           { destination: "REMOTE" },
         )
         wildDieStatus = "explode"
@@ -60,7 +67,10 @@ export const useProbe = (isPublicRoll, player, box) => {
       const wildDieResult = rollD6Dices(1)
       await OBR.broadcast.sendMessage(
         isPublicRoll ? MESSAGE_CHANNEL_PUBLIC : MESSAGE_CHANNEL_GM,
-        { message: `- ${wildDieResult}`, data: { result: wildDieResult, type: "fail" } },
+        {
+          message: `${rollText[wildDie]} - ${wildDieResult}`,
+          data: { result: wildDieResult, type: "fail" },
+        },
         { destination: "REMOTE" },
       )
       wildDieStatus = "fail"
@@ -68,15 +78,15 @@ export const useProbe = (isPublicRoll, player, box) => {
       wildDieRolls.push(-wildDieRoll[0].value)
     }
 
-    const regularRollsTotal = regularRolls.reduce((sum, roll) => sum + roll, 0) + modifier
+    const regularRollsTotal = regularRolls.reduce((sum, roll) => sum + roll, 0)
     const wildDieTotal = wildDieRolls.reduce((sum, roll) => sum + roll, 0)
-    const total = regularRollsTotal + wildDieTotal
+    const total = regularRollsTotal + wildDieTotal + modifier
     const quality = getQualityRating(total)
 
     await OBR.broadcast.sendMessage(
       isPublicRoll ? MESSAGE_CHANNEL_PUBLIC : MESSAGE_CHANNEL_GM,
       {
-        message: `${player.name}s Probe auf ${attribute} war ${quality.text} (${rollText[wildDie]} ${regularRolls.join(" + ")} ${modifier ? `+${modifier}` : ""} = ${regularRolls.reduce((sum, roll) => sum + roll, 0) + modifier})`,
+        message: `${player.name}s Probe auf ${attribute} war ${quality.text} (${rollText[wildDie]} ${[...regularRolls, ...wildDieRolls].join(" + ")} ${modifier ? `+ ${modifier}` : ""} = ${total})`,
       },
       { destination: "REMOTE" },
     )
@@ -91,7 +101,7 @@ export const useProbe = (isPublicRoll, player, box) => {
     })
 
     const [firstWildDie, ...restWildDie] = wildDieRolls
-    const diceString = `${regularRolls.join("+")}${firstWildDie === 1 ? restWildDie.join("") : "+" + wildDieRolls.join("+")}${modifier ? "+" + modifier : ""}=${total}`
+    const diceString = `${regularRolls.join("+")}${firstWildDie === 1 ? restWildDie.join("") : "+" + wildDieRolls.join("+")} ${modifier ? "+" + modifier : ""}=${total}`
 
     setResult({
       rolls: {
