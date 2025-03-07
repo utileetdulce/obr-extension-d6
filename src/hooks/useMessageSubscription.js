@@ -37,8 +37,9 @@ export const useMessageSubscription = (ready, box) => {
   useEffect(() => {
     if (ready) {
       return OBR.broadcast.onMessage(MESSAGE_CHANNEL_PUBLIC, async (event) => {
+        console.log(" asdf:", event.data)
         try {
-          if (event.data?.player?.name !== player.name) {
+          if (event.data.data && event.data?.player?.name !== player.name) {
             await roll(event.data.data)
           }
           if (event.data.message) {
