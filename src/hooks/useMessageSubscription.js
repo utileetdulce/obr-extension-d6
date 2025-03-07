@@ -14,31 +14,37 @@ export const useMessageSubscription = (ready, box) => {
   const { roll } = useRollVisualizer(box)
 
   useEffect(() => {
-    if (isGm && ready) {
+    if (ready) {
       return OBR.broadcast.onMessage(MESSAGE_CHANNEL_GM, (event) => {
-        console.log(event.data)
-        try {
-          OBR.notification.show(`${event.data.message}`)
-          pushMessageToHistory(`Private: ${event.data.message}`)
-          if (event.data.data) {
-            roll(event.data.data)
+        if (isGm || event.data?.player?.name === player.name)
+          try {
+            if (event.data.data && event.data.player.name !== player.name) {
+              roll(event.data.data)
+            }
+            if (event.data.message) {
+              OBR.notification.show(`${event.data.message}`)
+            }
+            if (event.data.history) {
+              pushMessageToHistory(`(Private) ${event.data.message}`)
+            }
+          } catch (error) {
+            console.error(error)
           }
-        } catch (error) {
-          console.error(error)
-        }
       })
     }
-  }, [isGm, ready, pushMessageToHistory, roll])
+  }, [isGm, ready, pushMessageToHistory, roll, player.name])
 
   useEffect(() => {
     if (ready) {
       return OBR.broadcast.onMessage(MESSAGE_CHANNEL_PUBLIC, async (event) => {
         try {
-          if (event.data.data && event.data.data.player.name !== player.name) {
+          if (event.data?.player?.name !== player.name) {
             await roll(event.data.data)
           }
           if (event.data.message) {
             OBR.notification.show(`${event.data.message}`)
+          }
+          if (event.data.history) {
             pushMessageToHistory(event.data.message)
           }
         } catch (error) {
@@ -46,7 +52,7 @@ export const useMessageSubscription = (ready, box) => {
         }
       })
     }
-  }, [ready, pushMessageToHistory, roll])
+  }, [ready, pushMessageToHistory, roll, player.name])
 
   return { history }
 }

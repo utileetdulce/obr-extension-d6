@@ -4,6 +4,8 @@ const History = styled.div`
   margin-top: 20px;
   margin-bottom: 10px;
   padding: 10px;
+  height: 200px;
+  overflow-y: scroll;
   background-color: white;
   border-radius: 4px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);

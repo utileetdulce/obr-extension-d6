@@ -4,9 +4,7 @@ export const useRollVisualizer = (box) => {
   const roll = async ({ result = [], type = "regular" }) => {
     if (!box) return
 
-    await delay(12000)
-    console.log("useRollVisualizer result:", result)
-    console.log("box:", box)
+    // await delay(12000)
 
     const numDice = result.length
 

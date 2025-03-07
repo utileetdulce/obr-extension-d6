@@ -13,7 +13,7 @@ export const useProbe = (isPublicRoll, player, box) => {
     await OBR.broadcast.sendMessage(
       isPublicRoll ? MESSAGE_CHANNEL_PUBLIC : MESSAGE_CHANNEL_GM,
       {
-        message: `${player.name}s Probe auf ${attribute} (${numDice}W6 ${modifier ? `+ ${modifier}` : ""})`,
+        message: `${player.name}: Probe auf ${attribute} (${numDice}W6 ${modifier ? `+ ${modifier}` : ""})`,
       },
       { destination: "REMOTE" },
     )
@@ -40,7 +40,8 @@ export const useProbe = (isPublicRoll, player, box) => {
           wildDie === 6 || wildDie === 1
             ? `${regularRolls.join(" + ")} ${modifier ? `+ ${modifier}` : ""}`
             : null,
-        data: { result: regularRolls, type: "regular", player },
+        data: { result: regularRolls, type: "regular" },
+        player,
       },
       { destination: "REMOTE" },
     )
@@ -53,8 +54,9 @@ export const useProbe = (isPublicRoll, player, box) => {
         await OBR.broadcast.sendMessage(
           isPublicRoll ? MESSAGE_CHANNEL_PUBLIC : MESSAGE_CHANNEL_GM,
           {
-            message: `${rollText[wildDie]} + ${wildDieResult}`,
+            message: `${player.name}: ${rollText[wildDie]} + ${wildDieResult}`,
             data: { result: wildDieResult, type: "explode" },
+            player,
           },
           { destination: "REMOTE" },
         )
@@ -68,8 +70,9 @@ export const useProbe = (isPublicRoll, player, box) => {
       await OBR.broadcast.sendMessage(
         isPublicRoll ? MESSAGE_CHANNEL_PUBLIC : MESSAGE_CHANNEL_GM,
         {
-          message: `${rollText[wildDie]} - ${wildDieResult}`,
+          message: `${player.name}s: ${rollText[wildDie]} - ${wildDieResult}`,
           data: { result: wildDieResult, type: "fail" },
+          player,
         },
         { destination: "REMOTE" },
       )
@@ -86,9 +89,11 @@ export const useProbe = (isPublicRoll, player, box) => {
     await OBR.broadcast.sendMessage(
       isPublicRoll ? MESSAGE_CHANNEL_PUBLIC : MESSAGE_CHANNEL_GM,
       {
-        message: `${player.name}s Probe auf ${attribute} war ${quality.text} (${rollText[wildDie]} ${[...regularRolls, ...wildDieRolls].join(" + ")} ${modifier ? `+ ${modifier}` : ""} = ${total})`,
+        message: `${player.name}: ${attribute} war ${quality.text} (${[...regularRolls, ...wildDieRolls].join(" + ")} ${modifier ? `+ ${modifier}` : ""} = ${total})`,
+        history: true,
+        player,
       },
-      { destination: "REMOTE" },
+      { destination: "ALL" },
     )
 
     console.log("result", {

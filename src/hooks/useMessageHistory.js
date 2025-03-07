@@ -1,7 +1,7 @@
 import { useCallback, useState } from "react"
 
 export const useMessageHistory = () => {
-  const [historyLength, setHistoryLength] = useState(6)
+  const [historyLength, setHistoryLength] = useState(100)
   const [history, setHistory] = useState([])
 
   const pushMessageToHistory = useCallback(
