@@ -11,7 +11,7 @@ import { SliderButton } from "./SliderButton"
 import { useAttributes } from "../hooks/useAttributes"
 import { useProbe } from "../hooks/useProbe"
 import { DiceRoll } from "./DiceRoll"
-import { useDiceBox } from "./useDiceBox"
+import { useDiceBox } from "../hooks/useDiceBox"
 
 const TABS = {
   MY_PLAYER: "MY_PLAYER",
