@@ -19,13 +19,10 @@ const NumberInput = styled.div`
   font-size: 12px;
   font-weight: normal;
   overflow: none;
-
   background-color: ${(props) => (props.color ? props.color : "white")};
-
   box-sizing: border-box;
   width: 20px;
   height: 20px;
-
   text-align: center;
   display: flex;
   align-items: center;
@@ -59,24 +56,32 @@ const Messsage = styled.div`
   margin-right: 10px;
 `
 
+const getBorderColor = (index, roll) => {
+  if (index === 0) {
+    if (roll === 1) return RED
+    if (roll === 6) return GREEN
+  }
+  return "#333"
+}
+
+const getColor = (roll, regularRolls) => {
+  if (roll < 0) return RED
+  if (regularRolls[0] === 6) return GREEN
+  if (regularRolls[0] === 1) return RED
+  return "white"
+}
+
 export const MessageHistory = ({ history }) => {
   return (
     <History>
       {history.map((item, index) => (
         <Item key={item.message + index}>
           <Messsage>{item.message}</Messsage>
-
           <Roll>
             {item.result.regularRolls.map((roll, index) => (
               <Block key={index}>
-                {index !== 0 ? (roll < 0 ? "-" : "+") : ""}
-                <NumberInputDice
-                  $borderColor={
-                    index === 0 ? (roll === 1 ? RED : roll === 6 ? GREEN : "#333") : "#333"
-                  }
-                  color={roll < 0 ? RED : "white"}
-                  key={index}
-                >
+                {index !== 0 && (roll < 0 ? "-" : "+")}
+                <NumberInputDice $borderColor={getBorderColor(index, roll)}>
                   <b>{Math.abs(roll)}</b>
                 </NumberInputDice>
               </Block>
@@ -84,24 +89,15 @@ export const MessageHistory = ({ history }) => {
             {item.result.wildDieRolls.map((roll, index) => (
               <Block key={index}>
                 {roll < 0 ? "-" : "+"}
-                <NumberInputDice
-                  color={
-                    item.result.regularRolls[0] === 6
-                      ? GREEN
-                      : item.result.regularRolls[0] === 1
-                        ? RED
-                        : "white"
-                  }
-                  key={index}
-                >
+                <NumberInputDice color={getColor(roll, item.result.regularRolls)}>
                   <b>{Math.abs(roll)}</b>
                 </NumberInputDice>
               </Block>
             ))}
             {item.result.modifier !== 0 && (
               <Block key={index}>
-                {Math.sign(item.result.modifier).toString() === "-1" ? "-" : "+"}
-                <NumberInput key={index}>
+                {Math.sign(item.result.modifier) === -1 ? "-" : "+"}
+                <NumberInput>
                   <b>{Math.abs(item.result.modifier)}</b>
                 </NumberInput>
               </Block>
@@ -113,3 +109,5 @@ export const MessageHistory = ({ history }) => {
     </History>
   )
 }
+
+export default MessageHistory
