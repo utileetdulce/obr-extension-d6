@@ -13,7 +13,6 @@ import { useAttributes } from "../hooks/useAttributes"
 import { useProbe } from "../hooks/useProbe"
 import { DiceRoll } from "./DiceRoll"
 import { useDiceBox } from "./useDiceBox"
-import { useRollVisualizer } from "../hooks/useRollVisualizer"
 
 const TABS = {
   MY_PLAYER: "MY_PLAYER",
@@ -43,7 +42,7 @@ const Container = styled.div`
   color: black;
 `
 
-const Button = styled.button`
+const StyledButton = styled.button`
   background-color: #3498db;
   color: white;
   border: none;
@@ -60,6 +59,19 @@ const Button = styled.button`
     background-color: #2980b9;
   }
 `
+
+const SaveButton = ({ onClick }) => (
+  <StyledButton onClick={onClick}> 💾 Save Attributes to file</StyledButton>
+)
+
+const RestoreButton = ({ onChange }) => (
+  <>
+    <StyledButton as="label" htmlFor="files">
+      ↺ Restore attributes from file
+    </StyledButton>
+    <input id="files" style={{ visibility: "hidden" }} type="file" onChange={onChange} />
+  </>
+)
 
 function App() {
   const [ready, setReady] = useState(!OBR.isAvailable)
@@ -117,14 +129,8 @@ function App() {
         />
         <RollResult result={result} />
         <MessageHistory history={history} />
-        <Button onClick={saveAttibutesToJsonFile}> 💾 Save Attributes to file</Button>
-        <Button as="label" htmlFor="files">
-          ↺ Restore attributes from file
-        </Button>
-        <input
-          id="files"
-          style={{ visibility: "hidden" }}
-          type="file"
+        <SaveButton onClick={saveAttibutesToJsonFile} />
+        <RestoreButton
           onChange={(e) => {
             restoreAttributesFromJsonFile(e.target.files[0])
             e.target.value = ""
