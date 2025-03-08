@@ -4,8 +4,6 @@ export const useRollVisualizer = (box) => {
   const roll = async ({ result = [], type = "regular" }) => {
     if (!box) return
 
-    // await delay(12000)
-
     const numDice = result.length
 
     if (type === "regular") {
@@ -22,8 +20,4 @@ export const useRollVisualizer = (box) => {
   return {
     roll,
   }
-}
-
-function delay(ms) {
-  return new Promise((resolve) => setTimeout(resolve, ms))
 }
