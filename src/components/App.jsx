@@ -89,6 +89,12 @@ function App() {
   const { history } = useMessageSubscription(ready, box)
   const [isPublicRoll, setIsPublicRoll] = useState(true)
 
+  const clearDice = () => {
+    if (box) {
+      box.clearDice()
+    }
+  }
+
   useEffect(() => {
     OBR.onReady(() => {
       console.log("OBR is ready !")
@@ -104,6 +110,7 @@ function App() {
       <TabNavigation>
         <button onClick={() => setTab(TABS.MY_PLAYER)}>My Player</button>
         {isGm && <button onClick={() => setTab(TABS.ALL_PLAYERS)}>All Players</button>}
+        <button onClick={clearDice}>Clear Dice</button>
       </TabNavigation>
       <TabContainer>
         {tab === TABS.MY_PLAYER && (
