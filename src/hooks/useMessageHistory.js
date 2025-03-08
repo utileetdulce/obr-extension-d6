@@ -5,9 +5,9 @@ export const useMessageHistory = () => {
   const [history, setHistory] = useState([])
 
   const pushMessageToHistory = useCallback(
-    (message) => {
+    (message, result) => {
       setHistory((history) => {
-        return [message, ...history.slice(0, historyLength - 1)]
+        return [{ message, result }, ...history.slice(0, historyLength - 1)]
       })
     },
     [historyLength],

@@ -90,7 +90,13 @@ export const useProbe = (isPublicRoll, player, box) => {
     await OBR.broadcast.sendMessage(
       isPublicRoll ? MESSAGE_CHANNEL_PUBLIC : MESSAGE_CHANNEL_GM,
       {
-        message: `${player.name}: ${attribute} war ${quality.text} (${[...regularRolls, ...wildDieRolls, modifier].reduce((a, c) => a + (c !== 0 ? (c < 0 ? "" : "+") + c : ""))} = ${total})`,
+        message: `${player.name}: ${attribute} war ${quality.text}`,
+        result: {
+          regularRolls,
+          wildDieRolls,
+          modifier,
+          total,
+        },
         history: true,
         player,
       },

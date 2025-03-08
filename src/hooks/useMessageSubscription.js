@@ -25,7 +25,7 @@ export const useMessageSubscription = (ready, box) => {
               OBR.notification.show(`${event.data.message}`)
             }
             if (event.data.history) {
-              pushMessageToHistory(`(Private) ${event.data.message}`)
+              pushMessageToHistory(`(Private) ${event.data.message}`, event.data.result)
             }
           } catch (error) {
             console.error(error)
@@ -46,7 +46,7 @@ export const useMessageSubscription = (ready, box) => {
             OBR.notification.show(`${event.data.message}`)
           }
           if (event.data.history) {
-            pushMessageToHistory(event.data.message)
+            pushMessageToHistory(event.data.message, event.data.result)
           }
         } catch (error) {
           console.error(error)
