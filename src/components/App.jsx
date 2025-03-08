@@ -9,7 +9,6 @@ import { useMessageSubscription } from "../hooks/useMessageSubscription"
 import { MessageHistory } from "./MessageHistory"
 import { SliderButton } from "./SliderButton"
 import { useAttributes } from "../hooks/useAttributes"
-import { useProbe } from "../hooks/useProbe"
 import { DiceRoll } from "./DiceRoll"
 import { useDiceBox } from "../hooks/useDiceBox"
 
@@ -89,7 +88,6 @@ function App() {
   const { diceBoxRef, box } = useDiceBox()
   const { history } = useMessageSubscription(ready, box)
   const [isPublicRoll, setIsPublicRoll] = useState(true)
-  const { result } = useProbe(isPublicRoll)
 
   useEffect(() => {
     OBR.onReady(() => {
