@@ -6,7 +6,6 @@ import { AllPlayers } from "./AllPlayers"
 import { usePlayer } from "../hooks/usePlayer"
 import { useRole } from "../hooks/useRole"
 import { useMessageSubscription } from "../hooks/useMessageSubscription"
-import { RollResult } from "./RollResult"
 import { MessageHistory } from "./MessageHistory"
 import { SliderButton } from "./SliderButton"
 import { useAttributes } from "../hooks/useAttributes"
@@ -127,7 +126,6 @@ function App() {
           onCaption={"Public Roll"}
           offCaption={"Private Roll"}
         />
-        <RollResult result={result} />
         <MessageHistory history={history} />
         <SaveButton onClick={saveAttibutesToJsonFile} />
         <RestoreButton
