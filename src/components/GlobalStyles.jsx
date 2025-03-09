@@ -10,8 +10,6 @@ export const GlobalStyles = createGlobalStyle`
     }
 
     #root {
-        display: flex;
-        justify-content: center;
         padding: 0;
         margin: 0;
     }

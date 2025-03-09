@@ -6,26 +6,21 @@ import { AllPlayers } from "./AllPlayers"
 import { usePlayer } from "../hooks/usePlayer"
 import { useRole } from "../hooks/useRole"
 import { useMessageSubscription } from "../hooks/useMessageSubscription"
-import { RollResult } from "./RollResult"
 import { MessageHistory } from "./MessageHistory"
 import { SliderButton } from "./SliderButton"
 import { useAttributes } from "../hooks/useAttributes"
-import { useProbe } from "../hooks/useProbe"
-import { ManageSheetData } from "./ManageSheetData"
+import { DiceRoll } from "./DiceRoll"
+import { useDiceBox } from "../hooks/useDiceBox"
 
 const TABS = {
   MY_PLAYER: "MY_PLAYER",
   ALL_PLAYERS: "ALL_PLAYERS",
 }
 
-const Container = styled.div`
-  width: 512px;
-  height: 1000px;
-  box-sizing: border-box;
-  overflow-y: scroll;
-  padding: 20px;
-  background-color: #f5f5f5;
-  color: black;
+const TabNavigation = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
 `
 
 const TabContainer = styled.div`
@@ -34,21 +29,71 @@ const TabContainer = styled.div`
   justify-content: center;
 `
 
-const TabNavigation = styled.div`
-  display: flex;
-  justify-content: center;
+const Container = styled.div`
+  width: 512px;
+  height: 700px;
+  box-sizing: border-box;
+  overflow-y: scroll;
+  font-family: "Arial", sans-serif;
+  padding: 20px;
+  background-color: #f5f5f5;
+  color: black;
 `
+
+const StyledButton = styled.button`
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  text-align: center;
+  width: 230px;
+
+  font-size: 16px;
+  margin: 2px 0;
+
+  &:hover {
+    background-color: #2980b9;
+  }
+`
+
+const SaveButton = ({ onClick }) => (
+  <StyledButton onClick={onClick}> 💾 Save Attributes to file</StyledButton>
+)
+
+const RestoreButton = ({ onChange }) => (
+  <>
+    <StyledButton as="label" htmlFor="files">
+      ↺ Restore attributes from file
+    </StyledButton>
+    <input id="files" style={{ visibility: "hidden" }} type="file" onChange={onChange} />
+  </>
+)
 
 function App() {
   const [ready, setReady] = useState(!OBR.isAvailable)
   const [tab, setTab] = useState(TABS.MY_PLAYER)
   const player = usePlayer(ready)
   const { isGm } = useRole(ready)
-  const { attributes, setAttributes, attributeClasses, setAttributeClasses } = useAttributes()
+  const {
+    attributes,
+    setAttributes,
+    attributeClasses,
+    setAttributeClasses,
+    saveAttibutesToJsonFile,
+    restoreAttributesFromJsonFile,
+  } = useAttributes()
 
-  const { history } = useMessageSubscription(ready)
+  const { diceBoxRef, box } = useDiceBox()
+  const { history } = useMessageSubscription(ready, box)
   const [isPublicRoll, setIsPublicRoll] = useState(true)
-  const { result, rollForRow } = useProbe(isPublicRoll)
+
+  const clearDice = () => {
+    if (box) {
+      box.clearDice()
+    }
+  }
 
   useEffect(() => {
     OBR.onReady(() => {
@@ -61,17 +106,19 @@ function App() {
 
   return (
     <Container>
+      <DiceRoll diceBoxRef={diceBoxRef} />
       <TabNavigation>
         <button onClick={() => setTab(TABS.MY_PLAYER)}>My Player</button>
         {isGm && <button onClick={() => setTab(TABS.ALL_PLAYERS)}>All Players</button>}
+        <button onClick={clearDice}>Clear Dice</button>
       </TabNavigation>
       <TabContainer>
         {tab === TABS.MY_PLAYER && (
           <Sheet
             player={player}
+            box={box}
             attributes={attributes}
             isPublicRoll={isPublicRoll}
-            rollForRow={rollForRow}
             setAttributes={setAttributes}
             attributeClasses={attributeClasses}
             setAttributeClasses={setAttributeClasses}
@@ -84,9 +131,14 @@ function App() {
           onCaption={"Public Roll"}
           offCaption={"Private Roll"}
         />
-        <RollResult result={result} />
         <MessageHistory history={history} />
-        <ManageSheetData />
+        <SaveButton onClick={saveAttibutesToJsonFile} />
+        <RestoreButton
+          onChange={(e) => {
+            restoreAttributesFromJsonFile(e.target.files[0])
+            e.target.value = ""
+          }}
+        />
       </TabContainer>
     </Container>
   )

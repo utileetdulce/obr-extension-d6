@@ -1,77 +1,102 @@
 import OBR from "@owlbear-rodeo/sdk"
-import { useState } from "react"
 import { MESSAGE_CHANNEL_GM, MESSAGE_CHANNEL_PUBLIC } from "../constants"
-import { getQualityRating, rollD6 } from "../utils"
+import { getQualityRating, rollD6Dices } from "../utils"
+import { COLORSETS } from "../components/DiceBox/const/colorsets"
 
-export const useProbe = (isPublicRoll, player) => {
-  const [result, setResult] = useState(null)
-
+export const useProbe = (isPublicRoll, player, box) => {
   const rollForRow = async ({ attribute, numDice, modifier }) => {
-    let rolls = []
-    let wildDieRolls = []
-    let wildDieTotal = 0
-    let wildDieStatus = "normal"
-
-    // Roll the wild die first
-    let currentWildRoll = rollD6()
-    wildDieRolls.push(currentWildRoll)
-
-    if (currentWildRoll === 1) {
-      wildDieStatus = "fail"
-      currentWildRoll = rollD6()
-      wildDieRolls.push(-currentWildRoll)
-      wildDieTotal -= currentWildRoll
-    } else if (currentWildRoll === 6) {
-      wildDieStatus = "explode"
-      wildDieTotal = currentWildRoll
-      currentWildRoll = rollD6()
-      while (currentWildRoll === 6) {
-        wildDieRolls.push(currentWildRoll)
-        wildDieTotal += currentWildRoll
-        currentWildRoll = rollD6()
-      }
-      wildDieRolls.push(currentWildRoll)
-      wildDieTotal += currentWildRoll
-    } else {
-      wildDieTotal = currentWildRoll
-    }
-
-    // Roll the regular dice
-    for (let i = 0; i < numDice - 1; i++) {
-      rolls.push(rollD6())
-    }
-
-    // Calculate total
-    const regularTotal = rolls.reduce((sum, roll) => sum + roll, 0)
-    const total = regularTotal + wildDieTotal + modifier
-
-    const quality = getQualityRating(total)
-
-    const [firstWildDie, ...restWildDie] = wildDieRolls
-    const diceString = `${rolls.join("+")}${firstWildDie === 1 ? restWildDie.join("") : "+" + wildDieRolls.join("+")}${modifier ? "+" + modifier : ""}=${total}`
-
-    setResult({
-      rolls: {
-        regular: rolls,
-        wild: wildDieRolls,
-      },
-      attribute,
-      total,
-      modifier,
-      wildDieStatus,
-      quality,
-      diceString,
-    })
+    if (!box) return
 
     await OBR.broadcast.sendMessage(
       isPublicRoll ? MESSAGE_CHANNEL_PUBLIC : MESSAGE_CHANNEL_GM,
-      `${player.name}s ${attribute} ist ${quality.text} (${diceString}) ${quality.icon}`,
+      {
+        message: `${player.name}: Probe auf ${attribute} (${numDice}W6 ${modifier ? `+ ${modifier}` : ""})`,
+      },
+      { destination: "REMOTE" },
+    )
+
+    const regularRolls = rollD6Dices(numDice)
+    const wildDieRolls = []
+    let wildDie = regularRolls[0]
+
+    const rollText = {
+      1: "fail! ",
+      2: "",
+      3: "",
+      4: "",
+      5: "",
+      6: "explode! ",
+    }
+
+    await OBR.broadcast.sendMessage(
+      isPublicRoll ? MESSAGE_CHANNEL_PUBLIC : MESSAGE_CHANNEL_GM,
+      {
+        message:
+          wildDie === 6 || wildDie === 1
+            ? `${regularRolls.join(" + ")} ${modifier ? `+ ${modifier}` : ""}`
+            : null,
+        data: { result: regularRolls, type: "regular" },
+        player,
+      },
+      { destination: "REMOTE" },
+    )
+
+    await box.roll(`${numDice}d6@${regularRolls.join(",")}`)
+
+    if (wildDie === 6) {
+      while (wildDie === 6) {
+        const wildDieResult = rollD6Dices(1)
+        await OBR.broadcast.sendMessage(
+          isPublicRoll ? MESSAGE_CHANNEL_PUBLIC : MESSAGE_CHANNEL_GM,
+          {
+            message: `${player.name}: ${rollText[wildDie]} + ${wildDieResult}`,
+            data: { result: wildDieResult, type: "explode" },
+            player,
+          },
+          { destination: "REMOTE" },
+        )
+        const wildDieRoll = await box.add(`1d6@${wildDieResult}`, COLORSETS.green)
+        wildDie = wildDieRoll[0].value
+        wildDieRolls.push(wildDie)
+      }
+    } else if (wildDie === 1) {
+      const wildDieResult = rollD6Dices(1)
+      await OBR.broadcast.sendMessage(
+        isPublicRoll ? MESSAGE_CHANNEL_PUBLIC : MESSAGE_CHANNEL_GM,
+        {
+          message: `${player.name}s: ${rollText[wildDie]} - ${wildDieResult}`,
+          data: { result: wildDieResult, type: "fail" },
+          player,
+        },
+        { destination: "REMOTE" },
+      )
+      const wildDieRoll = await box.add(`1d6@${wildDieResult}`, COLORSETS.red)
+      wildDieRolls.push(-wildDieRoll[0].value)
+    }
+
+    const regularRollsTotal = regularRolls.reduce((sum, roll) => sum + roll, 0)
+    const wildDieTotal = wildDieRolls.reduce((sum, roll) => sum + roll, 0)
+    const total = regularRollsTotal + wildDieTotal + modifier
+    const quality = getQualityRating(total)
+
+    await OBR.broadcast.sendMessage(
+      isPublicRoll ? MESSAGE_CHANNEL_PUBLIC : MESSAGE_CHANNEL_GM,
+      {
+        message: `${player.name}: ${attribute} war ${quality.text}`,
+        result: {
+          regularRolls,
+          wildDieRolls,
+          modifier,
+          total,
+        },
+        history: true,
+        player,
+      },
       { destination: "ALL" },
     )
   }
 
   return {
-    result,
     rollForRow,
   }
 }

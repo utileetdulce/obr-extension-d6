@@ -11,67 +11,72 @@ const WAHRNEHMUNG = "Wahrnehmung"
 const INTELLIGENZ = "Intelligenz"
 
 const initialAttributes = [
-  { attribute: "Waffenloser Kampf (S)", numDice: 0, modifier: 0, class: STAERKE },
-  { attribute: "Bewaffneter Kampf (S)", numDice: 0, modifier: 0, class: STAERKE },
-  { attribute: "Schild (S)", numDice: 0, modifier: 0, class: STAERKE },
-  { attribute: "Athletik", numDice: 0, modifier: 0, class: STAERKE },
+  { attribute: "waffenloser Kampf (S)", numDice: 0, modifier: 0, class: "physis" },
+  { attribute: "bewaffneter Kampf (S)", numDice: 0, modifier: 0, class: "physis" },
+  { attribute: "Schild (S)", numDice: 0, modifier: 0, class: "physis" },
+  { attribute: "Athletik", numDice: 0, modifier: 0, class: "physis" },
 
-  { attribute: "Waffenloser Kampf (G)", numDice: 0, modifier: 0, class: GESCHICKLICHKEIT },
-  { attribute: "Bewaffneter Kampf (G)", numDice: 0, modifier: 0, class: GESCHICKLICHKEIT },
-  { attribute: "Schild (G)", numDice: 0, modifier: 0, class: GESCHICKLICHKEIT },
-  { attribute: "Akrobatik", numDice: 0, modifier: 0, class: GESCHICKLICHKEIT },
-  { attribute: "Fernwaffen", numDice: 0, modifier: 0, class: GESCHICKLICHKEIT },
-  { attribute: "Ausweichen", numDice: 0, modifier: 0, class: GESCHICKLICHKEIT },
+  { attribute: "waffenloser Kampf (G)", numDice: 0, modifier: 0, class: "reflexe" },
+  { attribute: "bewaffneter Kampf (G)", numDice: 0, modifier: 0, class: "reflexe" },
+  { attribute: "Schild (G)", numDice: 0, modifier: 0, class: "reflexe" },
+  { attribute: "Akrobatik", numDice: 0, modifier: 0, class: "reflexe" },
+  { attribute: "Fernwaffe/Werfen", numDice: 0, modifier: 0, class: "reflexe" },
+  { attribute: "Ausweichen", numDice: 0, modifier: 0, class: "reflexe" },
 
-  { attribute: "Ausdauer", numDice: 0, modifier: 0, class: ROBUSTHEIT },
-  { attribute: "Resistenz", numDice: 0, modifier: 0, class: ROBUSTHEIT },
-  { attribute: "Willensstärke", numDice: 0, modifier: 0, class: ROBUSTHEIT },
+  { attribute: "Ausdauer/Zähgkeit", numDice: 0, modifier: 0, class: "kondition" },
+  {
+    attribute: "Resistenz (Krankheit, Gifte, Verletzungen)",
+    numDice: 0,
+    modifier: 0,
+    class: "kondition",
+  },
+  { attribute: "Willensstärke", numDice: 0, modifier: 0, class: "kondition" },
 
-  { attribute: "Medizin", numDice: 0, modifier: 0, class: INTELLIGENZ },
-  { attribute: "Navigation", numDice: 0, modifier: 0, class: INTELLIGENZ },
-  { attribute: "Handwerkskunst", numDice: 0, modifier: 0, class: INTELLIGENZ },
-  { attribute: "Wissen", numDice: 0, modifier: 0, class: INTELLIGENZ },
-  { attribute: "Naturkunde", numDice: 0, modifier: 0, class: INTELLIGENZ },
+  { attribute: "Medizin/erte Hlfe", numDice: 0, modifier: 0, class: "ratio" },
+  { attribute: "Navigation", numDice: 0, modifier: 0, class: "ratio" },
+  { attribute: "Handerks-/Ingenieurskunst", numDice: 0, modifier: 0, class: "ratio" },
+  { attribute: "Wissen/Recherche", numDice: 0, modifier: 0, class: "ratio" },
+  { attribute: "Naturkunde", numDice: 0, modifier: 0, class: "ratio" },
 
-  { attribute: "Verkleiden", numDice: 0, modifier: 0, class: WAHRNEHMUNG },
-  { attribute: "Schleichen", numDice: 0, modifier: 0, class: WAHRNEHMUNG },
-  { attribute: "Untersuchen", numDice: 0, modifier: 0, class: WAHRNEHMUNG },
-  { attribute: "Spuren suchen", numDice: 0, modifier: 0, class: WAHRNEHMUNG },
+  { attribute: "Verkleiden", numDice: 0, modifier: 0, class: "wahrnehmung" },
+  { attribute: "Untersuchen", numDice: 0, modifier: 0, class: "wahrnehmung" },
+  { attribute: "Spuren lesen", numDice: 0, modifier: 0, class: "wahrnehmung" },
+  { attribute: "Schleichen", numDice: 0, modifier: 0, class: "wahrnehmung" },
 
-  { attribute: "Diebeskunst", numDice: 0, modifier: 0, class: AUFTRETEN },
-  { attribute: "Tierhandhabung", numDice: 0, modifier: 0, class: AUFTRETEN },
-  { attribute: "Beeinflussen", numDice: 0, modifier: 0, class: AUFTRETEN },
-  { attribute: "Schauspielern", numDice: 0, modifier: 0, class: AUFTRETEN },
+  { attribute: "Tierhandhabung", numDice: 0, modifier: 0, class: "auftreten" },
+  { attribute: "Betören/Beeinflussen/Befehlen", numDice: 0, modifier: 0, class: "auftreten" },
+  { attribute: "Schauspielern/Täuschen", numDice: 0, modifier: 0, class: "auftreten" },
+  { attribute: "Diebeskunst", numDice: 0, modifier: 0, class: "auftreten" },
 ]
 
 const initialAttributeClasses = {
-  [STAERKE]: {
-    attribute: STAERKE,
+  physis: {
+    attribute: "Stärke",
     numDice: 2,
     modifier: 0,
   },
-  [GESCHICKLICHKEIT]: {
-    attribute: GESCHICKLICHKEIT,
+  reflexe: {
+    attribute: "Geschicklichkeit",
     numDice: 2,
     modifier: 0,
   },
-  [ROBUSTHEIT]: {
-    attribute: ROBUSTHEIT,
+  kondition: {
+    attribute: "Kondition",
     numDice: 2,
     modifier: 0,
   },
-  [AUFTRETEN]: {
-    attribute: AUFTRETEN,
-    numDice: 2,
-    modifier: 0,
-  },
-  [WAHRNEHMUNG]: {
-    attribute: WAHRNEHMUNG,
+  ratio: {
+    attribute: "Intelligenz",
     numDice: 2,
     modifier: 0,
   },
   [INTELLIGENZ]: {
     attribute: INTELLIGENZ,
+    numDice: 2,
+    modifier: 0,
+  },
+  auftreten: {
+    attribute: "Auftreten",
     numDice: 2,
     modifier: 0,
   },

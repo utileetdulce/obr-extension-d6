@@ -22,9 +22,9 @@ export function AllPlayers({ isPublicRoll }) {
 
   return (
     <Container>
-      {players.map((player) => (
+      {players.map((player, index) => (
         <Sheet
-          key={player.id}
+          key={player.id + index}
           player={player}
           isPublicRoll={isPublicRoll}
           attributes={player.metadata.attributes}
