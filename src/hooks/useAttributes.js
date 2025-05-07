@@ -94,11 +94,20 @@ export const useAttributes = () => {
     OBR.player.setMetadata({ attributes, attributeClasses })
   }, [attributes, attributeClasses])
 
-  const saveAttibutesToJsonFile = () => {
+  const saveDataToJsonFile = () => {
     const element = document.createElement("a")
-    const file = new Blob([JSON.stringify({ attributes, attributeClasses })], {
-      type: "application/json",
-    })
+    const file = new Blob(
+      [
+        JSON.stringify({
+          attributes,
+          attributeClasses,
+          notes: player.notes || "",
+        }),
+      ],
+      {
+        type: "application/json",
+      },
+    )
     element.href = URL.createObjectURL(file)
 
     const now = new Date()
@@ -112,12 +121,17 @@ export const useAttributes = () => {
     element.click()
   }
 
-  const restoreAttributesFromJsonFile = (file) => {
+  const restoreDataFromJsonFile = (file) => {
     const reader = new FileReader()
     reader.onload = (e) => {
-      const { attributes, attributeClasses } = JSON.parse(e.target.result)
-      setAttributes(attributes)
-      setAttributeClasses(attributeClasses)
+      const data = JSON.parse(e.target.result)
+      setAttributes(data.attributes)
+      setAttributeClasses(data.attributeClasses)
+
+      // Update notes if present in the imported data
+      if (data.notes !== undefined && player.updatePlayer) {
+        player.updatePlayer({ notes: data.notes })
+      }
     }
     reader.readAsText(file)
   }
@@ -133,7 +147,7 @@ export const useAttributes = () => {
     setAttributeClasses,
     setAttributes,
     resetAttributes,
-    saveAttibutesToJsonFile,
-    restoreAttributesFromJsonFile,
+    saveDataToJsonFile,
+    restoreDataFromJsonFile,
   }
 }

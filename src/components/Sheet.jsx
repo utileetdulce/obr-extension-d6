@@ -3,6 +3,7 @@ import { styled } from "styled-components"
 
 import { Row } from "./Row"
 import { useProbe } from "../hooks/useProbe"
+import { ManageSheetData } from "./ManageSheetData"
 
 const PlayerName = styled.h1`
   margin: 10px 0;
@@ -21,6 +22,26 @@ const Th = styled.th`
   border: 1px solid #ddd;
   background-color: #2c3e50;
   color: white;
+`
+
+const NotesContainer = styled.div`
+  margin-top: 20px;
+  width: 100%;
+`
+
+const NotesLabel = styled.div`
+  font-weight: bold;
+  margin-bottom: 5px;
+`
+
+const NotesTextarea = styled.textarea`
+  width: 100%;
+  min-height: 100px;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-family: inherit;
+  resize: vertical;
 `
 
 export const Sheet = ({
@@ -95,6 +116,19 @@ export const Sheet = ({
           ))}
         </tbody>
       </Table>
+
+      <NotesContainer>
+        <NotesLabel>Notizen</NotesLabel>
+        <NotesTextarea
+          value={player.notes || ""}
+          onChange={(e) => {
+            if (player.updatePlayer) {
+              player.updatePlayer({ notes: e.target.value })
+            }
+          }}
+        />
+      </NotesContainer>
+      <ManageSheetData />
     </>
   )
 }

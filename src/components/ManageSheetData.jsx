@@ -19,14 +19,13 @@ const Button = styled.button`
 `
 
 export function ManageSheetData() {
-  const { saveAttibutesToJsonFile, restoreAttributesFromJsonFile, resetAttributes } =
-    useAttributes()
+  const { saveDataToJsonFile, restoreDataFromJsonFile, resetAttributes } = useAttributes()
 
   return (
     <>
-      <Button onClick={saveAttibutesToJsonFile}> 💾 Save Attributes to file</Button>
+      <Button onClick={saveDataToJsonFile}> 💾 Save Character Sheet to file</Button>
       <Button as="label" htmlFor="files">
-        ↺ Restore attributes from file
+        ↺ Restore Character Sheet from file
       </Button>
       <Button onClick={resetAttributes}>↺ Reset attributes to initial values</Button>
       <input
@@ -34,7 +33,7 @@ export function ManageSheetData() {
         style={{ visibility: "hidden" }}
         type="file"
         onChange={(e) => {
-          restoreAttributesFromJsonFile(e.target.files[0])
+          restoreDataFromJsonFile(e.target.files[0])
           e.target.value = ""
         }}
       />
