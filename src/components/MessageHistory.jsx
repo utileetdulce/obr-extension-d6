@@ -15,6 +15,7 @@ const NumberInput = styled.div`
   border: 2px solid ${({ $borderColor = "#333" }) => $borderColor};
   border-radius: 10px;
   margin-right: 1px;
+  margin-top: -3px;
   color: black;
   font-size: 12px;
   font-weight: normal;
