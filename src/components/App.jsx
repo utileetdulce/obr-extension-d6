@@ -58,6 +58,19 @@ const StyledButton = styled.button`
   }
 `
 
+const SaveButton = ({ onClick }) => (
+  <StyledButton onClick={onClick}> 💾 Save Attributes to file</StyledButton>
+)
+
+const RestoreButton = ({ onChange }) => (
+  <>
+    <StyledButton as="label" htmlFor="files">
+      ↺ Restore attributes from file
+    </StyledButton>
+    <input id="files" style={{ visibility: "hidden" }} type="file" onChange={onChange} />
+  </>
+)
+
 function App() {
   const [ready, setReady] = useState(!OBR.isAvailable)
   const [tab, setTab] = useState(TABS.MY_PLAYER)
@@ -99,9 +112,6 @@ function App() {
         {isGm && <button onClick={() => setTab(TABS.ALL_PLAYERS)}>All Players</button>}
         <button onClick={clearDice}>Clear Dice</button>
       </TabNavigation>
-
-      <MessageHistory history={history} />
-
       <TabContainer>
         {tab === TABS.MY_PLAYER && (
           <Sheet
@@ -120,6 +130,14 @@ function App() {
           onStateChange={setIsPublicRoll}
           onCaption={"Public Roll"}
           offCaption={"Private Roll"}
+        />
+        <MessageHistory history={history} />
+        <SaveButton onClick={saveAttibutesToJsonFile} />
+        <RestoreButton
+          onChange={(e) => {
+            restoreAttributesFromJsonFile(e.target.files[0])
+            e.target.value = ""
+          }}
         />
       </TabContainer>
     </Container>
