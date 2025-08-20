@@ -81,6 +81,8 @@ function App() {
     setAttributes,
     attributeClasses,
     setAttributeClasses,
+    notes,
+    setNotes,
     saveAttibutesToJsonFile,
     restoreAttributesFromJsonFile,
   } = useAttributes()
@@ -122,6 +124,8 @@ function App() {
             setAttributes={setAttributes}
             attributeClasses={attributeClasses}
             setAttributeClasses={setAttributeClasses}
+            notes={notes}
+            setNotes={setNotes}
           />
         )}
         {tab === TABS.ALL_PLAYERS && <AllPlayers isPublicRoll={isPublicRoll} />}

@@ -8,7 +8,6 @@ const GESCHICKLICHKEIT = "Geschicklichkeit"
 const ROBUSTHEIT = "Kondition"
 const AUFTRETEN = "Auftreten"
 const WAHRNEHMUNG = "Wahrnehmung"
-const INTELLIGENZ = "Intelligenz"
 
 const initialAttributes = [
   { attribute: "waffenloser Kampf (S)", numDice: 0, modifier: 0, class: "physis" },
@@ -70,11 +69,6 @@ const initialAttributeClasses = {
     numDice: 2,
     modifier: 0,
   },
-  [INTELLIGENZ]: {
-    attribute: INTELLIGENZ,
-    numDice: 2,
-    modifier: 0,
-  },
   auftreten: {
     attribute: "Auftreten",
     numDice: 2,
@@ -89,14 +83,15 @@ export const useAttributes = () => {
     "initialAttributeClasses",
     initialAttributeClasses,
   )
+  const [notes, setNotes] = useLocalStorage("characterNotes", "")
 
   useEffect(() => {
-    OBR.player.setMetadata({ attributes, attributeClasses })
-  }, [attributes, attributeClasses])
+    OBR.player.setMetadata({ attributes, attributeClasses, notes })
+  }, [attributes, attributeClasses, notes])
 
   const saveAttibutesToJsonFile = () => {
     const element = document.createElement("a")
-    const file = new Blob([JSON.stringify({ attributes, attributeClasses })], {
+    const file = new Blob([JSON.stringify({ attributes, attributeClasses, notes })], {
       type: "application/json",
     })
     element.href = URL.createObjectURL(file)
@@ -115,9 +110,12 @@ export const useAttributes = () => {
   const restoreAttributesFromJsonFile = (file) => {
     const reader = new FileReader()
     reader.onload = (e) => {
-      const { attributes, attributeClasses } = JSON.parse(e.target.result)
-      setAttributes(attributes)
-      setAttributeClasses(attributeClasses)
+      const data = JSON.parse(e.target.result)
+      setAttributes(data.attributes)
+      setAttributeClasses(data.attributeClasses)
+      if (data.notes) {
+        setNotes(data.notes)
+      }
     }
     reader.readAsText(file)
   }
@@ -125,13 +123,16 @@ export const useAttributes = () => {
   const resetAttributes = () => {
     setAttributes(initialAttributes)
     setAttributeClasses(initialAttributeClasses)
+    setNotes("")
   }
 
   return {
     attributeClasses,
     attributes,
+    notes,
     setAttributeClasses,
     setAttributes,
+    setNotes,
     resetAttributes,
     saveAttibutesToJsonFile,
     restoreAttributesFromJsonFile,

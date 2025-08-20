@@ -26,6 +26,7 @@ export function AllPlayers({ isPublicRoll }) {
       name: player.name,
       attributes: player.metadata.attributes,
       attributeClasses: player.metadata.attributeClasses,
+      notes: player.metadata.notes,
     }))
     const element = document.createElement("a")
     const file = new Blob([JSON.stringify(allData, null, 2)], { type: "application/json" })
@@ -48,6 +49,7 @@ export function AllPlayers({ isPublicRoll }) {
           isPublicRoll={isPublicRoll}
           attributes={player.metadata.attributes}
           attributeClasses={player.metadata.attributeClasses}
+          notes={player.metadata.notes}
         />
       ))}
     </Container>

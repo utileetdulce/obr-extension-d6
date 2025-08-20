@@ -23,6 +23,34 @@ const Th = styled.th`
   color: white;
 `
 
+const NotesContainer = styled.div`
+  margin: 20px 0;
+  width: 100%;
+`
+
+const NotesLabel = styled.h3`
+  margin: 0 0 8px 0;
+  color: #2c3e50;
+  font-size: 1.1rem;
+`
+
+const NotesTextArea = styled.textarea`
+  width: 100%;
+  min-height: 120px;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-family: inherit;
+  font-size: 0.9rem;
+  resize: vertical;
+  box-sizing: border-box;
+
+  &:focus {
+    border-color: #3498db;
+    outline: none;
+  }
+`
+
 export const Sheet = ({
   player,
   box,
@@ -31,6 +59,8 @@ export const Sheet = ({
   setAttributes,
   attributeClasses,
   setAttributeClasses,
+  notes,
+  setNotes,
 }) => {
   const [tempModifiers, setTempModifiers] = React.useState({})
   const { rollForRow } = useProbe(isPublicRoll, player, box)
@@ -117,19 +147,19 @@ export const Sheet = ({
         {/* Lucky Die Button Row */}
         <tfoot>
           <tr>
-            <td colSpan={6} style={{ textAlign: 'center', padding: '12px 0' }}>
+            <td colSpan={6} style={{ textAlign: "center", padding: "12px 0" }}>
               <button
                 style={{
-                  background: '#f39c12',
-                  color: 'white',
-                  border: 'none',
-                  borderRadius: '4px',
-                  padding: '8px 16px',
-                  fontSize: '1.1rem',
-                  cursor: 'pointer',
+                  background: "#f39c12",
+                  color: "white",
+                  border: "none",
+                  borderRadius: "4px",
+                  padding: "8px 16px",
+                  fontSize: "1.1rem",
+                  cursor: "pointer",
                 }}
                 onClick={() => {
-                  rollForRow({ attribute: 'Lucky Die', numDice: 1, modifier: 0, noWildDie: true })
+                  rollForRow({ attribute: "Lucky Die", numDice: 1, modifier: 0, noWildDie: true })
                 }}
               >
                 Roll Lucky Die (D6)
@@ -138,6 +168,15 @@ export const Sheet = ({
           </tr>
         </tfoot>
       </Table>
+
+      <NotesContainer>
+        <NotesLabel>Notizen</NotesLabel>
+        <NotesTextArea
+          value={notes || ""}
+          onChange={(e) => setNotes(e.target.value)}
+          placeholder="Notizen zum Charakter..."
+        />
+      </NotesContainer>
     </>
   )
 }
