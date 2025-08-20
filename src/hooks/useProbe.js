@@ -4,8 +4,33 @@ import { getQualityRating, rollD6Dices } from "../utils"
 import { COLORSETS } from "../components/DiceBox/const/colorsets"
 
 export const useProbe = (isPublicRoll, player, box) => {
-  const rollForRow = async ({ attribute, numDice, modifier }) => {
+  const rollForRow = async ({ attribute, numDice, modifier, noWildDie = false }) => {
     if (!box) return
+
+    // Lucky Die: just roll a single D6, no reroll/explode
+    if (noWildDie) {
+      const result = rollD6Dices(1)[0]
+      const total = result + (modifier || 0)
+
+      await OBR.broadcast.sendMessage(
+        isPublicRoll ? MESSAGE_CHANNEL_PUBLIC : MESSAGE_CHANNEL_GM,
+        {
+          message: `${player.name}: Lucky Die roll: ${result}${modifier ? ` + ${modifier}` : ""} = ${total}`,
+          result: {
+            regularRolls: [result],
+            wildDieRolls: [],
+            modifier: modifier || 0,
+            total,
+          },
+          history: true,
+          player,
+        },
+        { destination: "ALL" },
+      )
+
+      await box.roll(`1d6@${result}`)
+      return
+    }
 
     await OBR.broadcast.sendMessage(
       isPublicRoll ? MESSAGE_CHANNEL_PUBLIC : MESSAGE_CHANNEL_GM,

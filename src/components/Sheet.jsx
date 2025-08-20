@@ -114,6 +114,29 @@ export const Sheet = ({
             </React.Fragment>
           ))}
         </tbody>
+        {/* Lucky Die Button Row */}
+        <tfoot>
+          <tr>
+            <td colSpan={6} style={{ textAlign: 'center', padding: '12px 0' }}>
+              <button
+                style={{
+                  background: '#f39c12',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '4px',
+                  padding: '8px 16px',
+                  fontSize: '1.1rem',
+                  cursor: 'pointer',
+                }}
+                onClick={() => {
+                  rollForRow({ attribute: 'Lucky Die', numDice: 1, modifier: 0, noWildDie: true })
+                }}
+              >
+                Roll Lucky Die (D6)
+              </button>
+            </td>
+          </tr>
+        </tfoot>
       </Table>
     </>
   )
