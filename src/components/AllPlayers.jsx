@@ -20,8 +20,27 @@ export function AllPlayers({ isPublicRoll }) {
     initPlayers()
   }, [])
 
+  const downloadAllCharacters = () => {
+    const allData = players.map((player) => ({
+      id: player.id,
+      name: player.name,
+      attributes: player.metadata.attributes,
+      attributeClasses: player.metadata.attributeClasses,
+    }))
+    const element = document.createElement("a")
+    const file = new Blob([JSON.stringify(allData, null, 2)], { type: "application/json" })
+    element.href = URL.createObjectURL(file)
+    element.download = `all-characters-${new Date().toISOString().slice(0, 10)}.json`
+    document.body.appendChild(element)
+    element.click()
+    document.body.removeChild(element)
+  }
+
   return (
     <Container>
+      <button style={{ margin: "8px", padding: "6px 12px" }} onClick={downloadAllCharacters}>
+        Download all characters data
+      </button>
       {players.map((player, index) => (
         <Sheet
           key={player.id + index}
