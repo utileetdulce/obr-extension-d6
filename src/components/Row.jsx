@@ -87,11 +87,22 @@ const InputGroup = styled.div`
   }
 `
 
-export const Row = ({ name, addRow, deleteRow, attributeClass, row, updateRow, rollForRow }) => {
+export const Row = ({
+  name,
+  addRow,
+  deleteRow,
+  attributeClass,
+  row,
+  updateRow,
+  rollForRow,
+  tempModifier,
+  setTempModifier,
+}) => {
   console.log("name:", name)
   const isClass = row.class === undefined
   const numDice = (attributeClass?.numDice || 0) + row.numDice
   const modifier = (attributeClass?.modifier || 0) + row.modifier
+  const tempMod = typeof tempModifier === "number" ? tempModifier : 0
 
   return (
     <>
@@ -116,7 +127,6 @@ export const Row = ({ name, addRow, deleteRow, attributeClass, row, updateRow, r
                 <Sign>{Math.sign(row.numDice) === -1 ? "-" : "+"} </Sign>
               </>
             )}
-
             <NumberInputDice $isClass={isClass}>{Math.abs(row.numDice)}</NumberInputDice>
             <AdjustButton onClick={() => updateRow({ numDice: row.numDice + 1 })}>+</AdjustButton>
           </InputGroup>
@@ -136,14 +146,23 @@ export const Row = ({ name, addRow, deleteRow, attributeClass, row, updateRow, r
             <AdjustButton onClick={() => updateRow({ modifier: row.modifier + 1 })}>+</AdjustButton>
           </InputGroup>
         </Td>
+        {/* Temp Modifier Column */}
         <Td>
-          <RollButton onClick={() => rollForRow({ ...row, numDice, modifier })}>
+          <InputGroup>
+            <AdjustButton $decrease onClick={() => setTempModifier(tempMod - 1)}>
+              -
+            </AdjustButton>
+            <NumberInput $isClass={isClass}>{tempMod}</NumberInput>
+            <AdjustButton onClick={() => setTempModifier(tempMod + 1)}>+</AdjustButton>
+          </InputGroup>
+        </Td>
+        <Td>
+          <RollButton onClick={() => rollForRow({ ...row, numDice, modifier: modifier + tempMod })}>
             {`${numDice}W`}
-            {Math.sign(modifier) === -1 ? "-" : "+"}
-            {Math.abs(modifier)}
+            {Math.sign(modifier + tempMod) === -1 ? "-" : "+"}
+            {Math.abs(modifier + tempMod)}
           </RollButton>
         </Td>
-
         <Td>
           <InputGroup>
             {isClass ? (

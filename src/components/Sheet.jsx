@@ -32,6 +32,7 @@ export const Sheet = ({
   attributeClasses,
   setAttributeClasses,
 }) => {
+  const [tempModifiers, setTempModifiers] = React.useState({})
   const { rollForRow } = useProbe(isPublicRoll, player, box)
 
   return (
@@ -44,6 +45,7 @@ export const Sheet = ({
             <Th>Fertigkeit</Th>
             <Th>W6</Th>
             <Th>Bonus</Th>
+            <Th>Temp. Mod.</Th>
             <Th>Probe</Th>
             <Th>±</Th>
           </tr>
@@ -64,7 +66,14 @@ export const Sheet = ({
                     [key]: { ...attributeClasses[key], ...row },
                   })
                 }}
-                rollForRow={rollForRow}
+                tempModifier={tempModifiers[key] || 0}
+                setTempModifier={(mod) => setTempModifiers({ ...tempModifiers, [key]: mod })}
+                rollForRow={(rowData) => {
+                  rollForRow({
+                    ...rowData,
+                    modifier: (rowData.modifier || 0) + (tempModifiers[key] || 0),
+                  })
+                }}
               />
 
               {attributes
@@ -90,7 +99,16 @@ export const Sheet = ({
                         }),
                       )
                     }}
-                    rollForRow={rollForRow}
+                    tempModifier={tempModifiers[row.attribute] || 0}
+                    setTempModifier={(mod) =>
+                      setTempModifiers({ ...tempModifiers, [row.attribute]: mod })
+                    }
+                    rollForRow={(rowData) => {
+                      rollForRow({
+                        ...rowData,
+                        modifier: (rowData.modifier || 0) + (tempModifiers[row.attribute] || 0),
+                      })
+                    }}
                   />
                 ))}
             </React.Fragment>
