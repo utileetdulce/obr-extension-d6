@@ -76,7 +76,9 @@ export const Sheet = ({
                     row={row}
                     attributeClass={value}
                     deleteRow={() => {
-                      setAttributes(attributes.filter((attribute) => attribute !== row))
+                      if (window.confirm("Are you sure you want to remove this attribute?")) {
+                        setAttributes(attributes.filter((attribute) => attribute !== row))
+                      }
                     }}
                     updateRow={(updatedRow) => {
                       setAttributes(
