@@ -1,7 +1,7 @@
 import OBR from "@owlbear-rodeo/sdk"
 import { MESSAGE_CHANNEL_GM, MESSAGE_CHANNEL_PUBLIC } from "../constants"
 import { getQualityRating, rollD6Dices } from "../utils"
-import { COLORSETS } from "../components/DiceBox/const/colorsets"
+import { COLORSETS } from "@3d-dice/dice-box-threejs/colorsets"
 
 export const useProbe = (isPublicRoll, player, box) => {
   const rollForRow = async ({ attribute, numDice, modifier }) => {

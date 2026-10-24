@@ -1,4 +1,4 @@
-import { COLORSETS } from "../components/DiceBox/const/colorsets"
+import { COLORSETS } from "@3d-dice/dice-box-threejs/colorsets"
 
 export const useRollVisualizer = (box) => {
   const roll = async ({ result = [], type = "regular" }) => {
